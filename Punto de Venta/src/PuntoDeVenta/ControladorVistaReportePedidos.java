@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package punto.de.venta;
+package PuntoDeVenta;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -16,7 +16,7 @@ import javafx.scene.control.Label;
  *
  * @author Mike
  */
-public class ControladorReportePedidos implements Initializable {
+public class ControladorVistaReportePedidos implements Initializable {
     
     @FXML
     private Label label;
