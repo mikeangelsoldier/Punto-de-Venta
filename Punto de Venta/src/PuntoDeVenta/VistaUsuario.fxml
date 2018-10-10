@@ -1,21 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 
-<AnchorPane id="AnchorPane" prefHeight="433.0" prefWidth="459.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="PuntoDeVenta.ControladorVistaUsuario">
+<AnchorPane id="AnchorPane" blendMode="DARKEN" prefHeight="447.0" prefWidth="518.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="PuntoDeVenta.ControladorVistaUsuario">
     <children>
         <Label fx:id="label" layoutX="126" layoutY="120" minHeight="16" minWidth="69" />
-      <Pane layoutX="126.0" layoutY="57.0" prefHeight="248.0" prefWidth="267.0">
+      <Pane layoutY="3.0" prefHeight="447.0" prefWidth="499.0" style="-fx-background-color: 12,12,12;">
          <children>
-              <Button fx:id="button" layoutX="57.0" layoutY="180.0" onAction="#handleButtonAction" text="Iniciar Sesion" />
-            <Label layoutX="62.0" layoutY="34.0" text="USUARIO" />
-            <Label layoutX="62.0" layoutY="112.0" text="CONTRASEÑA" />
-            <TextField layoutX="26.0" layoutY="51.0" promptText="Usuario" />
-            <TextField layoutX="26.0" layoutY="129.0" promptText="Contraseña" />
+            <Label layoutX="22.0" layoutY="62.0" prefHeight="38.0" prefWidth="89.0" text="Usuarios">
+               <font>
+                  <Font name="Arial Narrow" size="22.0" />
+               </font>
+            </Label>
+            <JFXTextField focusColor="#fac40a" layoutX="22.0" layoutY="123.0" maxWidth="155.0" minWidth="155.0" prefHeight="31.0" prefWidth="155.0" unFocusColor="#d0b276" />
+            <JFXButton buttonType="RAISED" layoutX="15.0" layoutY="17.0" ripplerFill="#251d1d" text="Agregar Usuario" textOverrun="CENTER_ELLIPSIS" />
+            <JFXButton layoutX="131.0" layoutY="17.0" text="Eliminar" />
+            <JFXButton layoutX="199.0" layoutY="17.0" text="Modificar" />
+            <JFXButton layoutX="265.0" layoutY="17.0" text="Regresar" />
+            <JFXButton layoutX="340.0" layoutY="17.0" />
+            <Label layoutX="22.0" layoutY="106.0" text="Nombres" />
+            <Label layoutX="22.0" layoutY="173.0" text="Usuario" />
+            <Label layoutX="199.0" layoutY="106.0" text="Apellido Materno" />
+            <Label layoutX="355.0" layoutY="106.0" text="Apellido Paterno" />
+            <Label layoutX="199.0" layoutY="173.0" text="Password" />
+            <JFXTextField focusColor="#fac40a" layoutX="189.0" layoutY="123.0" maxWidth="111.0" minWidth="111.0" prefHeight="31.0" prefWidth="111.0" unFocusColor="#d0b276" />
+            <JFXTextField focusColor="#fac40a" layoutX="340.0" layoutY="123.0" maxWidth="118.0" minWidth="118.0" prefHeight="31.0" prefWidth="118.0" unFocusColor="#d0b276" />
+            <JFXPasswordField focusColor="#fac40a" layoutX="199.0" layoutY="199.0" maxWidth="118.0" minWidth="118.0" prefHeight="31.0" prefWidth="118.0" unFocusColor="#d0b276" />
+            <JFXTextField focusColor="#fac40a" layoutX="22.0" layoutY="199.0" unFocusColor="#d0b276" />
+            <JFXComboBox layoutX="28.0" layoutY="263.0" />
+            <Label layoutX="22.0" layoutY="246.0" text="Rol" />
+            <TableView layoutX="77.0" layoutY="307.0" prefHeight="113.0" prefWidth="376.0">
+              <columns>
+                <TableColumn prefWidth="75.0" text="ID Usuario" />
+                <TableColumn prefWidth="75.0" text="Nombre" />
+                  <TableColumn prefWidth="75.0" text="Apellido P." />
+                  <TableColumn prefWidth="75.0" text="Apellido M." />
+                  <TableColumn prefWidth="75.0" text="Rol" />
+              </columns>
+            </TableView>
          </children>
       </Pane>
     </children>
