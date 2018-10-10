@@ -1,21 +1,105 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import com.jfoenix.controls.JFXToolbar?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.effect.Blend?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="433.0" prefWidth="459.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="PuntoDeVenta.ControladorVistaVentas">
+<AnchorPane id="AnchorPane" prefHeight="544.0" prefWidth="630.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="PuntoDeVenta.ControladorVistaVentas">
     <children>
         <Label fx:id="label" layoutX="126" layoutY="120" minHeight="16" minWidth="69" />
-      <Pane layoutX="126.0" layoutY="57.0" prefHeight="248.0" prefWidth="267.0">
+      <Pane layoutX="-1.0" prefHeight="544.0" prefWidth="637.0">
          <children>
-              <Button fx:id="button" layoutX="57.0" layoutY="180.0" onAction="#handleButtonAction" text="Iniciar Sesion" />
-            <Label layoutX="62.0" layoutY="34.0" text="USUARIO" />
-            <Label layoutX="62.0" layoutY="112.0" text="CONTRASEÑA" />
-            <TextField layoutX="26.0" layoutY="51.0" promptText="Usuario" />
-            <TextField layoutX="26.0" layoutY="129.0" promptText="Contraseña" />
+            <Label layoutX="24.0" layoutY="7.0" prefHeight="33.0" prefWidth="121.0" text="Ventas" textFill="#222288">
+               <font>
+                  <Font name="Tahoma" size="33.0" />
+               </font>
+            </Label>
+            <JFXToolbar layoutX="24.0" layoutY="59.0" prefHeight="33.0" prefWidth="509.0">
+               <left>
+                  <JFXButton buttonType="RAISED" prefHeight="33.0" prefWidth="82.0" text="Insertar" textFill="#001673" BorderPane.alignment="CENTER">
+                     <font>
+                        <Font name="Tahoma" size="14.0" />
+                     </font>
+                     <effect>
+                        <Blend />
+                     </effect>
+                  </JFXButton>
+               </left>
+               <center>
+                  <JFXButton buttonType="RAISED" prefHeight="33.0" prefWidth="82.0" text="Eliminar" textFill="#001673" BorderPane.alignment="CENTER">
+                     <font>
+                        <Font name="Tahoma" size="14.0" />
+                     </font>
+                     <effect>
+                        <Blend />
+                     </effect>
+                  </JFXButton>
+               </center>
+               <right>
+                  <JFXButton buttonType="RAISED" prefHeight="33.0" prefWidth="82.0" text="Actualizar" textFill="#001673" BorderPane.alignment="CENTER">
+                     <font>
+                        <Font name="Tahoma" size="14.0" />
+                     </font>
+                     <effect>
+                        <Blend />
+                     </effect>
+                  </JFXButton>
+               </right>
+            </JFXToolbar>
+            <Label layoutX="21.0" layoutY="131.0" prefHeight="26.0" prefWidth="54.0" text="Clave" textFill="#222288">
+               <font>
+                  <Font name="Tahoma" size="14.0" />
+               </font>
+            </Label>
+            <JFXTextField layoutX="162.0" layoutY="132.0" promptText="Clave de venta" unFocusColor="#4d4d4d" />
+            <Label layoutX="21.0" layoutY="171.0" prefHeight="26.0" prefWidth="141.0" text="Clave de empleado" textFill="#222288">
+               <font>
+                  <Font name="Tahoma" size="14.0" />
+               </font>
+            </Label>
+            <JFXTextField layoutX="162.0" layoutY="172.0" promptText="Clave de empleado" unFocusColor="#4d4d4d" />
+            <TableView editable="true" layoutX="33.0" layoutY="215.0" prefHeight="200.0" prefWidth="418.0">
+              <columns>
+                <TableColumn prefWidth="75.0" text="Id" />
+                <TableColumn prefWidth="75.0" text="Descripcion" />
+                  <TableColumn prefWidth="75.0" text="Precio" />
+                  <TableColumn prefWidth="75.0" text="Existencia" />
+                  <TableColumn prefWidth="75.0" text="Unidad" />
+              </columns>
+            </TableView>
+            <Label layoutX="21.0" layoutY="436.0" prefHeight="26.0" prefWidth="69.0" text="Subtotal" textFill="#222288">
+               <font>
+                  <Font name="Tahoma" size="14.0" />
+               </font>
+            </Label>
+            <JFXTextField layoutX="107.0" layoutY="436.0" promptText="Subtotal" unFocusColor="#4d4d4d" />
+            <Label layoutX="21.0" layoutY="475.0" prefHeight="26.0" prefWidth="69.0" text="Iva" textFill="#222288">
+               <font>
+                  <Font name="Tahoma" size="14.0" />
+               </font>
+            </Label>
+            <JFXTextField layoutX="107.0" layoutY="475.0" promptText="Iva 16%" unFocusColor="#4d4d4d" />
+            <Label layoutX="311.0" layoutY="436.0" prefHeight="26.0" prefWidth="69.0" text="Total" textFill="#222288">
+               <font>
+                  <Font name="Tahoma" size="14.0" />
+               </font>
+            </Label>
+            <JFXTextField layoutX="396.0" layoutY="437.0" promptText="Total" unFocusColor="#4d4d4d" />
+            <Label layoutX="311.0" layoutY="475.0" prefHeight="26.0" prefWidth="85.0" text="Tipo de pago" textFill="#222288">
+               <font>
+                  <Font name="Tahoma" size="14.0" />
+               </font>
+            </Label>
+            <JFXComboBox layoutX="410.0" layoutY="476.0" prefHeight="25.0" prefWidth="121.0" promptText="Tipo de pago" />
          </children>
       </Pane>
     </children>

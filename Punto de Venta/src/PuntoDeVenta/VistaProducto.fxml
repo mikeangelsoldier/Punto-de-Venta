@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="546.0" prefWidth="629.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="PuntoDeVenta.ControladorVistaProducto">
+<AnchorPane id="AnchorPane" prefHeight="546.0" prefWidth="629.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="PuntoDeVenta.ControladorVistaProducto">
     <children>
       <GridPane layoutX="59.0" layoutY="161.0" prefHeight="272.0" prefWidth="239.0">
         <columnConstraints>
@@ -116,12 +116,12 @@
                         <Font size="16.0" />
                      </font>
                   </JFXButton>
-                  <JFXButton buttonType="RAISED" ripplerFill="#4c861d" textFill="#1e28ae" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                  <JFXButton buttonType="RAISED" ripplerFill="#4c861d" text="Button" textFill="#1e28ae" GridPane.columnIndex="3" GridPane.rowIndex="1">
                      <font>
                         <Font size="16.0" />
                      </font>
                   </JFXButton>
-                  <JFXButton buttonType="RAISED" ripplerFill="#4c861d" textFill="#1e28ae" GridPane.columnIndex="4" GridPane.rowIndex="1">
+                  <JFXButton buttonType="RAISED" ripplerFill="#4c861d" text="Salir" textFill="#1e28ae" GridPane.columnIndex="4" GridPane.rowIndex="1">
                      <font>
                         <Font size="16.0" />
                      </font>
