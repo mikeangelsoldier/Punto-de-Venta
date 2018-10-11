@@ -38,7 +38,7 @@
             </TableView>
          </content>
       </ScrollPane>
-      <HBox layoutX="26.0" layoutY="74.0" prefHeight="42.0" prefWidth="557.0" spacing="10.0">
+      <HBox layoutX="43.0" layoutY="66.0" prefHeight="42.0" prefWidth="557.0" spacing="10.0">
          <children>
             <JFXButton buttonType="RAISED" ripplerFill="#011245" style="-fx-background-color: #222288;" text="Volver" textFill="WHITE">
                <font>
