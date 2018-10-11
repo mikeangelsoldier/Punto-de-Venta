@@ -8,6 +8,7 @@ Semestre 7
 
 
 /*create database punto_de_venta;*/
+DROP SCHEMA IF EXISTS punto_de_venta;
 create database punto_de_venta;
 
 use punto_de_venta;
@@ -85,8 +86,8 @@ create table Ventas(
 id_venta int not null primary key auto_increment,
 fecha_venta date not null,
 subtotal_venta float (15) not null,
-iva_venta float(5)not null,
-total_venta varchar(15)not Null,
+iva_venta float(5) not null,
+total_venta float(15) not Null,
 forma_pago varchar(20),
 id_usuario int not null,
 id_cliente int not null
@@ -98,6 +99,14 @@ id_venta int not null,
 codigo_producto varchar(13) not null,
 cantidad int not null,
 importe float(4) null
+);
+
+create table Factura_Pedido(
+folio_factura int not null primary key auto_increment,
+id_proveedor int not null,
+id_usuario int not null,
+montoFactura float(15) not null,
+fecha date not null
 );
 
 
@@ -145,6 +154,17 @@ FOREIGN KEY (codigo_producto)
 REFERENCES Producto (codigo_producto);
 
 
+/***********Llaves foraneas en Factura_Pedido*/
+ALTER TABLE  Factura_Pedido  ADD
+CONSTRAINT FK_FacturaPedido_proveedor
+FOREIGN KEY (id_proveedor)
+REFERENCES Proveedor (id_proveedor);
+
+
+ALTER TABLE  Factura_Pedido  ADD
+CONSTRAINT FK_FacturaPedido_usuario
+FOREIGN KEY (id_usuario)
+REFERENCES Usuario (id_usuario);
 
 
 
