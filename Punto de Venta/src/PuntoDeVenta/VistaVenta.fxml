@@ -13,7 +13,7 @@
 
 <AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="989.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="PuntoDeVenta.ControladorVistaVentas">
     <children>
-      <Pane prefHeight="600.0" prefWidth="964.0">
+      <Pane prefHeight="600.0" prefWidth="989.0">
          <children>
             <Label layoutX="24.0" layoutY="7.0" prefHeight="33.0" prefWidth="121.0" text="Ventas" textFill="#222288">
                <font>
@@ -40,12 +40,12 @@
                         <Font name="System Bold" size="13.0" />
                      </font>
                   </JFXButton>
-                  <JFXButton fx:id="btnActualizarProfesor" buttonType="RAISED" ripplerFill="#3fb0dd" style="-fx-background-color: #222288;" text="Productos" textFill="WHITE">
+                  <JFXButton fx:id="btnEliminarProfesor" buttonType="RAISED" ripplerFill="#3fb0dd" style="-fx-background-color: #222288;" text="Realizar Venta" textFill="WHITE">
                      <font>
                         <Font name="System Bold" size="13.0" />
                      </font>
                   </JFXButton>
-                  <JFXButton fx:id="btnEliminarProfesor" buttonType="RAISED" ripplerFill="#3fb0dd" style="-fx-background-color: #222288;" text="Realizar Venta" textFill="WHITE">
+                  <JFXButton fx:id="btnActualizarProfesor" buttonType="RAISED" ripplerFill="#3fb0dd" style="-fx-background-color: #222288;" text="Ver ventas" textFill="WHITE">
                      <font>
                         <Font name="System Bold" size="13.0" />
                      </font>
@@ -103,6 +103,21 @@
                   <Font size="14.0" />
                </font>
             </Label>
+            <JFXButton fx:id="btnInsertarProfesor1" buttonType="RAISED" layoutX="773.0" layoutY="215.0" prefHeight="29.0" prefWidth="151.0" ripplerFill="#011245" style="-fx-background-color: #222288;" text="Agregar Producto +" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="13.0" />
+               </font>
+            </JFXButton>
+            <JFXButton fx:id="btnInsertarProfesor11" buttonType="RAISED" layoutX="773.0" layoutY="253.0" prefHeight="29.0" prefWidth="151.0" ripplerFill="#011245" style="-fx-background-color: #222288;" text="Eliminar Producto -" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="13.0" />
+               </font>
+            </JFXButton>
+            <JFXButton fx:id="btnInsertarProfesor111" buttonType="RAISED" layoutX="773.0" layoutY="294.0" prefHeight="29.0" prefWidth="151.0" ripplerFill="#011245" style="-fx-background-color: #222288;" text="Actualizar Producto" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="13.0" />
+               </font>
+            </JFXButton>
          </children>
       </Pane>
     </children>
