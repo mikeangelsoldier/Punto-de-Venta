@@ -120,10 +120,10 @@
                      </font>
                   </Label>
                   <JFXTextField promptText="nombre cliente" unFocusColor="#4d4d4d" GridPane.columnIndex="1" />
-                  <JFXTextField promptText="Clave de venta" text="primer apellido" unFocusColor="#4d4d4d" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <JFXTextField promptText="Clave de venta" text="segundo apellido" unFocusColor="#4d4d4d" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                  <JFXTextField promptText="Clave de venta" text="xxxxxxxxxx" unFocusColor="#4d4d4d" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                  <JFXTextField promptText="Clave de venta" text="ejemplo@ejemplo.com" unFocusColor="#4d4d4d" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                  <JFXTextField promptText="primer apellido" unFocusColor="#4d4d4d" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <JFXTextField promptText="segundo apellido" unFocusColor="#4d4d4d" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <JFXTextField promptText="xxxxxxxxxx" unFocusColor="#4d4d4d" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                  <JFXTextField promptText="ejemplo@ejemplo.com" unFocusColor="#4d4d4d" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                   <JFXDatePicker GridPane.columnIndex="1" GridPane.rowIndex="3" />
                </children>
             </GridPane>
@@ -165,9 +165,9 @@
                         <Font size="14.0" />
                      </font>
                   </Label>
-                  <JFXTextField promptText="Clave de venta" text="calle #numero" unFocusColor="#4d4d4d" GridPane.columnIndex="1" />
-                  <JFXTextField promptText="Clave de venta" text="colonia" unFocusColor="#4d4d4d" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <JFXTextField promptText="Clave de venta" unFocusColor="#4d4d4d" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <JFXTextField promptText="calle #numero" unFocusColor="#4d4d4d" GridPane.columnIndex="1" />
+                  <JFXTextField promptText="colonia" unFocusColor="#4d4d4d" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <JFXTextField promptText="Codigo Postal" unFocusColor="#4d4d4d" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                   <JFXComboBox prefHeight="25.0" prefWidth="135.0" promptText="Municipio" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                   <JFXComboBox prefHeight="25.0" prefWidth="135.0" promptText="Estado" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                </children>
@@ -186,7 +186,7 @@
                         <Font size="14.0" />
                      </font>
                   </Label>
-                  <JFXTextField promptText="Clave de venta" text="ID cliente" unFocusColor="#4d4d4d" GridPane.columnIndex="1" />
+                  <JFXTextField editable="false" promptText="ID cliente" unFocusColor="#4d4d4d" GridPane.columnIndex="1" />
                </children>
             </GridPane>
          </children>

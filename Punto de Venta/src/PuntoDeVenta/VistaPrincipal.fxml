@@ -6,41 +6,38 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 
-<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="PuntoDeVenta.ControladorVistaPrincipal">
+<AnchorPane id="AnchorPane" prefHeight="620.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="PuntoDeVenta.ControladorVistaPrincipal">
    <children>
-      <Pane fx:id="panel_principal" prefHeight="600.0" prefWidth="1200.0">
-         <children>
-            <MenuBar layoutY="2.0" prefHeight="7.0" prefWidth="972.0" style="-fx-background-color: #8EBDCC;">
-              <menus>
-                <Menu mnemonicParsing="false" text="Archivo">
-                  <items>
-                    <MenuItem mnemonicParsing="false" text="Ayuda" />
-                        <MenuItem mnemonicParsing="false" text="Cerrar Sesión" />
-                        <MenuItem mnemonicParsing="false" text="Salir" />
-                  </items>
-                </Menu>
-                <Menu mnemonicParsing="false" text="Ventas">
-                  <items>
-                    <MenuItem mnemonicParsing="false" text="Ventas" />
-                  </items>
-                </Menu>
-                <Menu mnemonicParsing="false" text="Reportes">
-                  <items>
-                        <MenuItem mnemonicParsing="false" text="Reporte Almacen" />
-                    <MenuItem mnemonicParsing="false" text="Reporte Ventas" />
-                  </items>
-                </Menu>
-                  <Menu mnemonicParsing="false" text="Catalogos">
-                    <items>
-                      <MenuItem mnemonicParsing="false" text="Usuarios" />
-                        <MenuItem mnemonicParsing="false" text="Proveedores" />
-                        <MenuItem mnemonicParsing="false" onAction="#cambiarVistaProducto" text="Productos" />
-                        <MenuItem mnemonicParsing="false" text="Clientes" />
-                    </items>
-                  </Menu>
-              </menus>
-            </MenuBar>
-         </children>
-      </Pane>
+      <Pane fx:id="panel_principal" layoutY="31.0" prefHeight="610.0" prefWidth="1200.0" />
+      <MenuBar layoutX="14.0" layoutY="6.0" prefHeight="7.0" prefWidth="972.0" style="-fx-background-color: #8EBDCC;">
+        <menus>
+          <Menu mnemonicParsing="false" text="Archivo">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Ayuda" />
+                  <MenuItem mnemonicParsing="false" text="Cerrar Sesión" />
+                  <MenuItem mnemonicParsing="false" text="Salir" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Ventas">
+            <items>
+              <MenuItem mnemonicParsing="false" onAction="#cambiarAVistaVentas" text="Ventas" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Reportes">
+            <items>
+                  <MenuItem mnemonicParsing="false" onAction="#cambiarAVistaReportePedidos" text="Reporte Almacen" />
+              <MenuItem mnemonicParsing="false" onAction="#cambiarAVistaReporteVentas" text="Reporte Ventas" />
+            </items>
+          </Menu>
+            <Menu mnemonicParsing="false" text="Catalogos">
+              <items>
+                <MenuItem mnemonicParsing="false" onAction="#cambiarAVistaUsuario" text="Usuarios" />
+                  <MenuItem mnemonicParsing="false" text="Proveedores" />
+                  <MenuItem mnemonicParsing="false" onAction="#cambiarAVistaProducto" text="Productos" />
+                  <MenuItem mnemonicParsing="false" onAction="#cambiarAVistaCliente" text="Clientes" />
+              </items>
+            </Menu>
+        </menus>
+      </MenuBar>
    </children>
 </AnchorPane>

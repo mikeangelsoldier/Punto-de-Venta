@@ -74,7 +74,7 @@
                   <JFXTextField focusColor="#fac40a" layoutX="176.0" layoutY="95.0" unFocusColor="#d0b276" />
                   <JFXComboBox layoutX="182.0" layoutY="159.0" />
                   <Label layoutX="176.0" layoutY="142.0" text="Rol" />
-                  <JFXTextField focusColor="#fac40a" layoutX="41.0" layoutY="22.0" maxWidth="155.0" minWidth="92.0" prefHeight="25.0" prefWidth="92.0" unFocusColor="#d0b276" />
+                  <JFXTextField editable="false" focusColor="#fac40a" layoutX="41.0" layoutY="22.0" maxWidth="155.0" minWidth="92.0" prefHeight="25.0" prefWidth="92.0" unFocusColor="#d0b276" />
                   <Label layoutX="75.0" layoutY="2.0" text="ID" />
                </children>
             </Pane>
