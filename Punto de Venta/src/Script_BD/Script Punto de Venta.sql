@@ -98,7 +98,7 @@ id_det_ventas int not null primary key auto_increment,
 id_venta int not null,
 codigo_producto varchar(13) not null,
 cantidad int not null,
-importe float(4) null
+importe float(15) null
 );
 
 create table Factura_Pedido(
