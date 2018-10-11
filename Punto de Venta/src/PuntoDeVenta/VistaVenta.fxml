@@ -22,7 +22,7 @@
             </Label>
             <TableView editable="true" layoutX="21.0" layoutY="215.0" prefHeight="216.0" prefWidth="724.0">
               <columns>
-                <TableColumn prefWidth="107.0" style="-fx-background-color: #;" text="Codigo Producto" />
+                <TableColumn prefWidth="107.0" text="Codigo Producto" />
                 <TableColumn prefWidth="308.0" text="Descripcion" />
                   <TableColumn prefWidth="103.0" text="Precio Unitario" />
                   <TableColumn prefWidth="105.0" text="Cantidad" />
