@@ -23,7 +23,7 @@
                   <Font name="Arial Narrow Bold" size="22.0" />
                </font>
             </Label>
-            <JFXButton buttonType="RAISED" layoutX="111.0" layoutY="208.0" ripplerFill="#585beb" style="-fx-background-color: #8EBDCC;" text="Iniciar Sesión" textAlignment="CENTER" textOverrun="CLIP" wrapText="true">
+            <JFXButton fx:id="btn_iniciar_sesion" buttonType="RAISED" layoutX="111.0" layoutY="208.0" onAction="#cambiarVista" ripplerFill="#585beb" style="-fx-background-color: #8EBDCC;" text="Iniciar Sesión" textAlignment="CENTER" textOverrun="CLIP" wrapText="true">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>

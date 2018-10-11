@@ -19,7 +19,7 @@ public class PuntoDeVenta extends Application {
     
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("VistaVenta.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("VistaLogin.fxml"));
         
         Scene scene = new Scene(root);
         

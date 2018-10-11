@@ -8,7 +8,7 @@
 
 <AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="PuntoDeVenta.ControladorVistaPrincipal">
    <children>
-      <Pane prefHeight="600.0" prefWidth="1200.0">
+      <Pane fx:id="panel_principal" prefHeight="600.0" prefWidth="1200.0">
          <children>
             <MenuBar layoutY="2.0" prefHeight="7.0" prefWidth="972.0" style="-fx-background-color: #8EBDCC;">
               <menus>
@@ -34,7 +34,7 @@
                     <items>
                       <MenuItem mnemonicParsing="false" text="Usuarios" />
                         <MenuItem mnemonicParsing="false" text="Proveedores" />
-                        <MenuItem mnemonicParsing="false" text="Productos" />
+                        <MenuItem mnemonicParsing="false" onAction="#cambiarVistaProducto" text="Productos" />
                         <MenuItem mnemonicParsing="false" text="Clientes" />
                     </items>
                   </Menu>
