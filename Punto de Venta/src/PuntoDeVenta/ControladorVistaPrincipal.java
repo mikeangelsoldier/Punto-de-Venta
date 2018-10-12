@@ -99,4 +99,15 @@ public class ControladorVistaPrincipal implements Initializable {
             Logger.getLogger(ControladorVistaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    @FXML
+    public void cambiarAVistaProveedor (ActionEvent e) throws Exception {
+        try {
+            panel_principal.getChildren().clear();
+            panel_principal.getChildren().add(FXMLLoader.load(getClass().getResource("VistaProveedor.fxml")));
+        } catch (IOException ex) {
+            Logger.getLogger(ControladorVistaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
 }
