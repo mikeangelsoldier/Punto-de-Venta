@@ -10,7 +10,7 @@
 <?import javafx.scene.text.Font?>
 
 
-<AnchorPane id="AnchorPane" prefHeight="505.0" prefWidth="872.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171" fx:controller="PuntoDeVenta.ControladorVistaElegirProducto">
+<AnchorPane id="AnchorPane" prefHeight="505.0" prefWidth="872.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171" fx:controller="Controlador.ControladorVistaElegirProducto">
    <children>
       <Pane layoutY="1.0" prefHeight="504.0" prefWidth="872.0">
          <children>

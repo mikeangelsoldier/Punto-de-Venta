@@ -5,31 +5,205 @@
  */
 package Controlador;
 
+import PuntoDeVenta.*;
+import AccesoBD.ConectaBD_Punto_de_venta;
+import AccesoBD.ConexionJavaMySQL;
+import AccesoBD.LoginBD;
+import Modelo.Login;
+import com.jfoenix.controls.JFXPasswordField;
+import com.jfoenix.controls.JFXTextField;
 import java.net.URL;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.stage.Stage;
 
 /**
  *
  * @author Mike
  */
 public class ControladorVistaLogin implements Initializable {
-    
+
+    LoginBD loginDB;
+    ConectaBD_Punto_de_venta conectaBD_PuntoVenta;
+    private ArrayList<Login> logins;
+    String tipoUsuario, contenidoTxtUsuario, contenidoTxtpassword, usuarioActual, rolLogin;
+    private String mensajeLogin;
+    private static String MENSAJE_USUARIO_INCORRECTO="El usuario Ingresado no existe";
+    private static String MENSAJE_CONTRASEÑA_INCORRECTA="Usuario existente pero contraseña incorrecta";
+    boolean isProgramador, isAdministrador, isUsuario, isEncargadoAlmacen;
+    boolean loginExiste;
+
     @FXML
-    private Label label;
-    
+    private JFXTextField txtUser;
+
     @FXML
-    private void handleButtonAction(ActionEvent event) {
-        System.out.println("You clicked me!");
-        label.setText("Hello World!");
+    private JFXPasswordField txtPass;
+
+    @FXML
+    private Label lblAvisoLogin;
+
+    /*
+    @FXML
+    private void ingresar(ActionEvent event) {
+
+        validarLogin();
+        imprimirResultadoBusquedaLogin();
+
     }
+     */
     
+    
+    public void cambiarVista(ActionEvent e) throws Exception {
+        validarLogin();
+        imprimirResultadoBusquedaLogin();
+        if (loginExiste) {
+            Parent panelTabla = FXMLLoader.load(getClass().getResource("/PuntoDeVenta/VistaPrincipal.fxml"));
+            Scene panelTablaScene = new Scene(panelTabla);
+
+            Stage window = (Stage) ((Node) e.getSource()).getScene().getWindow();
+            window.setScene(panelTablaScene);
+            window.show();
+        }
+
+    }
+
+    public void imprimirResultadoBusquedaLogin() {
+
+        if (isProgramador == true && isAdministrador == false && isUsuario == false && isEncargadoAlmacen == false) {
+
+            rolLogin = "Programador";
+            //loginMeta.tipoUsuario =rolLogin;
+            System.out.println("Es " + rolLogin);
+        } else if (isProgramador == false && isAdministrador == true && isUsuario == false && isEncargadoAlmacen == false) {
+
+            rolLogin = "Administrador";
+            //loginMeta.tipoUsuario =rolLogin;
+            System.out.println("Es " + rolLogin);
+        } else if (isProgramador == false && isAdministrador == false && isUsuario == true && isEncargadoAlmacen == false) {
+
+            rolLogin = "Usuario";
+            //loginMeta.tipoUsuario =rolLogin;
+            System.out.println("Es " + rolLogin);
+        } else if (isProgramador == false && isAdministrador == false && isUsuario == false && isEncargadoAlmacen == true) {
+
+            rolLogin = "Encargado de almacen";
+            //loginMeta.tipoUsuario =rolLogin;
+            System.out.println("Es " + rolLogin);
+
+        } else {
+            System.out.println("El usuario no existe");
+        }
+        System.out.println("El login del usuario actual es " + usuarioActual);
+    }
+
+    public void validarLogin() {
+        loginExiste = false;
+        lblAvisoLogin.setText("");
+
+        contenidoTxtUsuario = txtUser.getText();
+
+        contenidoTxtpassword = txtPass.getText();
+        System.out.println("loginIngresado=     " + contenidoTxtUsuario + "         contraseñaIngresada= " + contenidoTxtpassword);
+
+        int idEncontrado;
+        String nombreEncontrado = "";
+        String loginEncontrado = "";
+        String passEncontrado = "";
+        String rolEncontrado = "";
+
+        isProgramador = false;
+        isAdministrador = false;
+        isUsuario = false;
+        isEncargadoAlmacen = false;
+
+        conectaBD_PuntoVenta = new ConectaBD_Punto_de_venta();
+        loginDB = new LoginBD(conectaBD_PuntoVenta.getConnection());
+        logins = new ArrayList<Login>(loginDB.getLogins());
+
+        if (!logins.isEmpty()) {//si hay un login existente
+            System.out.println("existe almenos un login en la BD");
+            System.out.println("tamaño del arreglo de logins = " + logins.size());
+
+            for (int i = 0; i < logins.size(); i++) {
+                idEncontrado = logins.get(i).getId();
+                nombreEncontrado = logins.get(i).getNombre();
+                loginEncontrado = logins.get(i).getLogin();
+                passEncontrado = logins.get(i).getPassword();
+                rolEncontrado = logins.get(i).getRol();
+
+                System.out.println("id usuario: " + idEncontrado + "             "
+                        + "nombre: " + nombreEncontrado + "             "
+                        + "login: " + loginEncontrado + "             "
+                        + "password: " + passEncontrado + "             "
+                        + "rol: " + rolEncontrado);
+
+                if (loginEncontrado.equals(contenidoTxtUsuario)) {
+                    if (passEncontrado.equals(contenidoTxtpassword)) {
+                        String rol = logins.get(i).getRol();
+
+                        usuarioActual = loginEncontrado;
+                        loginExiste = true;
+                        System.out.println("login existe= " + loginExiste);
+
+                        switch (rol) {
+                            case "Programador":
+                                isProgramador = true;
+                                isAdministrador = false;
+                                isUsuario = false;
+                                isEncargadoAlmacen = false;
+                                break;
+                            case "Administrador":
+                                isProgramador = false;
+                                isAdministrador = true;
+                                isUsuario = false;
+                                isEncargadoAlmacen = false;
+                                break;
+                            case "Usuario":
+                                isProgramador = false;
+                                isAdministrador = false;
+                                isUsuario = true;
+                                isEncargadoAlmacen = false;
+                                break;
+                            case "Encargado de almacen":
+                                isProgramador = false;
+                                isAdministrador = false;
+                                isUsuario = false;
+                                isEncargadoAlmacen = true;
+                                break;
+                            default:
+                                break;
+                        }
+
+                        loginMeta.idUsuario = String.valueOf(logins.get(i).getId());
+                        loginMeta.rolUsuario = logins.get(i).getRol();
+                        loginMeta.Password = logins.get(i).getPassword();
+                        
+                        
+                    }else{
+                        lblAvisoLogin.setText(MENSAJE_CONTRASEÑA_INCORRECTA);
+                    }
+
+                }else{
+                    lblAvisoLogin.setText(MENSAJE_USUARIO_INCORRECTO);
+                }
+            }
+        }
+
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-    }    
-    
+    }
+
 }

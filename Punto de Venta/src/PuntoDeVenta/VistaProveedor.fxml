@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" blendMode="DARKEN" prefHeight="601.0" prefWidth="773.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="PuntoDeVenta.ControladorVistaProveedor">
+<AnchorPane id="AnchorPane" blendMode="DARKEN" prefHeight="601.0" prefWidth="773.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controlador.ControladorVistaProveedor">
     <children>
         <Label fx:id="label" layoutX="126" layoutY="120" minHeight="16" minWidth="69" />
       <Pane layoutY="1.0" prefHeight="600.0" prefWidth="773.0" style="-fx-background-color: 12,12,12;">

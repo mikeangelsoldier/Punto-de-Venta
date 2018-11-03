@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="869.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="PuntoDeVenta.ControladorVistaReportePedidos">
+<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="869.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controlador.ControladorVistaReportePedidos">
     <children>
       <Label layoutX="47.0" layoutY="28.0" prefHeight="42.0" prefWidth="315.0" text="Reportes de Pedidos" textFill="#222288">
          <font>

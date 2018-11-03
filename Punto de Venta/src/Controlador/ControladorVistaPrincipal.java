@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package PuntoDeVenta;
+package Controlador;
 
+import PuntoDeVenta.*;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -44,7 +45,7 @@ public class ControladorVistaPrincipal implements Initializable {
     public void cambiarAVistaProducto (ActionEvent e) throws Exception {
         try {
             panel_principal.getChildren().clear();
-            panel_principal.getChildren().add(FXMLLoader.load(getClass().getResource("VistaProducto.fxml")));
+            panel_principal.getChildren().add(FXMLLoader.load(getClass().getResource("/PuntoDeVenta/VistaProducto.fxml")));
         } catch (IOException ex) {
             Logger.getLogger(ControladorVistaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -55,7 +56,7 @@ public class ControladorVistaPrincipal implements Initializable {
     public void cambiarAVistaCliente (ActionEvent e) throws Exception {
         try {
             panel_principal.getChildren().clear();
-            panel_principal.getChildren().add(FXMLLoader.load(getClass().getResource("VistaCliente.fxml")));
+            panel_principal.getChildren().add(FXMLLoader.load(getClass().getResource("/PuntoDeVenta/VistaCliente.fxml")));
         } catch (IOException ex) {
             Logger.getLogger(ControladorVistaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -65,7 +66,7 @@ public class ControladorVistaPrincipal implements Initializable {
     public void cambiarAVistaReportePedidos (ActionEvent e) throws Exception {
         try {
             panel_principal.getChildren().clear();
-            panel_principal.getChildren().add(FXMLLoader.load(getClass().getResource("VistaReportePedidos.fxml")));
+            panel_principal.getChildren().add(FXMLLoader.load(getClass().getResource("/PuntoDeVenta/VistaReportePedidos.fxml")));
         } catch (IOException ex) {
             Logger.getLogger(ControladorVistaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -74,7 +75,7 @@ public class ControladorVistaPrincipal implements Initializable {
     public void cambiarAVistaReporteVentas (ActionEvent e) throws Exception {
         try {
             panel_principal.getChildren().clear();
-            panel_principal.getChildren().add(FXMLLoader.load(getClass().getResource("VistaReporteVentas.fxml")));
+            panel_principal.getChildren().add(FXMLLoader.load(getClass().getResource("/PuntoDeVenta/VistaReporteVentas.fxml")));
         } catch (IOException ex) {
             Logger.getLogger(ControladorVistaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -84,7 +85,7 @@ public class ControladorVistaPrincipal implements Initializable {
     public void cambiarAVistaUsuario (ActionEvent e) throws Exception {
         try {
             panel_principal.getChildren().clear();
-            panel_principal.getChildren().add(FXMLLoader.load(getClass().getResource("VistaUsuario.fxml")));
+            panel_principal.getChildren().add(FXMLLoader.load(getClass().getResource("/PuntoDeVenta/VistaUsuario.fxml")));
         } catch (IOException ex) {
             Logger.getLogger(ControladorVistaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -94,7 +95,7 @@ public class ControladorVistaPrincipal implements Initializable {
     public void cambiarAVistaVentas (ActionEvent e) throws Exception {
         try {
             panel_principal.getChildren().clear();
-            panel_principal.getChildren().add(FXMLLoader.load(getClass().getResource("VistaVenta.fxml")));
+            panel_principal.getChildren().add(FXMLLoader.load(getClass().getResource("/PuntoDeVenta/VistaVenta.fxml")));
         } catch (IOException ex) {
             Logger.getLogger(ControladorVistaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -104,7 +105,7 @@ public class ControladorVistaPrincipal implements Initializable {
     public void cambiarAVistaProveedor (ActionEvent e) throws Exception {
         try {
             panel_principal.getChildren().clear();
-            panel_principal.getChildren().add(FXMLLoader.load(getClass().getResource("VistaProveedor.fxml")));
+            panel_principal.getChildren().add(FXMLLoader.load(getClass().getResource("/PuntoDeVenta/VistaProveedor.fxml")));
         } catch (IOException ex) {
             Logger.getLogger(ControladorVistaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }

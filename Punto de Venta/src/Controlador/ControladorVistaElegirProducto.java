@@ -3,27 +3,23 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package PuntoDeVenta;
+package Controlador;
 
+import PuntoDeVenta.*;
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
 
 /**
+ * FXML Controller class
  *
- * @author Mike
+ * @author PaulAdrian
  */
-public class ControladorVistaUsuario implements Initializable {
-    
-    
-    @FXML
-    private void handleButtonAction(ActionEvent event) {
-        
-    }
-    
+public class ControladorVistaElegirProducto implements Initializable {
+
+    /**
+     * Initializes the controller class.
+     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO

@@ -3,8 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package PuntoDeVenta;
+package Controlador;
 
+import PuntoDeVenta.*;
+import PuntoDeVenta.*;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -12,11 +14,12 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 
+
 /**
  *
  * @author Mike
  */
-public class ControladorVistaProveedor implements Initializable {
+public class ControladorVistaCliente implements Initializable {
     
     
     @FXML
