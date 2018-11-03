@@ -111,11 +111,7 @@ fecha date not null
 );
 
 
-/*******************Llaves foraneas **********/
-
-
-
-
+/*************************************************************************Llaves foraneas **********/
 /*****Llaves foranes en Productos*/
 ALTER TABLE Producto  ADD
 CONSTRAINT FK_producto_categoria
@@ -134,7 +130,6 @@ ALTER TABLE Ventas  ADD
 CONSTRAINT FK_venta_usuario
 FOREIGN KEY (id_usuario)
 REFERENCES Usuario(id_usuario);
-
 
 ALTER TABLE  Ventas  ADD
 CONSTRAINT FK_venta_cliente
@@ -167,6 +162,8 @@ CONSTRAINT FK_FacturaPedido_usuario
 FOREIGN KEY (id_usuario)
 REFERENCES Usuario (id_usuario);
 
+INSERT INTO USUARIO VALUES ('1','Programadores del sistema','admin','123', 'Programador');
+
 
 
 
@@ -179,3 +176,98 @@ select * from Producto;
 select * from Proveedor;
 select * from Ventas;
 select * from Detalle_Venta;
+
+
+
+/*****************************************************************************************************
+					PROCEDIMIENTOS ALMACENADOS
+****************************************************************************************************/
+/*Procedimientos de USUARIO*/
+
+DROP PROCEDURE IF EXISTS getUsuarios;
+CREATE PROCEDURE getUsuarios ()
+	SELECT * FROM Usuario;
+
+
+DROP PROCEDURE IF EXISTS addUsuario;
+CREATE PROCEDURE addUsuario(
+id int, 
+nombre VARCHAR(100), 
+login VARCHAR(100), 
+pass VARCHAR(100), 
+rol VARCHAR(100))
+INSERT INTO Usuario VALUES(id, nombre, login, pass, rol);
+
+
+
+DROP PROCEDURE IF EXISTS updateUsuario;
+CREATE PROCEDURE updateUsuario(
+id int, 
+nombre VARCHAR(100), 
+login VARCHAR(100), 
+pass VARCHAR(100), 
+rol VARCHAR(100))
+UPDATE Usuario SET Usuario.nombre = nombre, Usuario.login = login, Usuario.contraseña = pass, 
+Usuario.rol = rol WHERE Usuario.id_usuario = id;
+
+
+DROP PROCEDURE IF EXISTS deleteUsuario;
+CREATE PROCEDURE deleteUsuario (ID int)
+DELETE FROM Usuario WHERE id_usuario = ID;         
+
+DROP PROCEDURE IF EXISTS getBusquedaUsuario;
+CREATE PROCEDURE getBusquedaUsuario( 
+id VARCHAR(10), 
+nombre VARCHAR(60), 
+login VARCHAR(50), 
+rol VARCHAR(1))
+SELECT * from Usuario AS a
+where a.id like (CONCAT('%',id_usuario,'%'))
+AND  a.nombre like (CONCAT('%',nombre,'%'))
+AND  a.login like (CONCAT('%',login,'%'))
+AND  a.rol like (CONCAT('%',rol,'%'));
+
+
+
+/*PROC Validacion LOGIN	--------------------------------------------------------------------------------------------------------------------------------------------------*/
+/*ADMINISTRADOR*/
+
+DROP PROCEDURE IF EXISTS getLogin;
+CREATE PROCEDURE getLogin()
+SELECT * FROM usuario;
+
+ DROP PROCEDURE IF EXISTS buscarLogin;
+ CREATE PROCEDURE buscarLogin(login VARCHAR(100), passw VARCHAR(100))
+ select * from Usuario as u
+ where u.login = login
+ AND u.contraseña =passw;
+
+ DROP PROCEDURE IF EXISTS buscarLoginProgramador;
+ CREATE PROCEDURE buscarLoginProgramador(login VARCHAR(100), passw VARCHAR(100))
+ select * from Usuario as u
+ where u.login = login
+ AND u.contraseña =passw;
+ 
+  DROP PROCEDURE IF EXISTS buscarLoginAdministrador;
+ CREATE PROCEDURE buscarLoginAdministrador(login VARCHAR(100), passw VARCHAR(100))
+ select * from Usuario as u
+ where u.login = login
+ AND u.contraseña =passw;
+ 
+  DROP PROCEDURE IF EXISTS buscarLoginUsuario;
+ CREATE PROCEDURE buscarLoginUsuario(login VARCHAR(100), passw VARCHAR(100))
+ select * from Usuario as u
+ where u.login = login
+ AND u.contraseña =passw;
+ 
+  DROP PROCEDURE IF EXISTS buscarLoginEncargadoDeAlmacen;
+ CREATE PROCEDURE buscarLoginEncargadoDeAlmacen(login VARCHAR(100), passw VARCHAR(100))
+ select * from Usuario as u
+ where u.login = login
+ AND u.contraseña =passw;
+ 
+ 
+ call buscarLoginUsuario('Admin','123'); 
+ 
+ 
+ 
