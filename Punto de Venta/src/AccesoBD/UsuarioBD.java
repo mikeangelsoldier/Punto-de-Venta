@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import modelo.Usuario;
+import Modelo.Usuario;
 
 
 public class UsuarioBD {
@@ -17,7 +17,7 @@ public class UsuarioBD {
         this.connect = connect;
     }
     
-    public ArrayList<Usuario> getAdministradores(){
+    public ArrayList<Usuario> getUsuarios(){
         ArrayList<Usuario> listaUsuarios = new ArrayList<>();
         
         try {
@@ -32,14 +32,13 @@ public class UsuarioBD {
         return listaUsuarios;
     }
     
-    public void addUsuario(int id, String nombre, String login, String password, String rol) throws SQLException{
+    public void addUsuario(String nombre, String login, String password, String rol) throws SQLException{
         
-            PreparedStatement statement = connect.prepareCall("CALL addUsuario(?, ?, ?, ?, ?)");
-            statement.setInt(1, id);
-            statement.setString(2, nombre);
-            statement.setString(3, login);
-            statement.setString(4, password);
-            statement.setString(5, rol);
+            PreparedStatement statement = connect.prepareCall("CALL addUsuario(?, ?, ?, ?)");
+            statement.setString(1, nombre);
+            statement.setString(2, login);
+            statement.setString(3, password);
+            statement.setString(4, rol);
             System.out.println(statement.toString());
             statement.execute();
         
@@ -57,7 +56,7 @@ public class UsuarioBD {
         
     }
 
-    public void deleteAdministrador(int ID) throws SQLException {
+    public void deleteUsuario(int ID) throws SQLException {
         
             PreparedStatement statement = connect.prepareCall("CALL deleteUsuario(?)");
             statement.setInt(1, ID);
@@ -65,7 +64,7 @@ public class UsuarioBD {
             statement.execute();   
     }
     
-    public ArrayList<Usuario> getAdministradoresFiltro(int id, String nombre, String login, String rol){
+    public ArrayList<Usuario> getUsuariosFiltro(int id, String nombre, String login, String rol){
         ArrayList<Usuario> listaUsuarios = new ArrayList<>();
         
         try {

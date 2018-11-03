@@ -162,8 +162,8 @@ CONSTRAINT FK_FacturaPedido_usuario
 FOREIGN KEY (id_usuario)
 REFERENCES Usuario (id_usuario);
 
-INSERT INTO USUARIO VALUES ('1','Programadores del sistema','admin','123', 'Programador');
-
+INSERT INTO USUARIO VALUES (null,'Programadores del sistema','admin','123', 'Programador');
+INSERT INTO USUARIO VALUES (null,'miguel Angel','mike','mike123', 'Programador');
 
 
 
@@ -191,12 +191,11 @@ CREATE PROCEDURE getUsuarios ()
 
 DROP PROCEDURE IF EXISTS addUsuario;
 CREATE PROCEDURE addUsuario(
-id int, 
 nombre VARCHAR(100), 
 login VARCHAR(100), 
 pass VARCHAR(100), 
 rol VARCHAR(100))
-INSERT INTO Usuario VALUES(id, nombre, login, pass, rol);
+INSERT INTO Usuario VALUES(null, nombre, login, pass, rol);
 
 
 

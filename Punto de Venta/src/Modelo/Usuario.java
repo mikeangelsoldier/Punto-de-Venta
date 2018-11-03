@@ -1,6 +1,5 @@
-package modelo;
 
-
+package Modelo;
 
 public class Usuario {
     private int id;

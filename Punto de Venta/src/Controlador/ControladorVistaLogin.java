@@ -38,8 +38,13 @@ public class ControladorVistaLogin implements Initializable {
     private ArrayList<Login> logins;
     String tipoUsuario, contenidoTxtUsuario, contenidoTxtpassword, usuarioActual, rolLogin;
     private String mensajeLogin;
-    private static String MENSAJE_USUARIO_INCORRECTO="El usuario Ingresado no existe";
-    private static String MENSAJE_CONTRASEÑA_INCORRECTA="Usuario existente pero contraseña incorrecta";
+    private static String MENSAJE_USUARIO_INCORRECTO = "El usuario Ingresado no existe";
+    private static String MENSAJE_CONTRASEÑA_INCORRECTA = "Usuario existente pero contraseña incorrecta";
+    private static String ROL_PROGRAMADOR = "Programador";
+    private static String ROL_ADMINISTRADOR = "Administrador";
+    private static String ROL_EMPLEADO = "Empleado";
+    private static String ROL_ENCARGADO_ALMACEN = "Encargado de Almacen";
+
     boolean isProgramador, isAdministrador, isUsuario, isEncargadoAlmacen;
     boolean loginExiste;
 
@@ -61,8 +66,6 @@ public class ControladorVistaLogin implements Initializable {
 
     }
      */
-    
-    
     public void cambiarVista(ActionEvent e) throws Exception {
         validarLogin();
         imprimirResultadoBusquedaLogin();
@@ -81,22 +84,22 @@ public class ControladorVistaLogin implements Initializable {
 
         if (isProgramador == true && isAdministrador == false && isUsuario == false && isEncargadoAlmacen == false) {
 
-            rolLogin = "Programador";
+            rolLogin = ROL_PROGRAMADOR;
             //loginMeta.tipoUsuario =rolLogin;
             System.out.println("Es " + rolLogin);
         } else if (isProgramador == false && isAdministrador == true && isUsuario == false && isEncargadoAlmacen == false) {
 
-            rolLogin = "Administrador";
+            rolLogin = ROL_ADMINISTRADOR;
             //loginMeta.tipoUsuario =rolLogin;
             System.out.println("Es " + rolLogin);
         } else if (isProgramador == false && isAdministrador == false && isUsuario == true && isEncargadoAlmacen == false) {
 
-            rolLogin = "Usuario";
+            rolLogin = ROL_EMPLEADO;
             //loginMeta.tipoUsuario =rolLogin;
             System.out.println("Es " + rolLogin);
         } else if (isProgramador == false && isAdministrador == false && isUsuario == false && isEncargadoAlmacen == true) {
 
-            rolLogin = "Encargado de almacen";
+            rolLogin = ROL_ENCARGADO_ALMACEN;
             //loginMeta.tipoUsuario =rolLogin;
             System.out.println("Es " + rolLogin);
 
@@ -187,13 +190,12 @@ public class ControladorVistaLogin implements Initializable {
                         loginMeta.idUsuario = String.valueOf(logins.get(i).getId());
                         loginMeta.rolUsuario = logins.get(i).getRol();
                         loginMeta.Password = logins.get(i).getPassword();
-                        
-                        
-                    }else{
+
+                    } else {
                         lblAvisoLogin.setText(MENSAJE_CONTRASEÑA_INCORRECTA);
                     }
 
-                }else{
+                } else {
                     lblAvisoLogin.setText(MENSAJE_USUARIO_INCORRECTO);
                 }
             }
