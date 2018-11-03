@@ -164,7 +164,7 @@ REFERENCES Usuario (id_usuario);
 
 INSERT INTO USUARIO VALUES (null,'Programadores del sistema','admin','123', 'Programador');
 INSERT INTO USUARIO VALUES (null,'miguel Angel','mike','mike123', 'Programador');
-
+INSERT INTO USUARIO VALUES (null,'hernan','hernan','h123', 'Programador');
 
 
 use punto_de_venta;
@@ -214,18 +214,38 @@ DROP PROCEDURE IF EXISTS deleteUsuario;
 CREATE PROCEDURE deleteUsuario (ID int)
 DELETE FROM Usuario WHERE id_usuario = ID;         
 
-DROP PROCEDURE IF EXISTS getBusquedaUsuario;
-CREATE PROCEDURE getBusquedaUsuario( 
-id VARCHAR(10), 
-nombre VARCHAR(60), 
-login VARCHAR(50), 
-rol VARCHAR(1))
-SELECT * from Usuario AS a
-where a.id like (CONCAT('%',id_usuario,'%'))
-AND  a.nombre like (CONCAT('%',nombre,'%'))
-AND  a.login like (CONCAT('%',login,'%'))
-AND  a.rol like (CONCAT('%',rol,'%'));
 
+
+DROP PROCEDURE IF EXISTS getBusquedaUsuario1;
+CREATE PROCEDURE getBusquedaUsuario1(  
+nombre VARCHAR(100), 
+login VARCHAR(100), 
+rol VARCHAR(100))
+		SELECT * from Usuario AS a
+		where  a.nombre like (CONCAT('%',nombre,'%'))
+		AND  a.login like (CONCAT('%',login,'%'))
+		AND  a.rol like (CONCAT('%',rol,'%'))
+
+;
+
+
+DROP PROCEDURE IF EXISTS getBusquedaUsuario2;
+CREATE PROCEDURE getBusquedaUsuario2( 
+id int, 
+nombre VARCHAR(100), 
+login VARCHAR(100), 
+rol VARCHAR(100))
+
+		SELECT * from Usuario AS a
+		where 
+		a.id_usuario like (CONCAT('%',id,'%'))
+		AND  a.nombre like (CONCAT('%',nombre,'%'))
+		AND  a.login like (CONCAT('%',login,'%'))
+		AND  a.rol like (CONCAT('%',rol,'%'))
+;
+
+call getBusquedaUsuario1('','','');
+call getBusquedaUsuario2(2,'','','');
 
 
 /*PROC Validacion LOGIN	--------------------------------------------------------------------------------------------------------------------------------------------------*/
@@ -241,32 +261,9 @@ SELECT * FROM usuario;
  where u.login = login
  AND u.contraseña =passw;
 
- DROP PROCEDURE IF EXISTS buscarLoginProgramador;
- CREATE PROCEDURE buscarLoginProgramador(login VARCHAR(100), passw VARCHAR(100))
- select * from Usuario as u
- where u.login = login
- AND u.contraseña =passw;
- 
-  DROP PROCEDURE IF EXISTS buscarLoginAdministrador;
- CREATE PROCEDURE buscarLoginAdministrador(login VARCHAR(100), passw VARCHAR(100))
- select * from Usuario as u
- where u.login = login
- AND u.contraseña =passw;
- 
-  DROP PROCEDURE IF EXISTS buscarLoginUsuario;
- CREATE PROCEDURE buscarLoginUsuario(login VARCHAR(100), passw VARCHAR(100))
- select * from Usuario as u
- where u.login = login
- AND u.contraseña =passw;
- 
-  DROP PROCEDURE IF EXISTS buscarLoginEncargadoDeAlmacen;
- CREATE PROCEDURE buscarLoginEncargadoDeAlmacen(login VARCHAR(100), passw VARCHAR(100))
- select * from Usuario as u
- where u.login = login
- AND u.contraseña =passw;
  
  
- call buscarLoginUsuario('Admin','123'); 
+ call buscarLogin('Admin','123'); 
  
  
  
