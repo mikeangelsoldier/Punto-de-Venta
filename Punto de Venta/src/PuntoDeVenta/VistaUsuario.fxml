@@ -38,7 +38,7 @@
                   </TableView>
                </content>
             </ScrollPane>
-            <HBox layoutX="43.0" layoutY="58.0" prefHeight="38.0" prefWidth="549.0" spacing="10.0">
+            <HBox layoutX="43.0" layoutY="58.0" prefHeight="42.0" prefWidth="843.0" spacing="10.0">
                <children>
                   <JFXButton fx:id="btnAgregarUsuario" buttonType="RAISED" onAction="#handleButtonAgregar" ripplerFill="#3fb0dd" style="-fx-background-color: #222288;" text="Agregar Usuario" textFill="WHITE">
                      <font>
@@ -55,17 +55,27 @@
                         <Font name="System Bold" size="13.0" />
                      </font>
                   </JFXButton>
-                  <JFXButton fx:id="btnCancelarUsuario" buttonType="RAISED" onAction="#handleButtonCancelar" ripplerFill="#3fb0dd" style="-fx-background-color: #222288;" text="Cancelar" textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="13.0" />
-                     </font>
-                  </JFXButton>
                   <JFXButton fx:id="btnFiltrarUsuario" buttonType="RAISED" onAction="#filtrarUsuario" ripplerFill="#3fb0dd" style="-fx-background-color: #222288;" text="Filtrar" textFill="WHITE">
                      <font>
                         <Font name="System Bold" size="13.0" />
                      </font>
                   </JFXButton>
                   <JFXButton fx:id="btnRegresarUsuario" buttonType="RAISED" ripplerFill="#3fb0dd" style="-fx-background-color: #222288;" text="Regresar" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="13.0" />
+                     </font>
+                  </JFXButton>
+                  <JFXButton fx:id="btnCancelarUsuario" buttonType="RAISED" onAction="#handleButtonCancelar" ripplerFill="#3fb0dd" style="-fx-background-color: #222288;" text="Cancelar" textFill="WHITE" visible="false">
+                     <font>
+                        <Font name="System Bold" size="13.0" />
+                     </font>
+                  </JFXButton>
+                  <JFXButton fx:id="btnGuardarCambiosAgregarUsuario" buttonType="RAISED" onAction="#handleButtonAgregarCambios" ripplerFill="#3fb0dd" style="-fx-background-color: #222288;" text="Guardar Cambios" textFill="WHITE" visible="false">
+                     <font>
+                        <Font name="System Bold" size="13.0" />
+                     </font>
+                  </JFXButton>
+                  <JFXButton fx:id="btnGuardarCambiosModificarUsuario" buttonType="RAISED" onAction="#handleButtonActualizarCambios" ripplerFill="#3fb0dd" style="-fx-background-color: #222288;" text="Guardar Cambios" textFill="WHITE" visible="false">
                      <font>
                         <Font name="System Bold" size="13.0" />
                      </font>
@@ -105,6 +115,11 @@
             <Label layoutX="43.0" layoutY="14.0" prefHeight="38.0" prefWidth="149.0" text="Usuarios" textFill="#222288">
                <font>
                   <Font name="Tahoma" size="33.0" />
+               </font>
+            </Label>
+            <Label fx:id="lblAyuda" layoutX="48.0" layoutY="100.0" textFill="#e80505">
+               <font>
+                  <Font name="System Bold Italic" size="14.0" />
                </font>
             </Label>
          </children>

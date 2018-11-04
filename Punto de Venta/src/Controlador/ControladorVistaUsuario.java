@@ -34,6 +34,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.Event;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.paint.Color;
 
 /**
  *
@@ -44,13 +45,17 @@ public class ControladorVistaUsuario implements Initializable {
     UsuarioBD usuarioDB;
     ConectaBD_Punto_de_venta conectaBD_PuntoVenta;
     //ManejadorFiltroKey manejador;
-    private boolean filtrarActivado;
+    private boolean filtrarActivado, agregarActivado, modificarActivado;
 
     private static String ROL_DEFAULT = "Elegir Rol";
     private static String ROL_PROGRAMADOR = "Programador";
     private static String ROL_ADMINISTRADOR = "Administrador";
     private static String ROL_EMPLEADO = "Empleado";
     private static String ROL_ENCARGADO_ALMACEN = "Encargado de Almacen";
+    
+    private static String AYUDA_AL_AGREGAR = "Escribe en los campos los datos deseados, da clic en Guardar Cambios, o da clic en cancelar";
+    private static String AYUDA_AL_MODIFICAR = "Seleccionar un registro, Escribe en los campos los datos deseados, da clic en Guardar Cambios, o da clic en cancelar";
+    private static String AYUDA_AL_FILTRAR = "Escribe en los campos la informacion con la que deben coincidir los registros del filtro. Da clic en Filtro nuevamente para salir";
 
     String contenidoTxtIDUsuario, contenidoTxtNombreUsuario, contenidoTxtLoginUsuario, contenidoTxtPasswordUsuario, contenidoCboRolUsuario;
 
@@ -76,8 +81,12 @@ public class ControladorVistaUsuario implements Initializable {
             tbcLogin, tbcContraseña, tbcRol;
 
     @FXML
-    private JFXButton btnAgregarUsuario, btnModificarUsuario, btnEliminarUsuario, btnCancelarUsuario, btnFiltrarUsuario, btnRegresarUsuario;
+    private JFXButton btnAgregarUsuario, btnModificarUsuario, btnEliminarUsuario, btnCancelarUsuario, btnFiltrarUsuario, btnRegresarUsuario,
+            btnGuardarCambiosAgregarUsuario, btnGuardarCambiosModificarUsuario;
 
+    @FXML
+    private Label lblAyuda;
+    
     @FXML
     private void handleButtonAction(ActionEvent event) {
 
@@ -85,16 +94,33 @@ public class ControladorVistaUsuario implements Initializable {
 
     @FXML
     private void handleButtonAgregar(ActionEvent event) {
-        agregarUsuario();
-        llenarTabla(usuarioDB.getUsuarios());
-        limpiarCampos();
+        agregarUsuarioActivado();
     }
 
     @FXML
     private void handleButtonActualizar(ActionEvent event) {
-        actualizarUsuario();
-        llenarTabla(usuarioDB.getUsuarios());
-        limpiarCampos();
+        modificarUsuarioActivado();
+    }
+
+    @FXML
+    private void handleButtonAgregarCambios(ActionEvent event) {
+        if (agregarActivado) {
+            agregarUsuario();
+            llenarTabla(usuarioDB.getUsuarios());
+            //limpiarCampos();
+        }
+
+    }
+
+    @FXML
+    private void handleButtonActualizarCambios(ActionEvent event) {
+        if (modificarActivado) {
+            actualizarUsuario();
+            llenarTabla(usuarioDB.getUsuarios());
+            //limpiarCampos();
+
+        }
+
     }
 
     @FXML
@@ -103,10 +129,11 @@ public class ControladorVistaUsuario implements Initializable {
         llenarTabla(usuarioDB.getUsuarios());
         limpiarCampos();
     }
-    
+
     @FXML
     private void handleButtonCancelar(ActionEvent event) {
         limpiarCampos();
+        regresarBotonesAFormaOriginal();
     }
 
     @FXML
@@ -119,7 +146,17 @@ public class ControladorVistaUsuario implements Initializable {
         conectaBD_PuntoVenta = new ConectaBD_Punto_de_venta();
         usuarioDB = new UsuarioBD(conectaBD_PuntoVenta.getConnection());
         filtrarActivado = false;
+        agregarActivado = false;
+        modificarActivado = false;
         llenarTabla(usuarioDB.getUsuarios());
+
+        txtIDUsuario.setEditable(false);
+        txtNombreUsuario.setEditable(false);
+        txtLoginUsuario.setEditable(false);
+        txtPasswordUsuario.setEditable(false);
+        cboRolUsuario.setEditable(false);
+        
+        lblAyuda.setText("");
 
         manejador = new ManejadorFiltroKey();
         cboRolUsuario.setItems(FXCollections.observableArrayList(ROL_DEFAULT, ROL_PROGRAMADOR, ROL_ADMINISTRADOR, ROL_EMPLEADO, ROL_ENCARGADO_ALMACEN));
@@ -182,6 +219,8 @@ public class ControladorVistaUsuario implements Initializable {
                     alert.setHeaderText(null);
                     alert.setContentText("La operación se ha realizado con éxito");
                     alert.show();
+                    regresarBotonesAFormaOriginal();
+                    limpiarCampos();
 
                 } else {
                     alert = new Alert(Alert.AlertType.INFORMATION);
@@ -224,27 +263,49 @@ public class ControladorVistaUsuario implements Initializable {
             alert.setHeaderText(null);
             alert.setContentText("¿Realmente deseas modificar el registro de este Usuario?");
 
-            if (alert.showAndWait().get() == ButtonType.OK) {//solo si se acepto continuar
-                idDeUsuarioSeleccionado = tblDatosUsuario.getSelectionModel().getSelectedItem().getId();
-                contenidoTxtNombreUsuario = txtNombreUsuario.getText();
-                contenidoTxtLoginUsuario = txtLoginUsuario.getText();
-                contenidoTxtPasswordUsuario = txtPasswordUsuario.getText();
-                contenidoCboRolUsuario = cboRolUsuario.getSelectionModel().getSelectedItem().toString();
+            if (!camposPorCompletar()) {
+                if (tblDatosUsuario.getSelectionModel().getSelectedItems().isEmpty()) {
+                    Alert alertSeleccion = new Alert(Alert.AlertType.WARNING);
+                    alertSeleccion.setTitle("Advertencia");
+                    alertSeleccion.setHeaderText(null);
+                    alertSeleccion.setContentText("Por favor elige un registro para modificar");
+                    alertSeleccion.show();
+                    return;
+                }
+                
+                if (alert.showAndWait().get() == ButtonType.OK) {//solo si se acepto continuar
+                    idDeUsuarioSeleccionado = tblDatosUsuario.getSelectionModel().getSelectedItem().getId();
+                    contenidoTxtNombreUsuario = txtNombreUsuario.getText();
+                    contenidoTxtLoginUsuario = txtLoginUsuario.getText();
+                    contenidoTxtPasswordUsuario = txtPasswordUsuario.getText();
+                    contenidoCboRolUsuario = cboRolUsuario.getSelectionModel().getSelectedItem().toString();
 
-                usuarioDB.updateUsuario(idDeUsuarioSeleccionado, contenidoTxtNombreUsuario,
-                        contenidoTxtLoginUsuario, contenidoTxtPasswordUsuario, contenidoCboRolUsuario);
-                alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Información");
-                alert.setHeaderText(null);
-                alert.setContentText("La operación se ha realizado con éxito");
-                alert.show();
+                    usuarioDB.updateUsuario(idDeUsuarioSeleccionado, contenidoTxtNombreUsuario,
+                            contenidoTxtLoginUsuario, contenidoTxtPasswordUsuario, contenidoCboRolUsuario);
+                    alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Información");
+                    alert.setHeaderText(null);
+                    alert.setContentText("La operación se ha realizado con éxito");
+                    alert.show();
+                    regresarBotonesAFormaOriginal();
+                    limpiarCampos();
+                } else {
+                    alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Información");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Se ha cancelado la operación");
+                    alert.show();
+                }
+
             } else {
+
                 alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Información");
                 alert.setHeaderText(null);
-                alert.setContentText("Se ha cancelado la operación");
+                alert.setContentText("Aun existen campos por completar");
                 alert.show();
             }
+
         } catch (SQLException ex) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
@@ -301,7 +362,16 @@ public class ControladorVistaUsuario implements Initializable {
         String nombre = txtNombreUsuario.getText();
         String login = txtLoginUsuario.getText();
         String password = txtPasswordUsuario.getText();
-        String rol = cboRolUsuario.getSelectionModel().getSelectedItem().toString();
+        String rol = "";
+
+//        String rol =ROL_DEFAULT;
+//        try{
+//             rol = cboRolUsuario.getSelectionModel().getSelectedItem().toString();
+//        }catch(Exception e){
+//             rol =ROL_DEFAULT;
+//             
+//        }
+        rol = cboRolUsuario.getSelectionModel().getSelectedItem().toString();
 
         if (nombre.equals("") || login.equals("") || password.equals("") || rol.equals(ROL_DEFAULT)) {
             return true;
@@ -321,13 +391,24 @@ public class ControladorVistaUsuario implements Initializable {
 
     @FXML
     private void filtrarUsuario() {
+        
         filtrarActivado = !filtrarActivado;
         limpiarCampos();
         if (filtrarActivado) {
+            lblAyuda.setText(AYUDA_AL_FILTRAR);
+            
             btnAgregarUsuario.setDisable(true);
             btnModificarUsuario.setDisable(true);
             btnEliminarUsuario.setDisable(true);
+
+            btnRegresarUsuario.setVisible(false);
+
             txtIDUsuario.setEditable(true);
+            txtNombreUsuario.setEditable(true);
+            txtLoginUsuario.setEditable(true);
+            txtPasswordUsuario.setEditable(true);
+            cboRolUsuario.setEditable(true);
+            cboRolUsuario.getSelectionModel().select(0);
 
             txtIDUsuario.textProperty().addListener(manejador);
             txtNombreUsuario.textProperty().addListener(manejador);
@@ -340,7 +421,19 @@ public class ControladorVistaUsuario implements Initializable {
             btnAgregarUsuario.setDisable(false);
             btnModificarUsuario.setDisable(false);
             btnEliminarUsuario.setDisable(false);
+
+            btnAgregarUsuario.setDisable(false);
+            btnModificarUsuario.setDisable(false);
+            btnEliminarUsuario.setDisable(false);
+
+            btnRegresarUsuario.setVisible(true);
+
             txtIDUsuario.setEditable(false);
+            txtNombreUsuario.setEditable(false);
+            txtLoginUsuario.setEditable(false);
+            txtPasswordUsuario.setEditable(false);
+            cboRolUsuario.setEditable(false);
+            cboRolUsuario.getSelectionModel().select(0);
 
             txtIDUsuario.textProperty().removeListener(manejador);
             txtNombreUsuario.textProperty().removeListener(manejador);
@@ -348,10 +441,98 @@ public class ControladorVistaUsuario implements Initializable {
 
             //cboRolUsuario.promptTextProperty().removeListener(manejador);
             cboRolUsuario.valueProperty().removeListener(manejador);
-            
+
             llenarTabla(usuarioDB.getUsuarios());
             //limpiarCampos();//----------------------------------------------------------
         }
+    }
+
+    void agregarUsuarioActivado() {
+        agregarActivado = true;
+        modificarActivado = false;
+
+        limpiarCampos();
+        if (agregarActivado) {
+            lblAyuda.setText(AYUDA_AL_AGREGAR);
+            
+            btnAgregarUsuario.setDisable(true);
+            //btnAgregarUsuario.setStyle("fx-background-color: #0FFF09");
+            btnModificarUsuario.setDisable(true);
+            btnEliminarUsuario.setDisable(true);
+            btnFiltrarUsuario.setDisable(true);
+
+            btnCancelarUsuario.setVisible(true);
+            btnRegresarUsuario.setVisible(false);
+            btnGuardarCambiosAgregarUsuario.setVisible(true);
+            btnGuardarCambiosModificarUsuario.setVisible(false);
+
+            txtIDUsuario.setEditable(false);
+            txtNombreUsuario.setEditable(true);
+            txtLoginUsuario.setEditable(true);
+            txtPasswordUsuario.setEditable(true);
+            cboRolUsuario.setEditable(true);
+            cboRolUsuario.getSelectionModel().select(0);
+
+        } else {
+
+        }
+    }
+
+    void modificarUsuarioActivado() {
+        modificarActivado = true;
+        agregarActivado = false;
+
+        limpiarCampos();
+        if (modificarActivado) {
+            lblAyuda.setText(AYUDA_AL_MODIFICAR);
+            
+            btnAgregarUsuario.setDisable(true);
+            btnModificarUsuario.setDisable(true);
+            //btnModificarUsuario.setStyle("fx-background-color: #0FFF09");
+            btnEliminarUsuario.setDisable(true);
+            btnFiltrarUsuario.setDisable(true);
+
+            btnCancelarUsuario.setVisible(true);
+            btnRegresarUsuario.setVisible(false);
+            btnGuardarCambiosAgregarUsuario.setVisible(false);
+            btnGuardarCambiosModificarUsuario.setVisible(true);
+
+            txtIDUsuario.setEditable(false);
+            txtNombreUsuario.setEditable(true);
+            txtLoginUsuario.setEditable(true);
+            txtPasswordUsuario.setEditable(true);
+            cboRolUsuario.setEditable(true);
+            cboRolUsuario.getSelectionModel().select(0);
+
+        } else {
+
+        }
+    }
+
+    void regresarBotonesAFormaOriginal() {
+        modificarActivado = false;
+        agregarActivado = false;
+
+        btnAgregarUsuario.setDisable(false);
+        //btnAgregarUsuario.setStyle("fx-background-color: #222288");
+        btnModificarUsuario.setDisable(false);
+        //btnModificarUsuario.setStyle("fx-background-color: #222288");
+        btnEliminarUsuario.setDisable(false);
+        btnFiltrarUsuario.setDisable(false);
+
+        btnCancelarUsuario.setVisible(false);
+        btnRegresarUsuario.setVisible(true);
+        btnGuardarCambiosAgregarUsuario.setVisible(false);
+        btnGuardarCambiosModificarUsuario.setVisible(false);
+
+        txtIDUsuario.setEditable(false);
+        txtNombreUsuario.setEditable(false);
+        txtLoginUsuario.setEditable(false);
+        txtPasswordUsuario.setEditable(false);
+        cboRolUsuario.setEditable(false);
+        cboRolUsuario.getSelectionModel().select(0);
+
+        lblAyuda.setText("");
     }
 
     void ManejadorFiltro() {

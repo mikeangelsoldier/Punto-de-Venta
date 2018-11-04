@@ -190,11 +190,11 @@ public class ControladorVistaLogin implements Initializable {
                         loginMeta.idUsuario = String.valueOf(logins.get(i).getId());
                         loginMeta.rolUsuario = logins.get(i).getRol();
                         loginMeta.Password = logins.get(i).getPassword();
-
+                        
                     } else {
                         lblAvisoLogin.setText(MENSAJE_CONTRASEÑA_INCORRECTA);
                     }
-
+                    break;
                 } else {
                     lblAvisoLogin.setText(MENSAJE_USUARIO_INCORRECTO);
                 }

@@ -165,6 +165,9 @@ REFERENCES Usuario (id_usuario);
 INSERT INTO USUARIO VALUES (null,'Programadores del sistema','admin','123', 'Programador');
 INSERT INTO USUARIO VALUES (null,'miguel Angel','mike','mike123', 'Programador');
 INSERT INTO USUARIO VALUES (null,'hernan','hernan','h123', 'Programador');
+INSERT INTO USUARIO VALUES (null,'Encargado de almacen','useralmacen','alm123', 'Encargado de Almacen');
+INSERT INTO USUARIO VALUES (null,'Vendedores generales','vendedor','v123', 'Empleado');
+
 
 
 use punto_de_venta;
@@ -221,11 +224,10 @@ CREATE PROCEDURE getBusquedaUsuario1(
 nombre VARCHAR(100), 
 login VARCHAR(100), 
 rol VARCHAR(100))
-		SELECT * from Usuario AS a
-		where  a.nombre like (CONCAT('%',nombre,'%'))
-		AND  a.login like (CONCAT('%',login,'%'))
-		AND  a.rol like (CONCAT('%',rol,'%'))
-
+	SELECT * from Usuario AS a
+	where  a.nombre like (CONCAT('%',nombre,'%'))
+	AND  a.login like (CONCAT('%',login,'%'))
+	AND  a.rol like (CONCAT('%',rol,'%'))
 ;
 
 
@@ -235,14 +237,14 @@ id int,
 nombre VARCHAR(100), 
 login VARCHAR(100), 
 rol VARCHAR(100))
-
-		SELECT * from Usuario AS a
-		where 
-		a.id_usuario like (CONCAT('%',id,'%'))
-		AND  a.nombre like (CONCAT('%',nombre,'%'))
-		AND  a.login like (CONCAT('%',login,'%'))
-		AND  a.rol like (CONCAT('%',rol,'%'))
+	SELECT * from Usuario AS a
+	where 
+	a.id_usuario like (CONCAT('%',id,'%'))
+	AND  a.nombre like (CONCAT('%',nombre,'%'))
+	AND  a.login like (CONCAT('%',login,'%'))
+	AND  a.rol like (CONCAT('%',rol,'%'))
 ;
+
 
 call getBusquedaUsuario1('','','');
 call getBusquedaUsuario2(2,'','','');
@@ -262,8 +264,8 @@ SELECT * FROM usuario;
  AND u.contraseña =passw;
 
  
- 
  call buscarLogin('Admin','123'); 
+ 
  
  
  
