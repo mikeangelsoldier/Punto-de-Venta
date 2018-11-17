@@ -134,6 +134,7 @@ public class ControladorVistaUsuario implements Initializable {
     private void handleButtonCancelar(ActionEvent event) {
         limpiarCampos();
         regresarBotonesAFormaOriginal();
+        lblAyuda.setText("");
     }
 
     @FXML
@@ -221,6 +222,7 @@ public class ControladorVistaUsuario implements Initializable {
                     alert.show();
                     regresarBotonesAFormaOriginal();
                     limpiarCampos();
+                    lblAyuda.setText("");
 
                 } else {
                     alert = new Alert(Alert.AlertType.INFORMATION);
@@ -289,6 +291,7 @@ public class ControladorVistaUsuario implements Initializable {
                     alert.show();
                     regresarBotonesAFormaOriginal();
                     limpiarCampos();
+                    lblAyuda.setText("");
                 } else {
                     alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Información");
@@ -535,6 +538,30 @@ public class ControladorVistaUsuario implements Initializable {
         lblAyuda.setText("");
     }
 
+    
+
+    public static boolean isNumeric(String cadena) {
+
+        boolean resultado;
+
+        try {
+            Integer.parseInt(cadena);
+            resultado = true;
+        } catch (NumberFormatException excepcion) {
+            resultado = false;
+        }
+
+        return resultado;
+    }
+
+    private void leerFiltrarTabla(int id, String nombre, String login, String rol) {
+        if (id == 0) {
+            llenarTabla(usuarioDB.getUsuariosFiltro1(nombre, login, rol));
+        } else {
+            llenarTabla(usuarioDB.getUsuariosFiltro2(id, nombre, login, rol));
+        }
+    }
+
     void ManejadorFiltro() {
         System.out.println("si entra al metodo");
         if (filtrarActivado) {
@@ -571,29 +598,7 @@ public class ControladorVistaUsuario implements Initializable {
             }
         }
     }
-
-    public static boolean isNumeric(String cadena) {
-
-        boolean resultado;
-
-        try {
-            Integer.parseInt(cadena);
-            resultado = true;
-        } catch (NumberFormatException excepcion) {
-            resultado = false;
-        }
-
-        return resultado;
-    }
-
-    private void leerFiltrarTabla(int id, String nombre, String login, String rol) {
-        if (id == 0) {
-            llenarTabla(usuarioDB.getUsuariosFiltro1(nombre, login, rol));
-        } else {
-            llenarTabla(usuarioDB.getUsuariosFiltro2(id, nombre, login, rol));
-        }
-    }
-
+    
     class ManejadorFiltroKey implements ChangeListener {
 
         @Override
@@ -601,4 +606,6 @@ public class ControladorVistaUsuario implements Initializable {
             ManejadorFiltro();
         }
     }
+    
+    
 }

@@ -94,17 +94,17 @@
                         <Font size="14.0" />
                      </font>
                   </Label>
-                  <Label text="Apellido Paterno" textFill="#222288" GridPane.rowIndex="1">
+                  <Label text="Apellido Paterno" textFill="#222288" visible="false" GridPane.rowIndex="1">
                      <font>
                         <Font size="14.0" />
                      </font>
                   </Label>
-                  <Label text="Apellido Materno" textFill="#222288" GridPane.rowIndex="2">
+                  <Label text="Apellido Materno" textFill="#222288" visible="false" GridPane.rowIndex="2">
                      <font>
                         <Font size="14.0" />
                      </font>
                   </Label>
-                  <Label text="Fecha de Nacimiento" textFill="#222288" GridPane.rowIndex="3">
+                  <Label text="Fecha de Nacimiento" textFill="#222288" visible="false" GridPane.rowIndex="3">
                      <font>
                         <Font size="14.0" />
                      </font>
@@ -120,11 +120,11 @@
                      </font>
                   </Label>
                   <JFXTextField promptText="nombre cliente" unFocusColor="#4d4d4d" GridPane.columnIndex="1" />
-                  <JFXTextField promptText="primer apellido" unFocusColor="#4d4d4d" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <JFXTextField promptText="segundo apellido" unFocusColor="#4d4d4d" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <JFXTextField promptText="primer apellido" unFocusColor="#4d4d4d" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <JFXTextField promptText="segundo apellido" unFocusColor="#4d4d4d" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                   <JFXTextField promptText="xxxxxxxxxx" unFocusColor="#4d4d4d" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                   <JFXTextField promptText="ejemplo@ejemplo.com" unFocusColor="#4d4d4d" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                  <JFXDatePicker GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <JFXDatePicker visible="false" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                </children>
             </GridPane>
             <GridPane layoutX="633.0" layoutY="153.0" prefHeight="145.0" prefWidth="247.0">

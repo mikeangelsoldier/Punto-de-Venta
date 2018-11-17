@@ -41,10 +41,6 @@ estado varchar(200) null
 create table Cliente(
 id_cliente int not null primary key auto_increment,
 nombre varchar(100) not null,
-apellido_paterno varchar(100) null,
-apellido_materno varchar(100) null,
-rfc varchar(15) null,
-fecha_nacimiento date null,
 telefono varchar(10) null,
 correo varchar(100) null,
 direccion varchar(100)  null,
@@ -70,6 +66,11 @@ nombre varchar(200) not null,
 descripcion varchar(300) null
 );
 
+create table Marca(
+id_marca int not null primary key auto_increment,
+marca  varchar(200) 
+);
+
 create table Producto(
 codigo_producto varchar(13) not null primary key,
 descripcion varchar(400) not null,
@@ -82,6 +83,7 @@ stock_minimo int not null,
 id_categoria int not null,
 id_proveedor int not null
 );
+
 
 create table Ventas(
 id_venta int not null primary key auto_increment,
@@ -179,7 +181,8 @@ select * from Producto;
 select * from Proveedor;
 select * from Ventas;
 select * from Detalle_Venta;
-
+select * from categoria;
+select * from marca;
 
 
 /*****************************************************************************************************
@@ -268,4 +271,47 @@ SELECT * FROM usuario;
  
  
  
+ /*Procedimientos de CATEGORIA*/
+ SELECT * FROM Categoria;
+ INSERT INTO Categoria VALUES (null,'Fontaneria','');
+INSERT INTO Categoria VALUES (null,'Electricidad','');
+INSERT INTO Categoria VALUES (null,'Otros','Categoria estándar');
+ /*
+ Fontaneria 
+ Electricidad
+ */
  
+ 
+ /*
+ Trupper
+ Urrea
+ Dica
+ 
+ */
+ 
+ 
+ 
+  /*Procedimientos de CATEGORIA*/
+SELECT * FROM marca;
+INSERT INTO marca VALUES (null,'Trupper');
+INSERT INTO marca VALUES (null,'Urea');
+INSERT INTO marca VALUES (null,'Dica');
+INSERT INTO marca VALUES (null,'Generico');
+
+
+
+
+ 
+  /*Procedimientos de PRODCUTO*/
+SELECT * FROM Producto;
+INSERT INTO Producto VALUES ('1452178965426','');
+INSERT INTO Producto VALUES (null,'Urea');
+INSERT INTO Producto VALUES (null,'Dica');
+INSERT INTO Producto VALUES (null,'Generico');
+
+/*
+Llave Nariz 1/2" Dica 33 56 pieza 25 8 1 1
+Mezcladora para Lavavo 4048 Dica 268 342 pieza 3 1 1 1
+Pinza Electricista 10" Truper 112 183 pieza 5 1 1 1 
+*/
+
