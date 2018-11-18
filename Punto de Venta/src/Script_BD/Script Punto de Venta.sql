@@ -355,7 +355,7 @@ call deleteCategoria(1);
 
 DROP PROCEDURE IF EXISTS getBusquedaCategoria1;/*RECOMIENDO USAr la opcion 3*/
 CREATE PROCEDURE getBusquedaCategoria1(  
-nombe VARCHAR(200), 
+nombre VARCHAR(200), 
 descripcion VARCHAR(300))
 	SELECT * from Categoria AS a
 	where a.nombre like (CONCAT('%',nombre,'%'))
@@ -521,9 +521,153 @@ call getBusquedaMarca3(1,'');
 
   /***********************************************************Procedimientos de PROVEEDOR*/
 SELECT * FROM Proveedor;
+/*
+id_proveedor int not null primary key auto_increment,
+nombre_proveedor varchar(40) not null,
+telefono varchar(10) null,
+correo varchar(100) null,
+direccion varchar(100)  null,
+colonia varchar(100) null,
+municipio varchar(200)  null,
+cp varchar(5) null,
+estado varchar(200) null
 
+*/
 INSERT INTO Proveedor (id_proveedor,nombre_proveedor,telefono) 
 		VALUES (null,'Proveedor de prueba','4774265833'); 
+
+
+
+DROP PROCEDURE IF EXISTS getProveedores;
+CREATE PROCEDURE getProveedores()
+	SELECT * FROM Proveedor;
+    
+/*	
+
+call getProveedores();
+	
+*/
+
+
+/*
+id_proveedor int not null primary key auto_increment,
+nombre_proveedor varchar(40) not null,
+telefono varchar(10) null,
+correo varchar(100) null,
+direccion varchar(100)  null,
+colonia varchar(100) null,
+municipio varchar(200)  null,
+cp varchar(5) null,
+estado varchar(200) null
+
+*/
+DROP PROCEDURE IF EXISTS addProveedor;
+CREATE PROCEDURE addProveedor(
+nombre_proveedor varchar(40),
+telefono varchar(10),
+correo varchar(100),
+direccion varchar(100),
+colonia varchar(100),
+municipio varchar(200),
+cp varchar(5),
+estado varchar(200))
+INSERT INTO proveedor (nombre_proveedor,telefono,correo,direccion,colonia,municipio,cp,estado) 
+				VALUES(nombre_proveedor,telefono,correo,direccion,colonia,municipio,cp,estado);
+
+
+/*	
+call getProveedores();
+call addProveedor('Proveedor 2 de prueba','4728563241','','','','','','');
+call addProveedor('Proveedor 2 de prueba','4728563241','','','','','','');
+*/
+
+call addProveedor('Proveedor 2 de prueba','4728563241','','','','','','');
+call addProveedor('Proveedor 2 de prueba','4728563241','','','','','','');
+
+
+DROP PROCEDURE IF EXISTS updateProveedor;
+CREATE PROCEDURE updateProveedor(
+id_proveedor int,
+nombre_proveedor varchar(40),
+telefono varchar(10),
+correo varchar(100),
+direccion varchar(100),
+colonia varchar(100),
+municipio varchar(200),
+cp varchar(5),
+estado varchar(200))
+UPDATE Proveedor as p 
+	SET 
+		p.nombre_proveedor=nombre_proveedor,
+		p.telefono=telefono,
+		p.correo=correo,
+		p.direccion=direccion,
+		p.colonia=colonia,
+		p.municipio=municipio,
+		p.cp=cp,
+		p.estado=estado
+WHERE p.id_proveedor = id_proveedor;
+
+
+/*	
+call getProveedores();
+call updateProveedor(3,'Proveedor de prueba 3','4728563248','proveedor3@hotmail.com','','','León','','Guanajuato');
+call updateProveedor(3,'Proveedor de prueba 3','4587654123','prov3@hotmail.com','','','León','','Guanajuato');
+	
+*/
+
+call updateProveedor(1,'Proveedor de prueba','4774265833','','','','','','');
+
+
+
+DROP PROCEDURE IF EXISTS deleteProveedor;/*Debo tener cuidado al leminar un proveedor, ya que los productos lo tienen como llave foranea*/
+CREATE PROCEDURE deleteProveedor (id int)
+DELETE FROM proveedor WHERE id_proveedor = id;       
+  
+  
+/*	
+call deleteProveedor(4);
+*/
+
+
+
+DROP PROCEDURE IF EXISTS getBusquedaProveedor;
+CREATE PROCEDURE getBusquedaProveedor( 
+id_proveedor varchar(100),
+nombre_proveedor varchar(40),
+telefono varchar(10),
+correo varchar(100),
+direccion varchar(100),
+colonia varchar(100),
+municipio varchar(200),
+cp varchar(5),
+estado varchar(200))
+	SELECT * from Proveedor AS p
+	where CONVERT(p.id_proveedor,CHAR)  like (CONCAT('%',id_proveedor,'%'))
+    AND p.nombre_proveedor like (CONCAT('%',nombre_proveedor,'%'))
+	AND p.telefono like (CONCAT('%',telefono,'%'))
+	AND p.correo like (CONCAT('%',correo,'%'))/*Uso convert para comparar el valor char recibido con un int o double*/
+    AND p.direccion  like (CONCAT('%',direccion,'%'))
+	AND p.colonia like (CONCAT('%',colonia,'%'))
+    AND p.municipio like (CONCAT('%',municipio,'%'))
+	AND p.cp like (CONCAT('%',cp,'%'))
+    AND p.estado like (CONCAT('%',estado,'%'))
+;
+
+/*	
+
+call getBusquedaProveedor('','','','','','','','','');
+call getBusquedaProveedor('1','','','','','','','','');
+call getBusquedaProveedor('000','','','','','','','','');
+
+*/
+
+
+
+
+
+
+
   
   
  
