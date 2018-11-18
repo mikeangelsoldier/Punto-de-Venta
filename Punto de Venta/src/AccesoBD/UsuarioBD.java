@@ -54,6 +54,7 @@ public class UsuarioBD {
         statement.setString(3, login);
         statement.setString(4, password);
         statement.setString(5, rol);
+        
         System.out.println(statement);
         statement.execute();
 
@@ -66,13 +67,15 @@ public class UsuarioBD {
         statement.setInt(1, ID);
         System.out.println(statement);
         statement.execute();
+        
+        statement.close();
     }
 
     public ArrayList<Usuario> getUsuariosFiltro1(String nombre, String login, String rol) {
         ArrayList<Usuario> listaUsuarios = new ArrayList<>();
 
         try {
-            //ResultSet rs = connect.prepareCall("EXEC getBusquedaUsuario").executeQuery(); //Para SQL Server
+            //ResultSet rs = connect.prepareCall("EXEC getBusquedaUsuario1").executeQuery(); //Para SQL Server
             PreparedStatement ps = connect.prepareStatement("CALL  getBusquedaUsuario1(?, ?, ?)"); //Para MySql
 
             ps.setString(1, nombre);
@@ -99,10 +102,39 @@ public class UsuarioBD {
         ArrayList<Usuario> listaUsuarios = new ArrayList<>();
 
         try {
-            //ResultSet rs = connect.prepareCall("EXEC getBusquedaUsuario").executeQuery(); //Para SQL Server
+            //ResultSet rs = connect.prepareCall("EXEC getBusquedaUsuario2").executeQuery(); //Para SQL Server
             PreparedStatement ps = connect.prepareStatement("CALL  getBusquedaUsuario2(?, ?, ?, ?)"); //Para MySql
 
             ps.setInt(1, id);
+            ps.setString(2, nombre);
+            ps.setString(3, login);
+            ps.setString(4, rol);
+
+            System.out.println(ps);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                listaUsuarios.add(new Usuario(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5)));
+            }
+
+            rs.close();
+            ps.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(UsuarioBD.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return listaUsuarios;
+    }
+    
+    
+    public ArrayList<Usuario> getUsuariosFiltro3(String id, String nombre, String login, String rol) {
+        ArrayList<Usuario> listaUsuarios = new ArrayList<>();
+
+        try {
+            //ResultSet rs = connect.prepareCall("EXEC getBusquedaUsuario2").executeQuery(); //Para SQL Server
+            PreparedStatement ps = connect.prepareStatement("CALL  getBusquedaUsuario3(?, ?, ?, ?)"); //Para MySql
+
+            ps.setString(1, id);
             ps.setString(2, nombre);
             ps.setString(3, login);
             ps.setString(4, rol);

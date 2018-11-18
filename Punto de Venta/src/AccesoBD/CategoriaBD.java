@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import Modelo.Usuario;
+import Modelo.Categoria;
 
 public class CategoriaBD {
 
@@ -17,73 +17,73 @@ public class CategoriaBD {
         this.connect = connect;
     }
 
-    public ArrayList<Usuario> getUsuarios() {
-        ArrayList<Usuario> listaUsuarios = new ArrayList<>();
+    public ArrayList<Categoria> getCategorias() {
+        ArrayList<Categoria> listaCategorias = new ArrayList<>();
 
         try {
-            //ResultSet rs = connect.prepareCall("EXEC getUsuarios").executeQuery(); //Para SQL Server
-            ResultSet rs = connect.prepareCall("CALL getUsuarios").executeQuery(); //Para MySql
+            //ResultSet rs = connect.prepareCall("EXEC getCategorias").executeQuery(); //Para SQL Server
+            ResultSet rs = connect.prepareCall("CALL getCategorias").executeQuery(); //Para MySql
             while (rs.next()) {
-                listaUsuarios.add(new Usuario(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5)));
+                listaCategorias.add(new Categoria(rs.getInt(1), rs.getString(2), rs.getString(3)));
             }
 
             rs.close();
         } catch (SQLException ex) {
             Logger.getLogger(CategoriaBD.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return listaUsuarios;
+        
+        return listaCategorias;
     }
 
-    public void addUsuario(String nombre, String login, String password, String rol) throws SQLException {
+    public void addCategoria(String nombre, String descripcion) throws SQLException {
 
-        PreparedStatement statement = connect.prepareCall("CALL addUsuario(?, ?, ?, ?)");
+        PreparedStatement statement = connect.prepareCall("CALL addCategoria(?, ?)");
         statement.setString(1, nombre);
-        statement.setString(2, login);
-        statement.setString(3, password);
-        statement.setString(4, rol);
+        statement.setString(2, descripcion);
+        
         System.out.println(statement.toString());
         statement.execute();
 
         statement.close();
     }
 
-    public void updateUsuario(int id, String nombre, String login, String password, String rol) throws SQLException {
-        PreparedStatement statement = connect.prepareCall("CALL updateUsuario(?, ?, ?, ?, ?)");
+    public void updateCategoria(int id, String nombre, String descripcion) throws SQLException {
+        PreparedStatement statement = connect.prepareCall("CALL updateCategoria(?, ?, ?)");
         statement.setInt(1, id);
         statement.setString(2, nombre);
-        statement.setString(3, login);
-        statement.setString(4, password);
-        statement.setString(5, rol);
+        statement.setString(3, descripcion);
+        
         System.out.println(statement);
         statement.execute();
 
         statement.close();
     }
 
-    public void deleteUsuario(int ID) throws SQLException {
+    public void deleteCategoria(int ID) throws SQLException {
 
-        PreparedStatement statement = connect.prepareCall("CALL deleteUsuario(?)");
+        PreparedStatement statement = connect.prepareCall("CALL deleteCategoria(?)");
         statement.setInt(1, ID);
+        
         System.out.println(statement);
         statement.execute();
+        statement.close();
     }
 
-    public ArrayList<Usuario> getUsuariosFiltro1(String nombre, String login, String rol) {
-        ArrayList<Usuario> listaUsuarios = new ArrayList<>();
+    public ArrayList<Categoria> getCategoriasFiltro1(String nombre, String descripcion) {
+        ArrayList<Categoria> listaCategorias = new ArrayList<>();
 
         try {
-            //ResultSet rs = connect.prepareCall("EXEC getBusquedaUsuario").executeQuery(); //Para SQL Server
-            PreparedStatement ps = connect.prepareStatement("CALL  getBusquedaUsuario1(?, ?, ?)"); //Para MySql
+            //ResultSet rs = connect.prepareCall("EXEC getBusquedaCategoria1").executeQuery(); //Para SQL Server
+            PreparedStatement ps = connect.prepareStatement("CALL  getBusquedaCategoria1(?, ?)"); //Para MySql
 
             ps.setString(1, nombre);
-            ps.setString(2, login);
-            ps.setString(3, rol);
+            ps.setString(2, descripcion);
 
             System.out.println(ps);
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                listaUsuarios.add(new Usuario(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5)));
+                listaCategorias.add(new Categoria(rs.getInt(1), rs.getString(2), rs.getString(3)));
             }
 
             rs.close();
@@ -92,26 +92,26 @@ public class CategoriaBD {
             Logger.getLogger(CategoriaBD.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        return listaUsuarios;
+        return listaCategorias;
     }
     
-    public ArrayList<Usuario> getUsuariosFiltro2(int id, String nombre, String login, String rol) {
-        ArrayList<Usuario> listaUsuarios = new ArrayList<>();
+    
+    public ArrayList<Categoria> getCategoriasFiltro2(int id,String nombre, String descripcion) {
+        ArrayList<Categoria> listaCategorias = new ArrayList<>();
 
         try {
-            //ResultSet rs = connect.prepareCall("EXEC getBusquedaUsuario").executeQuery(); //Para SQL Server
-            PreparedStatement ps = connect.prepareStatement("CALL  getBusquedaUsuario2(?, ?, ?, ?)"); //Para MySql
+            //ResultSet rs = connect.prepareCall("EXEC getBusquedaCategoria2").executeQuery(); //Para SQL Server
+            PreparedStatement ps = connect.prepareStatement("CALL  getBusquedaCategoria2(?, ?, ?)"); //Para MySql
 
             ps.setInt(1, id);
             ps.setString(2, nombre);
-            ps.setString(3, login);
-            ps.setString(4, rol);
+            ps.setString(2, descripcion);
 
             System.out.println(ps);
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                listaUsuarios.add(new Usuario(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5)));
+                listaCategorias.add(new Categoria(rs.getInt(1), rs.getString(2), rs.getString(3)));
             }
 
             rs.close();
@@ -120,6 +120,33 @@ public class CategoriaBD {
             Logger.getLogger(CategoriaBD.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        return listaUsuarios;
+        return listaCategorias;
+    }
+    
+    public ArrayList<Categoria> getCategoriasFiltro3(String id,String nombre, String descripcion) {
+        ArrayList<Categoria> listaCategorias = new ArrayList<>();
+
+        try {
+            //ResultSet rs = connect.prepareCall("EXEC getBusquedaCategoria3").executeQuery(); //Para SQL Server
+            PreparedStatement ps = connect.prepareStatement("CALL  getBusquedaCategoria3(?, ?, ?)"); //Para MySql
+            
+            ps.setString(1, id);
+            ps.setString(1, nombre);
+            ps.setString(2, descripcion);
+
+            System.out.println(ps);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                listaCategorias.add(new Categoria(rs.getInt(1), rs.getString(2), rs.getString(3)));
+            }
+
+            rs.close();
+            ps.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(CategoriaBD.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return listaCategorias;
     }
 }

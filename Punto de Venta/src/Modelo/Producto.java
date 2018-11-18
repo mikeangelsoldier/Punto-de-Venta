@@ -2,6 +2,7 @@
 package Modelo;
 
 public class Producto {
+    private int id;
     private String codigo;
     private String descripcion;
     private String marca;
@@ -17,7 +18,8 @@ public class Producto {
         
     }
 
-    public Producto(String codigo, String descripcion, String marca, double costo, double precio, String presentacion, int stock, int stock_minimo, int categoria, int proveedor) {
+    public Producto(int id, String codigo, String descripcion, String marca, double costo, double precio, String presentacion, int stock, int stock_minimo, int categoria, int proveedor) {
+        this.id = id;
         this.codigo = codigo;
         this.descripcion = descripcion;
         this.marca = marca;
@@ -28,6 +30,14 @@ public class Producto {
         this.stock_minimo = stock_minimo;
         this.categoria = categoria;
         this.proveedor = proveedor;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getCodigo() {
@@ -109,9 +119,6 @@ public class Producto {
     public void setProveedor(int proveedor) {
         this.proveedor = proveedor;
     }
-  
     
     
-    
-
 }
