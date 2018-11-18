@@ -16,7 +16,6 @@
 
 <AnchorPane id="AnchorPane" blendMode="DARKEN" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controlador.ControladorVistaUsuario">
     <children>
-        <Label fx:id="label" layoutX="126" layoutY="120" minHeight="16" minWidth="69" />
       <Pane layoutY="1.0" prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: 12,12,12;">
          <children>
             <ScrollPane layoutX="18.0" layoutY="314.0" prefHeight="270.0" prefWidth="866.0">

@@ -82,7 +82,7 @@ public class ControladorVistaUsuario implements Initializable {
 
     @FXML
     private JFXButton btnAgregarUsuario, btnModificarUsuario, btnEliminarUsuario, btnCancelarUsuario, btnFiltrarUsuario, btnRegresarUsuario,
-            btnGuardarCambiosAgregarUsuario, btnGuardarCambiosModificarUsuario;
+            btnGuardarInsercionUsuario, btnGuardarModificacionUsuario;
 
     @FXML
     private Label lblAyuda;
@@ -466,8 +466,8 @@ public class ControladorVistaUsuario implements Initializable {
 
             btnCancelarUsuario.setVisible(true);
             btnRegresarUsuario.setVisible(false);
-            btnGuardarCambiosAgregarUsuario.setVisible(true);
-            btnGuardarCambiosModificarUsuario.setVisible(false);
+            btnGuardarInsercionUsuario.setVisible(true);
+            btnGuardarModificacionUsuario.setVisible(false);
 
             txtIDUsuario.setEditable(false);
             txtNombreUsuario.setEditable(true);
@@ -497,8 +497,8 @@ public class ControladorVistaUsuario implements Initializable {
 
             btnCancelarUsuario.setVisible(true);
             btnRegresarUsuario.setVisible(false);
-            btnGuardarCambiosAgregarUsuario.setVisible(false);
-            btnGuardarCambiosModificarUsuario.setVisible(true);
+            btnGuardarInsercionUsuario.setVisible(false);
+            btnGuardarModificacionUsuario.setVisible(true);
 
             txtIDUsuario.setEditable(false);
             txtNombreUsuario.setEditable(true);
@@ -525,8 +525,8 @@ public class ControladorVistaUsuario implements Initializable {
 
         btnCancelarUsuario.setVisible(false);
         btnRegresarUsuario.setVisible(true);
-        btnGuardarCambiosAgregarUsuario.setVisible(false);
-        btnGuardarCambiosModificarUsuario.setVisible(false);
+        btnGuardarInsercionUsuario.setVisible(false);
+        btnGuardarModificacionUsuario.setVisible(false);
 
         txtIDUsuario.setEditable(false);
         txtNombreUsuario.setEditable(false);
