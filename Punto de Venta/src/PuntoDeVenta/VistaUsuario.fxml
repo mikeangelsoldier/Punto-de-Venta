@@ -69,12 +69,12 @@
                         <Font name="System Bold" size="13.0" />
                      </font>
                   </JFXButton>
-                  <JFXButton fx:id="btnGuardarCambiosAgregarUsuario" buttonType="RAISED" onAction="#handleButtonAgregarCambios" ripplerFill="#3fb0dd" style="-fx-background-color: #222288;" text="Guardar Cambios" textFill="WHITE" visible="false">
+                  <JFXButton fx:id="btnGuardarInsercionUsuario" buttonType="RAISED" onAction="#handleButtonGuardarInsercion" ripplerFill="#3fb0dd" style="-fx-background-color: #222288;" text="Guardar Cambios" textFill="WHITE" visible="false">
                      <font>
                         <Font name="System Bold" size="13.0" />
                      </font>
                   </JFXButton>
-                  <JFXButton fx:id="btnGuardarCambiosModificarUsuario" buttonType="RAISED" onAction="#handleButtonActualizarCambios" ripplerFill="#3fb0dd" style="-fx-background-color: #222288;" text="Guardar Cambios" textFill="WHITE" visible="false">
+                  <JFXButton fx:id="btnGuardarModificacionUsuario" buttonType="RAISED" onAction="#handleButtonGuardarModificacion" ripplerFill="#3fb0dd" style="-fx-background-color: #222288;" text="Guardar Cambios" textFill="WHITE" visible="false">
                      <font>
                         <Font name="System Bold" size="13.0" />
                      </font>

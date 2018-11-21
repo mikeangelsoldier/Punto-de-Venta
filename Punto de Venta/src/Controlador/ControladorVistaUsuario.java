@@ -52,7 +52,7 @@ public class ControladorVistaUsuario implements Initializable {
     private static String ROL_ADMINISTRADOR = "Administrador";
     private static String ROL_EMPLEADO = "Empleado";
     private static String ROL_ENCARGADO_ALMACEN = "Encargado de Almacen";
-    
+
     private static String AYUDA_AL_AGREGAR = "Escribe en los campos los datos deseados, da clic en Guardar Cambios, o da clic en cancelar";
     private static String AYUDA_AL_MODIFICAR = "Seleccionar un registro, Escribe en los campos los datos deseados, da clic en Guardar Cambios, o da clic en cancelar";
     private static String AYUDA_AL_FILTRAR = "Escribe en los campos la informacion con la que deben coincidir los registros del filtro. Da clic en Filtro nuevamente para salir";
@@ -86,7 +86,7 @@ public class ControladorVistaUsuario implements Initializable {
 
     @FXML
     private Label lblAyuda;
-    
+
     @FXML
     private void handleButtonAction(ActionEvent event) {
 
@@ -103,7 +103,7 @@ public class ControladorVistaUsuario implements Initializable {
     }
 
     @FXML
-    private void handleButtonAgregarCambios(ActionEvent event) {
+    private void handleButtonGuardarInsercion(ActionEvent event) {
         if (agregarActivado) {
             agregarUsuario();
             llenarTabla(usuarioDB.getUsuarios());
@@ -113,7 +113,7 @@ public class ControladorVistaUsuario implements Initializable {
     }
 
     @FXML
-    private void handleButtonActualizarCambios(ActionEvent event) {
+    private void handleButtonGuardarModificacion(ActionEvent event) {
         if (modificarActivado) {
             actualizarUsuario();
             llenarTabla(usuarioDB.getUsuarios());
@@ -149,6 +149,7 @@ public class ControladorVistaUsuario implements Initializable {
         filtrarActivado = false;
         agregarActivado = false;
         modificarActivado = false;
+
         llenarTabla(usuarioDB.getUsuarios());
 
         txtIDUsuario.setEditable(false);
@@ -156,8 +157,10 @@ public class ControladorVistaUsuario implements Initializable {
         txtLoginUsuario.setEditable(false);
         txtPasswordUsuario.setEditable(false);
         cboRolUsuario.setEditable(false);
-        
+
         lblAyuda.setText("");
+
+        regresarBotonesAFormaOriginal();
 
         manejador = new ManejadorFiltroKey();
         cboRolUsuario.setItems(FXCollections.observableArrayList(ROL_DEFAULT, ROL_PROGRAMADOR, ROL_ADMINISTRADOR, ROL_EMPLEADO, ROL_ENCARGADO_ALMACEN));
@@ -274,7 +277,7 @@ public class ControladorVistaUsuario implements Initializable {
                     alertSeleccion.show();
                     return;
                 }
-                
+
                 if (alert.showAndWait().get() == ButtonType.OK) {//solo si se acepto continuar
                     idDeUsuarioSeleccionado = tblDatosUsuario.getSelectionModel().getSelectedItem().getId();
                     contenidoTxtNombreUsuario = txtNombreUsuario.getText();
@@ -394,12 +397,12 @@ public class ControladorVistaUsuario implements Initializable {
 
     @FXML
     private void filtrarUsuario() {
-        
+
         filtrarActivado = !filtrarActivado;
         limpiarCampos();
         if (filtrarActivado) {
             lblAyuda.setText(AYUDA_AL_FILTRAR);
-            
+
             btnAgregarUsuario.setDisable(true);
             btnModificarUsuario.setDisable(true);
             btnEliminarUsuario.setDisable(true);
@@ -447,6 +450,8 @@ public class ControladorVistaUsuario implements Initializable {
 
             llenarTabla(usuarioDB.getUsuarios());
             //limpiarCampos();//----------------------------------------------------------
+            lblAyuda.setText("");
+
         }
     }
 
@@ -457,7 +462,7 @@ public class ControladorVistaUsuario implements Initializable {
         limpiarCampos();
         if (agregarActivado) {
             lblAyuda.setText(AYUDA_AL_AGREGAR);
-            
+
             btnAgregarUsuario.setDisable(true);
             //btnAgregarUsuario.setStyle("fx-background-color: #0FFF09");
             btnModificarUsuario.setDisable(true);
@@ -488,7 +493,7 @@ public class ControladorVistaUsuario implements Initializable {
         limpiarCampos();
         if (modificarActivado) {
             lblAyuda.setText(AYUDA_AL_MODIFICAR);
-            
+
             btnAgregarUsuario.setDisable(true);
             btnModificarUsuario.setDisable(true);
             //btnModificarUsuario.setStyle("fx-background-color: #0FFF09");
@@ -515,6 +520,7 @@ public class ControladorVistaUsuario implements Initializable {
     void regresarBotonesAFormaOriginal() {
         modificarActivado = false;
         agregarActivado = false;
+        filtrarActivado = false;
 
         btnAgregarUsuario.setDisable(false);
         //btnAgregarUsuario.setStyle("fx-background-color: #222288");
@@ -522,9 +528,11 @@ public class ControladorVistaUsuario implements Initializable {
         //btnModificarUsuario.setStyle("fx-background-color: #222288");
         btnEliminarUsuario.setDisable(false);
         btnFiltrarUsuario.setDisable(false);
+        //btnRegresarUsuario.setDisable(false);
+
+        btnRegresarUsuario.setVisible(true);
 
         btnCancelarUsuario.setVisible(false);
-        btnRegresarUsuario.setVisible(true);
         btnGuardarInsercionUsuario.setVisible(false);
         btnGuardarModificacionUsuario.setVisible(false);
 
@@ -537,8 +545,6 @@ public class ControladorVistaUsuario implements Initializable {
 
         lblAyuda.setText("");
     }
-
-    
 
     public static boolean isNumeric(String cadena) {
 
@@ -598,7 +604,7 @@ public class ControladorVistaUsuario implements Initializable {
             }
         }
     }
-    
+
     class ManejadorFiltroKey implements ChangeListener {
 
         @Override
@@ -606,6 +612,5 @@ public class ControladorVistaUsuario implements Initializable {
             ManejadorFiltro();
         }
     }
-    
-    
+
 }
