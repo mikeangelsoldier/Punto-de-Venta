@@ -26,7 +26,7 @@
          <tabs>
             <Tab text="Acciones">
               <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                <AnchorPane minHeight="0.0" minWidth="0.0" onKeyReleased="#handleTableChange" onMouseClicked="#handleTableChange" prefHeight="180.0" prefWidth="200.0">
                      <children>
                         <Label fx:id="lblAyuda" layoutX="58.0" layoutY="52.0" prefHeight="27.0" prefWidth="24.0" textFill="#e80505">
                            <font>
@@ -35,7 +35,7 @@
                         </Label>
                         <ScrollPane layoutX="14.0" layoutY="301.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="206.0" prefWidth="1140.0">
                            <content>
-                              <TableView fx:id="tblDatosProducto" cache="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="1117.0">
+                              <TableView fx:id="tblDatosProducto" cache="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyReleased="#handleTableChange" onMouseClicked="#handleTableChange" prefHeight="200.0" prefWidth="1117.0">
                                  <columns>
                                     <TableColumn fx:id="tbcID" minWidth="-1.0" prefWidth="36.0" text="ID" />
                                     <TableColumn fx:id="tbcCodigo" maxWidth="600.0" minWidth="-1.0" prefWidth="115.99996948242188" text="Código" />
@@ -79,7 +79,7 @@
                                     <Font name="System Bold" size="13.0" />
                                  </font>
                               </JFXButton>
-                              <JFXButton buttonType="RAISED" ripplerFill="#011245" style="-fx-background-color: #222288;" text="Regresar" textFill="WHITE">
+                              <JFXButton fx:id="btnRegresarProducto" buttonType="RAISED" ripplerFill="#011245" style="-fx-background-color: #222288;" text="Regresar" textFill="WHITE">
                                  <font>
                                     <Font name="System Bold" size="13.0" />
                                  </font>
@@ -164,7 +164,7 @@
                                     <Insets left="10.0" />
                                  </padding>
                               </Label>
-                              <JFXComboBox fx:id="cboCateoriaProducto" prefHeight="25.0" prefWidth="118.0" GridPane.columnIndex="5" GridPane.rowIndex="2" />
+                              <JFXComboBox fx:id="cboCategoriaProducto" prefHeight="25.0" prefWidth="118.0" GridPane.columnIndex="5" GridPane.rowIndex="2" />
                               <Label text="Marca" textFill="#222288" wrapText="true" GridPane.columnIndex="2">
                                  <font>
                                     <Font size="13.0" />
@@ -226,9 +226,9 @@
                               </JFXButton>
                            </children>
                         </Pane>
-                        <Pane layoutX="769.0" layoutY="52.0" prefHeight="233.0" prefWidth="241.0">
+                        <Pane fx:id="panelCodigoBarras" layoutX="769.0" layoutY="102.0" prefHeight="188.0" prefWidth="288.0">
                            <children>
-                              <Label layoutX="54.0" layoutY="5.0" text="Código de Barras" textFill="#222288" wrapText="true">
+                              <Label layoutX="90.0" layoutY="14.0" text="Código de Barras" textFill="#222288" wrapText="true">
                                  <font>
                                     <Font size="13.0" />
                                  </font>
@@ -236,8 +236,8 @@
                                     <Insets left="10.0" />
                                  </padding>
                               </Label>
-                              <Label fx:id="lblCodigoBarras" layoutX="35.0" layoutY="31.0" prefHeight="125.0" prefWidth="197.0" />
-                              <JFXButton fx:id="btnImprimirCodigoBarrasProducto" buttonType="RAISED" layoutX="134.0" layoutY="167.0" prefHeight="56.0" prefWidth="100.0" ripplerFill="#3fb0dd" style="-fx-background-color: #222288;" text="Imprimir" textFill="WHITE" wrapText="true">
+                              <Label fx:id="lblCodigoBarras" layoutX="5.0" layoutY="33.0" prefHeight="71.0" prefWidth="284.0" text="dfgfd" />
+                              <JFXButton fx:id="btnImprimirCodigoBarrasProducto" buttonType="RAISED" layoutX="149.0" layoutY="118.0" prefHeight="56.0" prefWidth="100.0" ripplerFill="#3fb0dd" style="-fx-background-color: #222288;" text="Imprimir" textFill="WHITE" wrapText="true">
                                  <font>
                                     <Font name="System Bold" size="13.0" />
                                  </font>
@@ -247,24 +247,24 @@
                                     <Font name="System Bold" size="13.0" />
                                  </font>
                               </JFXButton>
-                              <JFXButton fx:id="btnMostrarCodigoBarrasProducto" buttonType="RAISED" layoutX="3.0" layoutY="167.0" prefHeight="63.0" prefWidth="117.0" ripplerFill="#3fb0dd" style="-fx-background-color: #222288;" text="Mostrar código de barras" textAlignment="JUSTIFY" textFill="WHITE" wrapText="true">
+                              <JFXButton fx:id="btnMostrarCodigoBarrasProducto" buttonType="RAISED" layoutX="5.0" layoutY="125.0" prefHeight="63.0" prefWidth="117.0" ripplerFill="#3fb0dd" style="-fx-background-color: #222288;" text="Mostrar código de barras" textAlignment="JUSTIFY" textFill="WHITE" wrapText="true">
                                  <font>
                                     <Font name="System Bold" size="13.0" />
                                  </font>
                               </JFXButton>
                            </children>
                         </Pane>
-                        <JFXButton fx:id="btnAccesoDirectoEditarMarcasProducto" buttonType="RAISED" layoutX="1044.0" layoutY="199.0" ripplerFill="#3fb0dd" style="-fx-background-color: #222288;" text="Editar Marcas" textFill="WHITE">
+                        <JFXButton fx:id="btnAccesoDirectoEditarMarcasProducto" buttonType="RAISED" layoutX="1059.0" layoutY="228.0" ripplerFill="#3fb0dd" style="-fx-background-color: #222288;" text="Editar Marcas" textFill="WHITE">
                            <font>
                               <Font name="System Bold" size="13.0" />
                            </font>
                         </JFXButton>
-                        <JFXButton fx:id="btnAccesoDirectoEditarProveedoresProducto" buttonType="RAISED" layoutX="1028.0" layoutY="113.0" ripplerFill="#3fb0dd" style="-fx-background-color: #222288;" text="Editar Proveedores" textFill="WHITE">
+                        <JFXButton fx:id="btnAccesoDirectoEditarProveedoresProducto" buttonType="RAISED" layoutX="1061.0" layoutY="97.0" prefHeight="49.0" prefWidth="97.0" ripplerFill="#3fb0dd" style="-fx-background-color: #222288;" text="Editar Proveedores" textAlignment="JUSTIFY" textFill="WHITE" wrapText="true">
                            <font>
                               <Font name="System Bold" size="13.0" />
                            </font>
                         </JFXButton>
-                        <JFXButton fx:id="btnAccesoDirectoEditarCategoriasProducto" buttonType="RAISED" layoutX="1034.0" layoutY="154.0" ripplerFill="#3fb0dd" style="-fx-background-color: #222288;" text="Editar categorias" textFill="WHITE">
+                        <JFXButton fx:id="btnAccesoDirectoEditarCategoriasProducto" buttonType="RAISED" layoutX="1067.0" layoutY="153.0" prefHeight="60.0" prefWidth="86.0" ripplerFill="#3fb0dd" style="-fx-background-color: #222288;" text="Editar categorias" textFill="WHITE" wrapText="true">
                            <font>
                               <Font name="System Bold" size="13.0" />
                            </font>

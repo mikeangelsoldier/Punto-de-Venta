@@ -13,7 +13,9 @@ public class Producto {
     private int stock_minimo;
     private int categoria;
     private int proveedor;
-
+    private String nombreCategoria;
+    private String nombreProveedor;
+    
     public Producto() {
         
     }
@@ -32,6 +34,23 @@ public class Producto {
         this.proveedor = proveedor;
     }
 
+    //constructor sobrecargado
+    public Producto(int id, String codigo, String descripcion, String marca, double costo, double precio, String presentacion, int stock, int stock_minimo, String nombreCategoria, String nombreProveedor) {
+        this.id = id;
+        this.codigo = codigo;
+        this.descripcion = descripcion;
+        this.marca = marca;
+        this.costo = costo;
+        this.precio = precio;
+        this.presentacion = presentacion;
+        this.stock = stock;
+        this.stock_minimo = stock_minimo;
+        this.nombreCategoria = nombreCategoria;
+        this.nombreProveedor = nombreProveedor;
+    }
+
+    
+    
     public int getId() {
         return id;
     }

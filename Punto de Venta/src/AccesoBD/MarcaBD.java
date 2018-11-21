@@ -60,6 +60,7 @@ public class MarcaBD {
         
         System.out.println(statement);
         statement.execute();
+        statement.close();
     }
 
     public ArrayList<Marca> getMarcasFiltro1( String marca) {

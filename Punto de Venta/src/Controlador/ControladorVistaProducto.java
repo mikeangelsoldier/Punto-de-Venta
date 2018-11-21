@@ -5,8 +5,13 @@
  */
 package Controlador;
 
+import AccesoBD.CategoriaBD;
 import AccesoBD.ConectaBD_Punto_de_venta;
+import AccesoBD.MarcaBD;
 import AccesoBD.ProductoBD;
+import AccesoBD.ProveedorBD;
+import Modelo.Categoria;
+import Modelo.Marca;
 import PuntoDeVenta.*;
 
 import com.jfoenix.controls.JFXButton;
@@ -25,6 +30,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import Modelo.Producto;
+import Modelo.Proveedor;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextArea;
 import java.io.IOException;
@@ -38,6 +44,25 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.paint.Color;
 
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.Barcode128;
+import com.itextpdf.text.pdf.Barcode39;
+import com.itextpdf.text.pdf.PdfWriter;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
+import javax.swing.ImageIcon;
+
 /**
  *
  * @author Mike
@@ -45,6 +70,10 @@ import javafx.scene.paint.Color;
 public class ControladorVistaProducto implements Initializable {
 
     ProductoBD productoDB;
+    CategoriaBD categoriaDB;
+    MarcaBD marcaDB;
+    ProveedorBD proveedorDB;
+
     ConectaBD_Punto_de_venta conectaBD_PuntoVenta;
     //ManejadorFiltroKey manejador;
     private boolean filtrarActivado, agregarActivado, modificarActivado;
@@ -52,40 +81,45 @@ public class ControladorVistaProducto implements Initializable {
     private static String MARCA_DEFAULT = "-";
     private static String PROVEEDOR_DEFAULT = "-";
     private static String CATEGORIA_DEFAULT = "-";
-    
+
     private static String AYUDA_AL_AGREGAR = "Escribe en los campos los datos deseados, da clic en Guardar Cambios, o da clic en cancelar";
     private static String AYUDA_AL_MODIFICAR = "Seleccionar un registro, Escribe en los campos los datos deseados, da clic en Guardar Cambios, o da clic en cancelar";
     private static String AYUDA_AL_FILTRAR = "Escribe en los campos la informacion con la que deben coincidir los registros del filtro. Da clic en Filtro nuevamente para salir";
 
-    private String contenidoTxtCodigoProducto, 
-            contenidoTxtPrecioProducto, 
-            contenidoTxtCostoProducto, 
+    private ArrayList<Proveedor> listaObjetosProveedores;
+    private ArrayList<Marca> listaObjetosMarcas;
+    private ArrayList<Categoria> listaObjetosCategorias;
+    private boolean existenMarcas = false;
+    private boolean existenProveedores = false;
+    private boolean existenCategorias = false;
+
+    private String contenidoTxtCodigoProducto,
+            contenidoTxtPrecioProducto,
+            contenidoTxtCostoProducto,
             contenidoTxtUnidadProducto,
             contenidoTxtStockProducto,
-            contenidoTxtStockMinimoProducto, 
-            contenidoTxaDescripcionProducto, 
+            contenidoTxtStockMinimoProducto,
+            contenidoTxaDescripcionProducto,
             seleccionCboMarcaProducto,
             seleccionCboCategoriaProducto,
-            seleccionCboProveedorProducto; 
+            seleccionCboProveedorProducto;
 
     ManejadorFiltroKey manejador;
 
     @FXML
     private JFXTextArea txaDescripcionProducto;
-    
+
     @FXML
-    private JFXTextField txtCodigoProducto, 
+    private JFXTextField txtCodigoProducto,
             txtPrecioProducto,
             txtCostoProducto,
             txtUnidadProducto,
             txtStockProducto,
-            txtStockMinimoProducto
-            ;
-
+            txtStockMinimoProducto;
 
     @FXML
     private JFXComboBox cboMarcaProducto,
-            cboCateoriaProducto,
+            cboCategoriaProducto,
             cboProveedorProducto;
 
     @FXML
@@ -93,27 +127,26 @@ public class ControladorVistaProducto implements Initializable {
 
     @FXML
     private TableColumn<Producto, Integer> tbcID,
-            tbcStock,tbcStockMinimo,tbcCategoria,tbcProveedor;
+            tbcStock, tbcStockMinimo, tbcCategoria, tbcProveedor;
 
     @FXML
     private TableColumn<Producto, String> tbcCodigo,
             tbcDescripcion,
             tbcMarca,
             tbcUnidad;
-            
-     @FXML
+
+    @FXML
     private TableColumn<Producto, Double> tbcCosto,
             tbcPrecio;
-                    
-    
+
     @FXML
-    private JFXButton btnAgregarProducto, 
-            btnModificarProducto, 
-            btnEliminarProducto, 
-            btnCancelarProducto, 
-            btnFiltrarProducto, 
+    private JFXButton btnAgregarProducto,
+            btnModificarProducto,
+            btnEliminarProducto,
+            btnCancelarProducto,
+            btnFiltrarProducto,
             btnRegresarProducto,
-            btnGuardarInsercionProducto, 
+            btnGuardarInsercionProducto,
             btnGuardarModificacionProducto,
             btnGenerarCodigoAleatorioProducto,
             btnLeerCodigoProducto,
@@ -121,13 +154,14 @@ public class ControladorVistaProducto implements Initializable {
             btnImprimirCodigoBarrasProducto,
             btnAccesoDirectoEditarProveedoresProducto,
             btnAccesoDirectoEditarCategoriasProducto,
-            btnAccesoDirectoEditarMarcasProducto
-            ;
+            btnAccesoDirectoEditarMarcasProducto;
 
     @FXML
-    private Label lblAyuda,lblCodigoBarras;
-    
-  
+    private Label lblAyuda, lblCodigoBarras;
+
+    @FXML
+    private Pane panelCodigoBarras;
+
     @FXML
     private void handleButtonAgregar(ActionEvent event) {
         /*agregarUsuarioActivado();*/
@@ -141,7 +175,7 @@ public class ControladorVistaProducto implements Initializable {
     @FXML
     private void handleButtonAgregarCambios(ActionEvent event) {
         if (agregarActivado) {
-           /* agregarUsuario();*/
+            /* agregarUsuario();*/
             llenarTabla(productoDB.getProductos());
             //limpiarCampos();
         }
@@ -151,7 +185,7 @@ public class ControladorVistaProducto implements Initializable {
     @FXML
     private void handleButtonActualizarCambios(ActionEvent event) {
         if (modificarActivado) {
-           /* actualizarUsuario();*/
+            /* actualizarUsuario();*/
             llenarTabla(productoDB.getProductos());
             //limpiarCampos();
 
@@ -169,12 +203,14 @@ public class ControladorVistaProducto implements Initializable {
     @FXML
     private void handleButtonCancelar(ActionEvent event) {
         /*limpiarCampos();*/
-        /*regresarBotonesAFormaOriginal();*/
+ /*regresarBotonesAFormaOriginal();*/
         lblAyuda.setText("");
     }
 
     @FXML
     private void filtroBusqueda(ActionEvent event) {
+        filtrarActivado=!filtrarActivado;
+        
         ManejadorFiltro();
     }
 
@@ -182,64 +218,128 @@ public class ControladorVistaProducto implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         conectaBD_PuntoVenta = new ConectaBD_Punto_de_venta();
         productoDB = new ProductoBD(conectaBD_PuntoVenta.getConnection());
+        categoriaDB = new CategoriaBD(conectaBD_PuntoVenta.getConnection());
+        marcaDB = new MarcaBD(conectaBD_PuntoVenta.getConnection());
+        proveedorDB = new ProveedorBD(conectaBD_PuntoVenta.getConnection());
+
         filtrarActivado = false;
         agregarActivado = false;
         modificarActivado = false;
+
+        listaObjetosProveedores = new ArrayList<Proveedor>();
+        listaObjetosMarcas = new ArrayList<Marca>();
+        listaObjetosCategorias = new ArrayList<Categoria>();
+
+        llenarCbosOpciones();
+        mostraCodigoBarras();
+
         llenarTabla(productoDB.getProductos());
 
-        txtCodigoProducto.setEditable(false);
-            txtPrecioProducto.setEditable(false);
-            txtCostoProducto.setEditable(false);
-            txtUnidadProducto.setEditable(false);
-            txtStockProducto.setEditable(false);
-            txtStockMinimoProducto.setEditable(false);
-                    
-        
         lblAyuda.setText("");
         lblCodigoBarras.setText("");
-        
+
+        regresarBotonesAFormaOriginal();
+
         /*
         Image image = new Image("/images/iconUser.png");
         logo.setGraphic(new ImageView(image));
-        */
-        
+         */
         manejador = new ManejadorFiltroKey();
-        
-        //cboMarcaProducto.setItems(FXCollections.observableArrayList(MARCA_DEFAULT, ROL_PROGRAMADOR, ROL_ADMINISTRADOR, ROL_EMPLEADO, ROL_ENCARGADO_ALMACEN));
-        //cboMarcaProducto.getSelectionModel().select(0);
+
     }
 
     @FXML
     private void generarCodigoBarrasAleatorio(ActionEvent event) {
         String cadena = "";
-        
+
         //corregir para que solo genere numeros
         for (int i = 0; i < 13; i++) {
-            cadena = cadena + (char) (Math.random() * 9 );
+            cadena = cadena + (char) (Math.random() * 9);
         }
-        
+
         //antes verificar que otro producto no lo tenga ya
-        
-        
         txtCodigoProducto.setText(cadena);
     }
-/*
+
+    void regresarBotonesAFormaOriginal() {
+        modificarActivado = false;
+        agregarActivado = false;
+        filtrarActivado = false;
+
+        //ESTADO ORIGINAL DE LOS BOTONES
+        btnAgregarProducto.setDisable(false);
+        //btnAgregarUsuario.setStyle("fx-background-color: #222288");
+        btnModificarProducto.setDisable(false);
+        //btnModificarUsuario.setStyle("fx-background-color: #222288");
+        btnEliminarProducto.setDisable(false);
+        btnFiltrarProducto.setDisable(false);
+        //btnRegresarUsuario.setDisable(false);
+
+        btnRegresarProducto.setVisible(true);
+
+        btnCancelarProducto.setVisible(false);
+        btnGuardarInsercionProducto.setVisible(false);
+        btnGuardarModificacionProducto.setVisible(false);
+
+        //POR DEFECTO NO SE PUEDE EDITAR EN LOS TXT
+        txtCodigoProducto.setEditable(false);
+        txaDescripcionProducto.setEditable(false);
+        txtPrecioProducto.setEditable(false);
+        txtCostoProducto.setEditable(false);
+        txtUnidadProducto.setEditable(false);
+        txtStockProducto.setEditable(false);
+        txtStockMinimoProducto.setEditable(false);
+
+        cboMarcaProducto.getSelectionModel().select(0);
+        cboCategoriaProducto.getSelectionModel().select(0);
+        cboProveedorProducto.getSelectionModel().select(0);
+
+        lblAyuda.setText("");
+        lblCodigoBarras.setText("");
+
+    }
+
     @FXML
     private void handleTableChange(Event event) {
         Producto producto = tblDatosProducto.getSelectionModel().getSelectedItem();
 
         if (producto != null) {
+            System.out.println("si estro al evento de la tabla");
             txtCodigoProducto.setText(producto.getCodigo());
-            txtNombreUsuario.setText(producto.getNombre());
-            txtLoginUsuario.setText(producto.getLogin());
-            txtPasswordUsuario.setText(producto.getPassword());
-            cboRolUsuario.getSelectionModel().select(producto.getRol());
+            txaDescripcionProducto.setText(producto.getDescripcion());
+            cboMarcaProducto.getSelectionModel().select(producto.getMarca());
+            //txtPrecioProducto.setText(producto.getPrecio());
+            txtPrecioProducto.setText(String.valueOf(producto.getPrecio()));
+            txtCostoProducto.setText(String.valueOf(producto.getCosto()));
+            txtUnidadProducto.setText(producto.getPresentacion());
+            txtStockProducto.setText(String.valueOf(producto.getStock()));
+            txtStockMinimoProducto.setText(String.valueOf(producto.getStock_minimo()));
+
+            int idProveedor;
+            int idCategoria;
+            idProveedor = producto.getProveedor();
+            idCategoria = producto.getCategoria();
+
+            for (int i = 0; i < listaObjetosProveedores.size(); i++) {
+                if (listaObjetosProveedores.get(i).getId_proveedor() == idProveedor) {
+                    cboProveedorProducto.getSelectionModel().select(listaObjetosProveedores.get(i).getNombre_proveedor());
+                    
+                    break;
+                }
+            }
+
+            for (int i = 0; i < listaObjetosCategorias.size(); i++) {
+                if (listaObjetosCategorias.get(i).getId_categoria() == idCategoria) {
+                    cboCategoriaProducto.getSelectionModel().select(listaObjetosCategorias.get(i).getNombre());
+                    break;
+                }
+            }
         }
-    }*/
+    }
 
     private void llenarTabla(ArrayList<Producto> listaProductos) {
         tblDatosProducto.getItems().clear();
-       
+
         /*
         private int id;
     private String ;
@@ -249,25 +349,168 @@ public class ControladorVistaProducto implements Initializable {
     private double ;
     private String presentacion;
         
-        */
-            
+         */
         tbcID.setCellValueFactory(new PropertyValueFactory<>("id"));
         tbcStock.setCellValueFactory(new PropertyValueFactory<>("stock"));
         tbcStockMinimo.setCellValueFactory(new PropertyValueFactory<>("stock_minimo"));
         tbcCategoria.setCellValueFactory(new PropertyValueFactory<>("categoria"));
         tbcProveedor.setCellValueFactory(new PropertyValueFactory<>("proveedor"));
-        
+
         tbcCodigo.setCellValueFactory(new PropertyValueFactory<>("codigo"));
         tbcDescripcion.setCellValueFactory(new PropertyValueFactory<>("descripcion"));
         tbcMarca.setCellValueFactory(new PropertyValueFactory<>("marca"));
         tbcUnidad.setCellValueFactory(new PropertyValueFactory<>("presentacion"));
-        
+
         tbcCosto.setCellValueFactory(new PropertyValueFactory<>("costo"));
         tbcPrecio.setCellValueFactory(new PropertyValueFactory<>("precio"));
-        
+
         for (Producto producto : listaProductos) {
             tblDatosProducto.getItems().add(producto);
         }
+    }
+
+    private void llenarCbosOpciones() {
+        actualizarComboCategorias();
+        actualizarComboMarcas();
+        actualizarComboProveedores();
+    }
+
+    private void actualizarComboCategorias() {
+        cboCategoriaProducto.getItems().clear();
+        this.listaObjetosCategorias = new ArrayList<Categoria>(categoriaDB.getCategorias());
+
+        System.out.println("\n*****************Las CATEGORIAS almacenadas son :");
+        for (Categoria categoria : listaObjetosCategorias) {
+            System.out.println(categoria.getId_categoria()
+                    + "         " + categoria.getNombre()
+                    + "         " + categoria.getDescripcion()
+            );
+        }
+
+        for (int i = 0; i < listaObjetosCategorias.size(); i++) {
+            cboCategoriaProducto.getItems().add(listaObjetosCategorias.get(i).getNombre());
+        }
+        if (listaObjetosCategorias.size() > 0) {
+            cboCategoriaProducto.setValue(listaObjetosCategorias.get(0).getNombre());
+            existenCategorias = true;
+        }
+    }
+
+    private void actualizarComboMarcas() {
+        cboMarcaProducto.getItems().clear();
+        this.listaObjetosMarcas = new ArrayList<Marca>(marcaDB.getMarcas());
+
+        System.out.println("*****************Las Marcas almacenadas son :");
+        for (int i = 0; i < listaObjetosMarcas.size(); i++) {
+            System.out.println(listaObjetosMarcas.get(i).getId_marca() + "         " + listaObjetosMarcas.get(i).getMarca());
+        }
+
+        for (int i = 0; i < listaObjetosMarcas.size(); i++) {
+            cboMarcaProducto.getItems().add(listaObjetosMarcas.get(i).getMarca());
+        }
+        if (listaObjetosMarcas.size() > 0) {
+            cboMarcaProducto.setValue(listaObjetosMarcas.get(0).getMarca());
+            existenMarcas = true;
+        }
+    }
+
+    private void actualizarComboProveedores() {
+        cboProveedorProducto.getItems().clear();
+
+        this.listaObjetosProveedores = new ArrayList<Proveedor>(proveedorDB.getProveedores());
+
+        System.out.println("\n*****************Los PROVEEDORES almacenados son :");
+        for (int i = 0; i < listaObjetosProveedores.size(); i++) {
+            System.out.println(listaObjetosProveedores.get(i).getId_proveedor()
+                    + "         " + listaObjetosProveedores.get(i).getNombre_proveedor()
+                    + "         " + listaObjetosProveedores.get(i).getTelefono()
+                    + "         " + listaObjetosProveedores.get(i).getCorreo()
+                    + "         " + listaObjetosProveedores.get(i).getDireccion()
+                    + "         " + listaObjetosProveedores.get(i).getColonia()
+                    + "         " + listaObjetosProveedores.get(i).getMunicipio()
+                    + "         " + listaObjetosProveedores.get(i).getCp()
+                    + "         " + listaObjetosProveedores.get(i).getEstado()
+            );
+        }
+
+        for (int i = 0; i < listaObjetosProveedores.size(); i++) {
+            cboProveedorProducto.getItems().add(listaObjetosProveedores.get(i).getNombre_proveedor());
+        }
+        if (listaObjetosProveedores.size() > 0) {
+            cboProveedorProducto.setValue(listaObjetosProveedores.get(0).getNombre_proveedor());
+            existenProveedores = true;
+        }
+    }
+
+    private void mostraCodigoBarras() {
+        Document documento = new Document();
+        try {
+            PdfWriter pdf = PdfWriter.getInstance(documento, new FileOutputStream("codigos.pdf"));
+            documento.open();
+
+            Barcode128 code2 = new Barcode128();
+            code2.setCode("145784kkh512");
+
+            Image img2 = code2.createImageWithBarcode(pdf.getDirectContent(), BaseColor.BLACK, BaseColor.BLACK);
+            img2.scalePercent(200);
+            documento.add(img2);
+            documento.close();
+
+            Barcode128 code3 = new Barcode128();
+            code3.setCode("145784kkh512");
+            java.awt.Image imgawt = code3.createAwtImage(java.awt.Color.black, java.awt.Color.white);
+            //java.awt.Image imgawt = code3.createAwtImage(java.awt.Color.darkGray, java.awt.Color.darkGray);
+
+            BufferedImage bImage = toBufferedImage(imgawt);
+            BufferedImage nuevaBImage = scale(bImage, 270, 70);
+            javafx.scene.image.Image imgfx = SwingFXUtils.toFXImage(nuevaBImage, null);
+
+            ImageView imageView = new ImageView();
+            imageView.setImage(imgfx);
+            lblCodigoBarras.setGraphic(imageView);
+            //lblCodigoBarras.setGraphic(imageView);
+
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(ControladorVistaProducto.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (DocumentException ex) {
+            Logger.getLogger(ControladorVistaProducto.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    public static BufferedImage toBufferedImage(java.awt.Image img) {
+        if (img instanceof BufferedImage) {
+            return (BufferedImage) img;
+        }
+
+        BufferedImage bimage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+
+        Graphics2D bGr = bimage.createGraphics();
+        bGr.drawImage(img, 0, 0, null);
+        bGr.dispose();
+
+        return bimage;
+
+    }
+
+    public static BufferedImage scale(BufferedImage src, int w, int h) {
+        BufferedImage img
+                = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
+        int x, y;
+        int ww = src.getWidth();
+        int hh = src.getHeight();
+        int[] ys = new int[h];
+        for (y = 0; y < h; y++) {
+            ys[y] = y * hh / h;
+        }
+        for (x = 0; x < w; x++) {
+            int newX = x * ww / w;
+            for (y = 0; y < h; y++) {
+                int col = src.getRGB(newX, ys[y]);
+                img.setRGB(x, y, col);
+            }
+        }
+        return img;
     }
 
     /*
@@ -328,9 +571,7 @@ public class ControladorVistaProducto implements Initializable {
         }
 
     }*/
-
-    
-    /*
+ /*
     private void actualizarUsuario() {
         int idDeUsuarioSeleccionado = 0;
 
@@ -395,7 +636,7 @@ public class ControladorVistaProducto implements Initializable {
 
     }*/
 
-    /*
+ /*
     private void eliminarUsuario() {
         try {
             if (tblDatosUsuario.getSelectionModel().getSelectedItems().isEmpty()) {
@@ -436,7 +677,7 @@ public class ControladorVistaProducto implements Initializable {
         }
 
     }*/
-/*
+ /*
     private boolean camposPorCompletar() {
         String nombre = txtNombreUsuario.getText();
         String login = txtLoginUsuario.getText();
@@ -459,10 +700,8 @@ public class ControladorVistaProducto implements Initializable {
         }
 
     }
-*/
-    
-    
-    /*
+     */
+ /*
     private void limpiarCampos() {
         txtIDUsuario.clear();
         txtNombreUsuario.clear();
@@ -470,10 +709,8 @@ public class ControladorVistaProducto implements Initializable {
         txtPasswordUsuario.clear();
         cboRolUsuario.getSelectionModel().select(0);
     }
-*/
-    
-    
-    /*
+     */
+ /*
     @FXML
     private void filtrarUsuario() {
         
@@ -531,9 +768,7 @@ public class ControladorVistaProducto implements Initializable {
             //limpiarCampos();//----------------------------------------------------------
         }
     }*/
-
-    
-    /*
+ /*
     void agregarUsuarioActivado() {
         agregarActivado = true;
         modificarActivado = false;
@@ -564,9 +799,7 @@ public class ControladorVistaProducto implements Initializable {
 
         }
     }*/
-    
-    
-    /*
+ /*
     void modificarUsuarioActivado() {
         modificarActivado = true;
         agregarActivado = false;
@@ -597,10 +830,8 @@ public class ControladorVistaProducto implements Initializable {
 
         }
     }
-*/
-    
-    
-    /*
+     */
+ /*
     void regresarBotonesAFormaOriginal() {
         modificarActivado = false;
         agregarActivado = false;
@@ -626,9 +857,8 @@ public class ControladorVistaProducto implements Initializable {
 
         lblAyuda.setText("");
     }
-*/
-    
-/*
+     */
+ /*
     public static boolean isNumeric(String cadena) {
 
         boolean resultado;
@@ -642,9 +872,8 @@ public class ControladorVistaProducto implements Initializable {
 
         return resultado;
     }
-*/
-    
-    /*
+     */
+ /*
     private void leerFiltrarTabla(int id, String nombre, String login, String rol) {
         if (id == 0) {
             llenarTabla(productoDB.getUsuariosFiltro1(nombre, login, rol));
@@ -652,11 +881,8 @@ public class ControladorVistaProducto implements Initializable {
             llenarTabla(productoDB.getUsuariosFiltro2(id, nombre, login, rol));
         }
     }*/
-
-    
-    
     void ManejadorFiltro() {
-        
+
         /*
         System.out.println("si entra al metodo");
         if (filtrarActivado) {
@@ -694,11 +920,9 @@ public class ControladorVistaProducto implements Initializable {
         }
         
         
-        */
+         */
     }
-    
-    
-    
+
     class ManejadorFiltroKey implements ChangeListener {
 
         @Override
@@ -706,6 +930,5 @@ public class ControladorVistaProducto implements Initializable {
             ManejadorFiltro();
         }
     }
-    
-    
+
 }

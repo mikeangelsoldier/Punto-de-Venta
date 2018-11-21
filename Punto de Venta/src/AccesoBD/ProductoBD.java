@@ -86,6 +86,8 @@ public class ProductoBD {
         statement.setInt(1, ID);
         System.out.println(statement);
         statement.execute();
+        
+        statement.close();
     }
 
     public ArrayList<Producto> getProductosFiltro1(String codigo, String descripcion, String marca, String costo, String precio,

@@ -39,39 +39,37 @@ public class ProveedorBD {
     public void addProveedor(String nombre, String telefono, String correo, String direccion, String colonia,
             String municipio, String cp, String estado) throws SQLException {
 
-        PreparedStatement statement = connect.prepareCall("CALL addProveedor(?,?,?,?,?,?,?,?)");
-        statement.setString(1, nombre);
-        statement.setString(2, telefono);
-        statement.setString(3, correo);
-        statement.setString(4, direccion);
-        statement.setString(5, colonia);
-        statement.setString(6, municipio);
-        statement.setString(7, cp);
-        statement.setString(8, estado);
-
-        System.out.println(statement.toString());
-        statement.execute();
-
-        statement.close();
+        try (PreparedStatement statement = connect.prepareCall("CALL addProveedor(?,?,?,?,?,?,?,?)")) {
+            statement.setString(1, nombre);
+            statement.setString(2, telefono);
+            statement.setString(3, correo);
+            statement.setString(4, direccion);
+            statement.setString(5, colonia);
+            statement.setString(6, municipio);
+            statement.setString(7, cp);
+            statement.setString(8, estado);
+            
+            System.out.println(statement.toString());
+            statement.execute();
+        }
     }
 
     public void updateProveedor(int id,String nombre, String telefono, String correo, String direccion, String colonia,
             String municipio, String cp, String estado) throws SQLException {
-        PreparedStatement statement = connect.prepareCall("CALL updateProveedor(?,?,?,?,?,?,?,?,?)");
-        statement.setInt(1, id);
-        statement.setString(2, nombre);
-        statement.setString(3, telefono);
-        statement.setString(4, correo);
-        statement.setString(5, direccion);
-        statement.setString(6, colonia);
-        statement.setString(7, municipio);
-        statement.setString(8, cp);
-        statement.setString(9, estado);
-        
-        System.out.println(statement);
-        statement.execute();
-
-        statement.close();
+        try (PreparedStatement statement = connect.prepareCall("CALL updateProveedor(?,?,?,?,?,?,?,?,?)")) {
+            statement.setInt(1, id);
+            statement.setString(2, nombre);
+            statement.setString(3, telefono);
+            statement.setString(4, correo);
+            statement.setString(5, direccion);
+            statement.setString(6, colonia);
+            statement.setString(7, municipio);
+            statement.setString(8, cp);
+            statement.setString(9, estado);
+            
+            System.out.println(statement);
+            statement.execute();
+        }
     }
 
     public void deleteProveedor(int ID) throws SQLException {
