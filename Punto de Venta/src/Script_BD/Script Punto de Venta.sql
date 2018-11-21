@@ -689,9 +689,9 @@ id_proveedor int not null
 */
 
 INSERT INTO Producto (codigo_producto,descripcion,marca,costo,precio,presentacion,stock,stock_minimo,id_categoria,id_proveedor) 
-				VALUES ('7501000664221','Llave Nariz 1/2',3,33,56,'pieza',25,8,1,1),
-                ('000000015425','Mezcladora para Lavavo 4048',3,268,342,'pieza',4,1,1,1),
-				('000000000003','Llave Nariz 1/2',1,112,183,'pieza',10,3,1,1); 
+				VALUES ('7501000664221','Llave Nariz 1/2','Dica',33,56,'pieza',25,8,1,1),
+                ('000000015425','Mezcladora para Lavavo 4048','Dica',268,342,'pieza',4,1,1,1),
+				('000000000003','Llave Nariz 1/2','Trupper',112,183,'pieza',10,3,1,1); 
 /*
 UPDATE Producto SET producto.codigo_producto = '7501000664221'
 WHERE producto.codigo_producto = '1111111111111';
@@ -746,8 +746,8 @@ call getCategorias();
 call addProducto('000000000004','Escalera de Tijera C/Plataforma Escalumex 3 Exc Sta-4',7,607,800,'pieza',3,1,4,1);
 	
 */
-call addProducto('000000000004','Escalera de Tijera C/Plataforma Escalumex 3 Exc Sta-4',7,607,800,'pieza',3,1,4,1);
-call addProducto('000000000005','Escalera de Tijera C/Plataforma Escalumex 3 Exc Sta-4',7,607,800,'pieza',3,1,4,1);
+call addProducto('000000000004','Escalera de Tijera C/Plataforma Escalumex 3 Exc Sta-4','Escalumex',607,800,'pieza',3,1,4,1);
+call addProducto('000000000005','Escalera de Tijera C/Plataforma Escalumex 3 Exc Sta-4','Escalumex',607,800,'pieza',3,1,4,1);
 
 
 
