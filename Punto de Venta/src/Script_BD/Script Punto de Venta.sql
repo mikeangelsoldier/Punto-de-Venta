@@ -23,7 +23,8 @@ direccion varchar(100) not null,
 colonia varchar(100) null,
 municipio varchar(200) null,
 cp varchar(5) null,
-estado varchar(200) null
+estado varchar(200) null,
+status varchar(20)
 ) ENGINE=InnoDB;
 
 create table Proveedor(
@@ -35,7 +36,8 @@ direccion varchar(100)  null,
 colonia varchar(100) null,
 municipio varchar(200)  null,
 cp varchar(5) null,
-estado varchar(200) null
+estado varchar(200) null,
+status varchar(20)
 ) ENGINE=InnoDB;
 
 create table Cliente(
@@ -47,7 +49,7 @@ direccion varchar(100)  null,
 colonia varchar(100) null,
 municipio varchar(200)  null,
 cp varchar(5) null,
-estado varchar(200) null
+status varchar(200) null
 ) ENGINE=InnoDB;
 
 
@@ -56,19 +58,22 @@ id_usuario int not null primary key auto_increment,
 nombre varchar(100) not null,
 login varchar (100) not null,
 contraseña varchar(100)not null,
-rol varchar(100)not null
+rol varchar(100)not null,
+status varchar(20)
 ) ENGINE=InnoDB;
 
 
 create table Categoria(
 id_categoria int not null primary key auto_increment,
 nombre varchar(200) not null,
-descripcion varchar(300) null
+descripcion varchar(300) null,
+status varchar(20)
 )ENGINE=InnoDB;
 
 create table Marca(
 id_marca int not null primary key auto_increment,
-marca  varchar(200) 
+marca  varchar(200),
+status varchar(20) 
 )ENGINE=InnoDB;
 
 create table Producto(
@@ -82,7 +87,8 @@ presentacion varchar(200) not null,
 stock int not null,
 stock_minimo int not null,
 id_categoria int not null,
-id_proveedor int not null
+id_proveedor int not null,
+status varchar(20)
 )ENGINE=InnoDB;
 
 
@@ -94,7 +100,8 @@ iva_venta float(5) not null,
 total_venta float(15) not Null,
 forma_pago varchar(20),
 id_usuario int not null,
-id_cliente int not null
+id_cliente int not null,
+status varchar(20)
 )ENGINE=InnoDB;
 
 create table Detalle_Venta(
@@ -102,7 +109,8 @@ id_det_ventas int not null primary key auto_increment,
 id_venta int not null,
 id_producto int not null,
 cantidad int not null,
-importe float(15) null
+importe float(15) null,
+status varchar(20)
 )ENGINE=InnoDB;
 
 create table Factura_Pedido(
@@ -110,7 +118,8 @@ folio_factura int not null primary key auto_increment,
 id_proveedor int not null,
 id_usuario int not null,
 montoFactura float(15) not null,
-fecha date not null
+fecha date not null,
+status varchar(20)
 )ENGINE=InnoDB;
 
 
@@ -120,13 +129,13 @@ ALTER TABLE Producto  ADD
 CONSTRAINT FK_producto_categoria
 FOREIGN KEY (id_categoria)
 REFERENCES Categoria (id_categoria)
-ON UPDATE CASCADE ON DELETE restrict;
+/*ON UPDATE CASCADE ON DELETE restrict*/;
 
 ALTER TABLE Producto  ADD
 CONSTRAINT FK_producto_proveedor
 FOREIGN KEY (id_proveedor)
 REFERENCES Proveedor (id_proveedor)
-ON UPDATE CASCADE ON DELETE restrict;
+/*ON UPDATE CASCADE ON DELETE restrict*/;
 
 
 
@@ -167,11 +176,11 @@ CONSTRAINT FK_FacturaPedido_usuario
 FOREIGN KEY (id_usuario)
 REFERENCES Usuario (id_usuario);
 
-INSERT INTO USUARIO VALUES (null,'Programadores del sistema','admin','123', 'Programador');
-INSERT INTO USUARIO VALUES (null,'miguel Angel','mike','mike123', 'Programador');
-INSERT INTO USUARIO VALUES (null,'hernan','hernan','h123', 'Programador');
-INSERT INTO USUARIO VALUES (null,'Encargado de almacen','useralmacen','alm123', 'Encargado de Almacen');
-INSERT INTO USUARIO VALUES (null,'Vendedores generales','vendedor','v123', 'Empleado');
+INSERT INTO USUARIO VALUES (null,'Programadores del sistema','admin','123', 'Programador','activo');
+INSERT INTO USUARIO VALUES (null,'miguel Angel','mike','mike123', 'Programador','activo');
+INSERT INTO USUARIO VALUES (null,'hernan','hernan','h123', 'Programador','activo');
+INSERT INTO USUARIO VALUES (null,'Encargado de almacen','useralmacen','alm123', 'Encargado de Almacen','activo');
+INSERT INTO USUARIO VALUES (null,'Vendedores generales','vendedor','v123', 'Empleado','activo');
 
 
 
@@ -195,7 +204,11 @@ select * from marca;
 
 DROP PROCEDURE IF EXISTS getUsuarios;
 CREATE PROCEDURE getUsuarios ()
-	SELECT * FROM Usuario;
+	SELECT * FROM Usuario WHERE status='activo';
+/*	
+call getUsuarios();	
+SELECT * FROM USUARIO;
+*/
 
 
 DROP PROCEDURE IF EXISTS addUsuario;
@@ -204,8 +217,10 @@ nombre VARCHAR(100),
 login VARCHAR(100), 
 pass VARCHAR(100), 
 rol VARCHAR(100))
-INSERT INTO Usuario VALUES(null, nombre, login, pass, rol);
-
+INSERT INTO Usuario VALUES(null, nombre, login, pass, rol,'activo');
+/*	
+call addUsuario('Usuario prueba','vendedor','asd', 'Empleado');	
+*/
 
 
 DROP PROCEDURE IF EXISTS updateUsuario;
@@ -217,11 +232,23 @@ pass VARCHAR(100),
 rol VARCHAR(100))
 UPDATE Usuario SET Usuario.nombre = nombre, Usuario.login = login, Usuario.contraseña = pass, 
 Usuario.rol = rol WHERE Usuario.id_usuario = id;
+/*	
+call updateUsuario(6,'Usuario prueba','vendedor','contraseña', 'Empleado');	
+*/
 
 
+/*
 DROP PROCEDURE IF EXISTS deleteUsuario;
 CREATE PROCEDURE deleteUsuario (ID int)
 DELETE FROM Usuario WHERE id_usuario = ID;         
+*/
+DROP PROCEDURE IF EXISTS deleteUsuario;
+CREATE PROCEDURE deleteUsuario(
+id int)
+UPDATE Usuario SET Usuario.status = 'inactivo' WHERE Usuario.id_usuario = id;
+/*	
+call deleteUsuario(6);	
+*/
 
 
 
@@ -234,6 +261,7 @@ rol VARCHAR(100))
 	where  a.nombre like (CONCAT('%',nombre,'%'))
 	AND  a.login like (CONCAT('%',login,'%'))
 	AND  a.rol like (CONCAT('%',rol,'%'))
+    AND  status='activo'
 ;
 
 
@@ -249,12 +277,14 @@ rol VARCHAR(100))
 	AND  a.nombre like (CONCAT('%',nombre,'%'))
 	AND  a.login like (CONCAT('%',login,'%'))
 	AND  a.rol like (CONCAT('%',rol,'%'))
+    AND status='activo'
 ;
 
 /*pruebas*/
+/*
 call getBusquedaUsuario1('','','');
 call getBusquedaUsuario2(2,'','','');
-
+*/
 
 DROP PROCEDURE IF EXISTS getBusquedaUsuario3;
 CREATE PROCEDURE getBusquedaUsuario3( 
@@ -267,6 +297,7 @@ rol VARCHAR(100))
 	AND  a.nombre like (CONCAT('%',nombre,'%'))
 	AND  a.login like (CONCAT('%',login,'%'))
 	AND  a.rol like (CONCAT('%',rol,'%'))
+	AND status='activo'
 ;
 
 /*
@@ -279,24 +310,26 @@ call getBusquedaUsuario3('2','','','');
 
 DROP PROCEDURE IF EXISTS getLogin;
 CREATE PROCEDURE getLogin()
-SELECT * FROM usuario;
+SELECT * FROM usuario WHERE status='activo';
 
  DROP PROCEDURE IF EXISTS buscarLogin;
  CREATE PROCEDURE buscarLogin(login VARCHAR(100), passw VARCHAR(100))
  select * from Usuario as u
  where u.login = login
- AND u.contraseña =passw;
+ AND u.contraseña =passw
+ AND status='activo';
 
- 
+/*
+ call buscarLogin('Admin','123'); 
  call buscarLogin('Admin','122'); 
- 
+ */
  
  
  /***********************************************************Procedimientos de CATEGORIA*/
 SELECT * FROM Categoria;
-INSERT INTO Categoria VALUES (null,'Fontaneria','');
-INSERT INTO Categoria VALUES (null,'Electricidad','');
-INSERT INTO Categoria VALUES (null,'Otros','Categoria estándar');
+INSERT INTO Categoria VALUES (null,'Fontaneria','','activo');
+INSERT INTO Categoria VALUES (null,'Electricidad','','activo');
+INSERT INTO Categoria VALUES (null,'Otros','Categoria estándar','activo');
 /*
 id_categoria int not null primary key auto_increment,
 nombre varchar(200) not null,
@@ -306,17 +339,18 @@ descripcion varchar(300) null
 
 DROP PROCEDURE IF EXISTS getCategorias;
 CREATE PROCEDURE getCategorias ()
-	SELECT * FROM Categoria;
+	SELECT * FROM Categoria WHERE status='activo';
 
 /*	
-call getCategorias();	
+call getCategorias();
+SELECT * FROM CATEGORIA;	
 */
 
 DROP PROCEDURE IF EXISTS addCategoria;
 CREATE PROCEDURE addCategoria(
 nombre VARCHAR(200), 
 descripcion VARCHAR(300))
-INSERT INTO Categoria VALUES(null, nombre, descripcion);
+INSERT INTO Categoria VALUES(null, nombre, descripcion,'activo');
 
 /*	
 
@@ -341,14 +375,18 @@ call updateCategoria(1,'Fontaneria','Herramientas de mano, equipos, etc');
 */
 
 
-
-DROP PROCEDURE IF EXISTS deleteCategoria;/*Antes de eliminar una categoria debo de pedir que al producto se le asigne otra categoria*/
+/*
+DROP PROCEDURE IF EXISTS deleteCategoria;
 CREATE PROCEDURE deleteCategoria (ID int)
-DELETE FROM Categoria WHERE id_categoria = ID;         
+DELETE FROM Categoria WHERE id_categoria = ID;
+*/       
+DROP PROCEDURE IF EXISTS deleteCategoria;
+CREATE PROCEDURE deleteCategoria(
+id int)
+UPDATE Categoria SET Categoria.status = 'inactivo'
+WHERE Categoria.id_categoria= id;
 /*	
-pendiente, no se recomienda usar, si un producto tiene una caegoria se eliminaria junto con esta
 call deleteCategoria(1);	
-
 */
 
 
@@ -360,6 +398,7 @@ descripcion VARCHAR(300))
 	SELECT * from Categoria AS a
 	where a.nombre like (CONCAT('%',nombre,'%'))
 	AND  a.descripcion like (CONCAT('%',descripcion,'%'))
+    AND  status='activo';
 ;
 
 /*
@@ -378,6 +417,7 @@ descripcion VARCHAR(300))
 	where a.id_categoria like (CONCAT('%',id,'%'))
 	AND  a.nombre like (CONCAT('%',nombre,'%'))
 	AND  a.descripcion like (CONCAT('%',descripcion,'%'))
+    AND a.status='activo';
 ;
 
 /*
@@ -397,6 +437,7 @@ descripcion VARCHAR(300))
 	where CONVERT(a.id_categoria,char) like (CONCAT('%',id,'%'))
 	AND  a.nombre like (CONCAT('%',nombre,'%'))
 	AND  a.descripcion like (CONCAT('%',descripcion,'%'))
+    AND  status='activo';
 ;
 
 /*
@@ -413,24 +454,24 @@ marca  varchar(200)
 */
 
 SELECT * FROM marca;
-INSERT INTO marca VALUES (null,'Trupper');
-INSERT INTO marca VALUES (null,'Urea');
-INSERT INTO marca VALUES (null,'Dica');
-INSERT INTO marca VALUES (null,'Genérico');
+INSERT INTO marca VALUES (null,'Trupper','activo');
+INSERT INTO marca VALUES (null,'Urea','activo');
+INSERT INTO marca VALUES (null,'Dica','activo');
+INSERT INTO marca VALUES (null,'Genérico','activo');
 
 DROP PROCEDURE IF EXISTS getMarcas;
 CREATE PROCEDURE getMarcas ()
-	SELECT * FROM Marca;
+	SELECT * FROM Marca WHERE status='activo';
 /*	
 
 call getMarcas();
-	
+SELECT * FROM MARCA;
 */
 
 DROP PROCEDURE IF EXISTS addMarca;
 CREATE PROCEDURE addMarca(
 marca VARCHAR(200))
-INSERT INTO Marca VALUES(null, marca);
+INSERT INTO Marca VALUES(null, marca,'activo');
 
 /*	
 
@@ -441,6 +482,7 @@ call addMarca('Escalumex');
 call addMarca('Stanley');	
 call addMarca('DeWALT');
 call addMarca('Escalumex');
+
 
 DROP PROCEDURE IF EXISTS updateMarca;
 CREATE PROCEDURE updateMarca(
@@ -457,14 +499,20 @@ call updateMarca(7,'DeWALT');
 	
 */
 
+
+/*
 DROP PROCEDURE IF EXISTS deleteMarca;
 CREATE PROCEDURE deleteMarca (ID int)
 DELETE FROM Marca WHERE id_marca = ID;         
-
+*/
+DROP PROCEDURE IF EXISTS deleteMarca;
+CREATE PROCEDURE deleteMarca(
+id int)
+UPDATE Marca as m 
+SET m.status = 'inactivo'
+WHERE m.id_marca = id;
 /*	
-
 call deleteMarca(7);	
-
 */
 
 
@@ -474,6 +522,7 @@ CREATE PROCEDURE getBusquedaMarca1(
 marca VARCHAR(200))
 	SELECT * from Marca AS m
 	where  m.marca like (CONCAT('%',marca,'%'))
+    AND status='activo';
 ;
 
 /*	
@@ -491,6 +540,7 @@ marca VARCHAR(200))
 	where 
 	m.id_marca like (CONCAT('%',id,'%'))
 	AND  m.marca like (CONCAT('%',marca,'%'))
+    AND status='activo';
 ;
 
 /*	
@@ -509,6 +559,7 @@ marca VARCHAR(200))
 	where 
 	CONVERT(m.id_marca,char) like (CONCAT('%',id,'%'))
 	AND  m.marca like (CONCAT('%',marca,'%'))
+    AND status='activo';
 ;
 
 /*	
@@ -533,19 +584,19 @@ cp varchar(5) null,
 estado varchar(200) null
 
 */
-INSERT INTO Proveedor (id_proveedor,nombre_proveedor,telefono) 
-		VALUES (null,'Proveedor de prueba','4774265833'); 
+INSERT INTO Proveedor (id_proveedor,nombre_proveedor,telefono,status) 
+		VALUES (null,'Proveedor de prueba','4774265833','activo'); 
 
 
 
 DROP PROCEDURE IF EXISTS getProveedores;
 CREATE PROCEDURE getProveedores()
-	SELECT * FROM Proveedor;
+	SELECT * FROM Proveedor WHERE status='activo';
     
 /*	
 
 call getProveedores();
-	
+SELECT * FROM PROVEEDOR;
 */
 
 
@@ -571,8 +622,8 @@ colonia varchar(100),
 municipio varchar(200),
 cp varchar(5),
 estado varchar(200))
-INSERT INTO proveedor (nombre_proveedor,telefono,correo,direccion,colonia,municipio,cp,estado) 
-				VALUES(nombre_proveedor,telefono,correo,direccion,colonia,municipio,cp,estado);
+INSERT INTO proveedor (nombre_proveedor,telefono,correo,direccion,colonia,municipio,cp,estado,status) 
+				VALUES(nombre_proveedor,telefono,correo,direccion,colonia,municipio,cp,estado,'activo');
 
 
 /*	
@@ -619,11 +670,18 @@ call updateProveedor(3,'Proveedor de prueba 3','4587654123','prov3@hotmail.com',
 call updateProveedor(1,'Proveedor de prueba','4774265833','','','','','','');
 
 
-
-DROP PROCEDURE IF EXISTS deleteProveedor;/*Debo tener cuidado al leminar un proveedor, ya que los productos lo tienen como llave foranea*/
+/*
+DROP PROCEDURE IF EXISTS deleteProveedor;
 CREATE PROCEDURE deleteProveedor (id int)
 DELETE FROM proveedor WHERE id_proveedor = id;       
-  
+*/
+  DROP PROCEDURE IF EXISTS deleteProveedor;
+CREATE PROCEDURE deleteProveedor(
+id_proveedor int)
+UPDATE Proveedor as p 
+	SET 
+		p.status='inactivo'
+WHERE p.id_proveedor = id_proveedor;
   
 /*	
 call deleteProveedor(4);
@@ -652,6 +710,7 @@ estado varchar(200))
     AND p.municipio like (CONCAT('%',municipio,'%'))
 	AND p.cp like (CONCAT('%',cp,'%'))
     AND p.estado like (CONCAT('%',estado,'%'))
+    AND status='activo';
 ;
 
 /*	
@@ -688,10 +747,10 @@ id_proveedor int not null
 
 */
 
-INSERT INTO Producto (codigo_producto,descripcion,marca,costo,precio,presentacion,stock,stock_minimo,id_categoria,id_proveedor) 
-				VALUES ('7501000664221','Llave Nariz 1/2','Dica',33,56,'pieza',25,8,1,1),
-                ('000000015425','Mezcladora para Lavavo 4048','Dica',268,342,'pieza',4,1,1,1),
-				('000000000003','Llave Nariz 1/2','Trupper',112,183,'pieza',10,3,1,1); 
+INSERT INTO Producto (id_producto,codigo_producto,descripcion,marca,costo,precio,presentacion,stock,stock_minimo,id_categoria,id_proveedor,status) 
+				VALUES (null,'7501000664221','Llave Nariz 1/2','Dica',33,56,'pieza',25,8,1,1,'activo'),
+                (null,'000000015425','Mezcladora para Lavavo 4048','Dica',268,342,'pieza',4,1,1,1,'activo'),
+				(null,'000000000003','Llave Nariz 1/2','Trupper',112,183,'pieza',10,3,1,1,'activo'); 
 /*
 UPDATE Producto SET producto.codigo_producto = '7501000664221'
 WHERE producto.codigo_producto = '1111111111111';
@@ -703,11 +762,12 @@ WHERE producto.codigo_producto = '1111111111111';
 
 DROP PROCEDURE IF EXISTS getProductos;
 CREATE PROCEDURE getProductos ()
-	SELECT * FROM Producto;
+	SELECT * FROM Producto WHERE status='activo';
     
 /*	
 
 call getProductos();
+SELECT * FROM PRODUCTO;
 	
 */
 
@@ -716,7 +776,7 @@ DROP PROCEDURE IF EXISTS getIdProductoCodigo;
 CREATE PROCEDURE getIdProductoCodigo (
 codigo_producto varchar(13)
 )
-	SELECT id_producto FROM Producto as p WHERE p.codigo_producto=codigo_producto ;
+SELECT id_producto FROM Producto as p WHERE p.codigo_producto=codigo_producto ;
     
 /*	
 
@@ -736,8 +796,8 @@ stock int,
 stock_minimo int,
 id_categoria int,
 id_proveedor int)
-INSERT INTO Producto (codigo_producto,descripcion,marca,costo,precio,presentacion,stock,stock_minimo,id_categoria,id_proveedor) 
-				VALUES(codigo_producto,descripcion,marca,costo,precio,presentacion,stock,stock_minimo,id_categoria,id_proveedor);
+INSERT INTO Producto (codigo_producto,descripcion,marca,costo,precio,presentacion,stock,stock_minimo,id_categoria,id_proveedor,status) 
+				VALUES(codigo_producto,descripcion,marca,costo,precio,presentacion,stock,stock_minimo,id_categoria,id_proveedor,'activo');
 
 
 /*	
@@ -824,11 +884,20 @@ call updateProducto('000004000004','Escalera de Tijera C/Plataforma Escalumex 3 
 	
 */
 
-DROP PROCEDURE IF EXISTS deleteProducto;/*Antes de eliminar un producto debo de verificar que no se afecten las ventas porque tienen llaves foraneas del producto a eliminar*/
+/*
+DROP PROCEDURE IF EXISTS deleteProducto;
 CREATE PROCEDURE deleteProducto (id int)
 DELETE FROM Producto WHERE id_producto = id;       
-  
-  
+*/
+
+DROP PROCEDURE IF EXISTS deleteProducto;
+CREATE PROCEDURE deleteProducto(
+id int)
+UPDATE Producto as p 
+	SET 
+		p.status='inactivo'
+WHERE p.id_producto = id;
+
 /*	
 
 call deleteProducto(5);
@@ -870,6 +939,7 @@ id_proveedor varchar(200))
 	AND CONVERT(p.stock_minimo,CHAR)  like (CONCAT('%',stock_minimo,'%'))
     AND CONVERT(p.id_categoria,CHAR) like (CONCAT('%',id_categoria,'%'))
 	AND CONVERT(p.id_proveedor,CHAR) like (CONCAT('%',id_proveedor,'%'))
+    AND status='activo';
 ;
 
 /*	
@@ -907,6 +977,7 @@ id_proveedor varchar(200))
 	AND CONVERT(p.stock_minimo,CHAR)  like (CONCAT('%',stock_minimo,'%'))
     AND CONVERT(p.id_categoria,CHAR) like (CONCAT('%',id_categoria,'%'))
 	AND CONVERT(p.id_proveedor,CHAR) like (CONCAT('%',id_proveedor,'%'))
+    AND status='activo';
 ;
 
 /*	
