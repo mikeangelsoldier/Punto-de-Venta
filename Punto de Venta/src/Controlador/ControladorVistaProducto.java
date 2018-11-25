@@ -77,7 +77,7 @@ public class ControladorVistaProducto implements Initializable {
 
     ConectaBD_Punto_de_venta conectaBD_PuntoVenta;
     //ManejadorFiltroKey manejador;
-    private boolean filtrarActivado, agregarActivado, modificarActivado;
+    private boolean filtrarActivado, agregarActivado, modificarActivado, agregarMarcaActivado;
 
     private static String MARCA_DEFAULT = "Eliger marca";
     private static String PROVEEDOR_DEFAULT = "Elegir Proveedor";
@@ -105,10 +105,11 @@ public class ControladorVistaProducto implements Initializable {
             seleccionCboCategoriaProducto,
             seleccionCboProveedorProducto;
 
-    ManejadorFiltroKey manejador;
+    ManejadorFiltroKey manejador, manejadorMarca;
 
     @FXML
-    private JFXTextArea txaDescripcionProducto;
+    private JFXTextArea txaDescripcionProducto,
+            txaNombreMarca;
 
     @FXML
     private JFXTextField txtCodigoProducto,
@@ -116,7 +117,8 @@ public class ControladorVistaProducto implements Initializable {
             txtCostoProducto,
             txtUnidadProducto,
             txtStockProducto,
-            txtStockMinimoProducto;
+            txtStockMinimoProducto,
+            txtIdMarca;
 
     @FXML
     private JFXComboBox cboMarcaProducto,
@@ -127,8 +129,14 @@ public class ControladorVistaProducto implements Initializable {
     private TableView<Producto> tblDatosProducto;
 
     @FXML
+    private TableView<Marca> tblDatosMarca;
+
+    @FXML
     private TableColumn<Producto, Integer> tbcID,
             tbcStock, tbcStockMinimo;
+
+    @FXML
+    private TableColumn<Marca, Integer> tbcIDMarca;
 
     /*
      @FXML
@@ -150,6 +158,9 @@ public class ControladorVistaProducto implements Initializable {
             tbcUnidad, tbcCategoria, tbcProveedor;
 
     @FXML
+    private TableColumn<Marca, String> tbcNombreMarcaMarca;
+
+    @FXML
     private TableColumn<Producto, Double> tbcCosto,
             tbcPrecio;
 
@@ -169,13 +180,14 @@ public class ControladorVistaProducto implements Initializable {
             btnAccesoDirectoEditarProveedoresProducto,
             btnAccesoDirectoEditarCategoriasProducto,
             btnAccesoDirectoEditarMarcasProducto,
-            btnImprimirCodigoBarrasVariosProductos;
+            btnImprimirCodigoBarrasVariosProductos,
+            btnRegresarAVistaProductos, btnAgregarMarca, btnEliminarMarca, btnGuardarInsercionMarca, btnCancelarMarca;
 
     @FXML
     private Label lblAyuda, lblCodigoBarras;
 
     @FXML
-    private Pane panelCodigoBarras;
+    private Pane panelCodigoBarras, panelMarcas, panelProductos;
 
     @FXML
     private void handleButtonAgregar(ActionEvent event) {
@@ -242,6 +254,21 @@ public class ControladorVistaProducto implements Initializable {
     }
 
     @FXML
+    private void handleButtonAbrirVistaMarcas(ActionEvent event) {
+        panelMarcas.setVisible(true);
+        panelProductos.setVisible(false);
+        abrirVistaMarcas();
+    }
+
+    @FXML
+    private void handleButtonRegresarAVistaProductos(ActionEvent event) {
+        panelMarcas.setVisible(false);
+        panelProductos.setVisible(true);
+        iniciarVistaProductos();
+
+    }
+
+    @FXML
     private void filtroBusqueda(ActionEvent event) {
         //filtrarActivado = !filtrarActivado;
 
@@ -250,6 +277,12 @@ public class ControladorVistaProducto implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        iniciarVistaProductos();
+        panelMarcas.setVisible(false);
+        panelProductos.setVisible(true);
+    }
+
+    private void iniciarVistaProductos() {
         conectaBD_PuntoVenta = new ConectaBD_Punto_de_venta();
         productoDB = new ProductoBD(conectaBD_PuntoVenta.getConnection());
         categoriaDB = new CategoriaBD(conectaBD_PuntoVenta.getConnection());
@@ -279,7 +312,6 @@ public class ControladorVistaProducto implements Initializable {
         logo.setGraphic(new ImageView(image));
          */
         manejador = new ManejadorFiltroKey();
-
     }
 
     @FXML
@@ -325,7 +357,7 @@ public class ControladorVistaProducto implements Initializable {
         Producto producto = tblDatosProducto.getSelectionModel().getSelectedItem();
 
         if (producto != null) {
-            System.out.println("si estro al evento de la tabla");
+            System.out.println("si entro al evento de la tabla");
             txtCodigoProducto.setText(producto.getCodigo());
             txaDescripcionProducto.setText(producto.getDescripcion());
             cboMarcaProducto.getSelectionModel().select(producto.getMarca());
@@ -1412,4 +1444,216 @@ public class ControladorVistaProducto implements Initializable {
             ManejadorFiltro();
         }
     }
+
+    /*------------------------------------------        Métodos de categorias              */
+    public void abrirVistaMarcas() {
+
+        agregarMarcaActivado = false;
+
+        //mostraCodigoBarras();
+        llenarTablaMarcas(marcaDB.getMarcas());
+
+        regresarBotonesMarcasAFormaOriginal();
+
+        /*
+        Image image = new Image("/images/iconUser.png");
+        logo.setGraphic(new ImageView(image));
+         */
+    }
+
+    @FXML
+    private void handleButtonAgregarMarca(ActionEvent event) {
+        agregarMarcaActivado();
+    }
+
+    @FXML
+    private void handleButtonGuardarInsercionMarca(ActionEvent event) {
+        if (agregarMarcaActivado) {
+            agregarMarca();
+            llenarTablaMarcas(marcaDB.getMarcas());
+            //limpiarCamposMarca();
+        }
+    }
+
+    @FXML
+    private void handleButtonEliminarMarca(ActionEvent event) {
+        eliminarMarca();
+        llenarTablaMarcas(marcaDB.getMarcas());
+        //limpiarCamposMarca();
+    }
+
+    @FXML
+    private void handleButtonCancelarMarca(ActionEvent event) {
+        limpiarCamposMarca();
+        regresarBotonesMarcasAFormaOriginal();
+    }
+
+    @FXML
+    private void handleTableChangeMarcas(Event event) {
+        Marca objetoMarca = tblDatosMarca.getSelectionModel().getSelectedItem();
+
+        if (objetoMarca != null) {
+            System.out.println("si entro al evento de la tabla Marca");
+            txtIdMarca.setText(String.valueOf(objetoMarca.getId_marca()));
+            txaNombreMarca.setText(objetoMarca.getMarca());
+        }
+    }
+
+    private void llenarTablaMarcas(ArrayList<Marca> listaMarcas) {
+
+        tblDatosMarca.getItems().clear();
+
+        tbcIDMarca.setCellValueFactory(new PropertyValueFactory<>("id_marca"));
+        tbcNombreMarcaMarca.setCellValueFactory(new PropertyValueFactory<>("marca"));
+
+        for (Marca marca : listaMarcas) {
+            tblDatosMarca.getItems().add(marca);
+        }
+    }
+
+    private void agregarMarca() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+
+        if (!camposImportantesMarcaPorCompletar()) {
+            String marca = txaNombreMarca.getText();
+            try {
+                alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Confirmación");
+                alert.setHeaderText(null);
+                alert.setContentText("¿Realmente deseas agregar esta Marca?");
+                if (alert.showAndWait().get() == ButtonType.OK) {
+                    marcaDB.addMarca(marca);
+
+                    alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Información");
+                    alert.setHeaderText(null);
+                    alert.setContentText("La operación se ha realizado con éxito");
+                    alert.show();
+                    regresarBotonesMarcasAFormaOriginal();
+                    limpiarCamposMarca();
+
+                } else {
+                    alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Información");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Se ha cancelado la operación");
+                    alert.show();
+                }
+
+            } catch (SQLIntegrityConstraintViolationException ex2) {
+                Alert alert2 = new Alert(Alert.AlertType.ERROR);
+                alert2.setTitle("Error");
+                alert2.setHeaderText("Un error ha ocurrido");
+                alert2.setContentText("El ID ya existe en la base de datos");
+                alert2.show();
+            } catch (SQLException ex) {
+                Alert alert3 = new Alert(Alert.AlertType.ERROR);
+                alert3.setTitle("Error");
+                alert3.setHeaderText("Un error ha ocurrido");
+                alert3.setContentText("La categoria no se ha podido agregar. Error al acceder a la base de datos");
+                alert3.show();
+            }
+
+        } else {
+
+            alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Información");
+            alert.setHeaderText(null);
+            alert.setContentText("Se debe escribir una marca para agregar");
+            alert.show();
+        }
+
+    }
+
+    private void eliminarMarca() {
+        try {
+            if (tblDatosMarca.getSelectionModel().getSelectedItems().isEmpty()) {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Advertencia");
+                alert.setHeaderText(null);
+                alert.setContentText("Por favor elige un registro");
+                alert.show();
+                return;
+            }
+
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Confirmación");
+            alert.setHeaderText(null);
+            alert.setContentText("¿Realmente deseas eliminar el registro de esta Marca?");
+            if (alert.showAndWait().get() == ButtonType.OK) {
+                int ID = tblDatosMarca.getSelectionModel().getSelectedItem().getId_marca();
+                marcaDB.deleteMarca(ID);
+                alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setHeaderText(null);
+                alert.setTitle("Información");
+                alert.setContentText("La operación se ha realizado con éxito");
+                alert.show();
+
+                limpiarCamposMarca();
+            } else {
+                alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Información");
+                alert.setHeaderText(null);
+                alert.setContentText("Se ha cancelado la operación");
+                alert.show();
+            }
+
+        } catch (SQLException ex) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Un error ha ocurrido");
+            alert.setContentText("La Marca no se ha podido eliminar. Error al acceder a la base de datos");
+            alert.show();
+        }
+    }
+
+    private boolean camposImportantesMarcaPorCompletar() {
+        String marca = txaNombreMarca.getText();
+
+        if (marca.equals("")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    void regresarBotonesMarcasAFormaOriginal() {
+        agregarMarcaActivado = false;
+
+        //ESTADO ORIGINAL DE LOS BOTONES
+        btnAgregarMarca.setDisable(false);
+        btnEliminarMarca.setDisable(false);
+
+        btnCancelarMarca.setVisible(false);
+        btnGuardarInsercionMarca.setVisible(false);
+
+        //POR DEFECTO NO SE PUEDE EDITAR EN LOS TXT
+        txtIdMarca.setEditable(false);
+        txaNombreMarca.setEditable(false);
+
+        limpiarCamposMarca();
+    }
+
+    void agregarMarcaActivado() {
+        agregarMarcaActivado = true;
+
+        limpiarCamposMarca();
+        if (agregarMarcaActivado) {
+
+            btnAgregarMarca.setDisable(true);
+            btnEliminarMarca.setDisable(true);
+
+            btnCancelarMarca.setVisible(true);
+            btnGuardarInsercionMarca.setVisible(true);
+
+            txaNombreMarca.setEditable(true);
+        } else {
+        }
+    }
+
+    private void limpiarCamposMarca() {
+        txtIdMarca.clear();
+        txaNombreMarca.clear();
+    }
+
 }
