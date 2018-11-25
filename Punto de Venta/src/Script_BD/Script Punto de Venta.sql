@@ -43,13 +43,15 @@ status varchar(20)
 create table Cliente(
 id_cliente int not null primary key auto_increment,
 nombre varchar(100) not null,
+rfc varchar(15) null,
 telefono varchar(10) null,
 correo varchar(100) null,
 direccion varchar(100)  null,
 colonia varchar(100) null,
 municipio varchar(200)  null,
 cp varchar(5) null,
-status varchar(200) null
+estado varchar(200) null,
+status varchar(20) null
 ) ENGINE=InnoDB;
 
 
@@ -322,7 +324,113 @@ SELECT * FROM usuario WHERE status='activo';
 /*
  call buscarLogin('Admin','123'); 
  call buscarLogin('Admin','122'); 
+  call buscarLogin('mike','mike123'); 
  */
+ 
+ 
+ /***********************************************************Procedimientos de CLIENTE   -----------*/
+ DROP PROCEDURE IF EXISTS getClientes;
+CREATE PROCEDURE getClientes ()
+	SELECT * FROM Cliente WHERE Cliente.status = 'activo';
+ 
+call getClientes;
+ 
+
+DROP PROCEDURE IF EXISTS addCliente;
+CREATE PROCEDURE addCliente(
+nombre varchar(100),
+rfc varchar(15),
+telefono varchar(10),
+correo varchar(100),
+direccion varchar(100),
+colonia varchar(100),
+municipio varchar(200),
+cp varchar(5),
+estado varchar(200))
+INSERT INTO Cliente VALUES(null, nombre, rfc, 
+telefono, correo, direccion, colonia, municipio, cp, estado, 'activo');
+
+call addCliente('paul','2728282','4771223363','hdjdjd','sjsjs','jjdddjd','sjsjs','27272','gto');
+ 
+ 
+ 
+ DROP PROCEDURE IF EXISTS updateCliente;
+CREATE PROCEDURE updateCliente(
+id_cliente int,
+nombre varchar(100),
+rfc varchar(15),
+telefono varchar(10),
+correo varchar(100),
+direccion varchar(100),
+colonia varchar(100),
+municipio varchar(200),
+cp varchar(5),
+estado varchar(200))
+UPDATE Cliente SET Cliente.nombre = nombre, Cliente.rfc = rfc,
+Cliente.telefono = telefono, Cliente.correo= correo, Cliente.direccion = direccion, Cliente.colonia = colonia, 
+Cliente.municipio = municipio, Cliente.cp = cp, Cliente.estado = estado WHERE Cliente.id_cliente = id_cliente;
+
+DROP PROCEDURE IF EXISTS deleteCliente;
+CREATE PROCEDURE deleteCliente(
+id int)
+UPDATE Cliente SET Cliente.status = 'inactivo' WHERE Cliente.id_cliente = id;
+
+DROP PROCEDURE IF EXISTS getBusquedaCliente1;
+CREATE PROCEDURE getBusquedaCliente1(  
+nombre varchar(100),
+rfc varchar(15),
+telefono varchar(10),
+correo varchar(100),
+direccion varchar(100),
+colonia varchar(100),
+municipio varchar(200),
+cp varchar(5),
+estado varchar(200))
+	SELECT * from Cliente AS c
+	where  c.nombre like (CONCAT('%',nombre,'%'))
+	AND  c.rfc like (CONCAT('%',rfc,'%'))
+    AND c.telefono like (CONCAT('%',telefono,'%'))
+    AND c.correo like (CONCAT('%',correo,'%'))
+    AND c.direccion like (CONCAT('%',direccion,'%'))
+    AND c.colonia like (CONCAT('%',colonia,'%'))
+    AND c.municipio like (CONCAT('%',municipio,'%'))
+    AND c.cp like (CONCAT('%',cp,'%'))
+    AND c.estado like (CONCAT('%',estado,'%'))
+    AND status = 'activo'
+;
+
+DROP PROCEDURE IF EXISTS getBusquedaCliente2;
+CREATE PROCEDURE getBusquedaCliente2(  
+id_cliente int,
+nombre varchar(100),
+rfc varchar(15),
+telefono varchar(10),
+correo varchar(100),
+direccion varchar(100),
+colonia varchar(100),
+municipio varchar(200),
+cp varchar(5),
+estado varchar(200))
+	SELECT * from Cliente AS c
+	where c.id_cliente like (CONCAT('%',id,'%')) 
+    AND c.nombre like (CONCAT('%',nombre,'%'))
+	AND  c.rfc like (CONCAT('%',rfc,'%'))
+	AND  c.fecha_nacimiento like (CONCAT('%',fecha_nacimiento,'%'))
+    AND c.telefono like (CONCAT('%',telefono,'%'))
+    AND c.correo like (CONCAT('%',correo,'%'))
+    AND c.direccion like (CONCAT('%',direccion,'%'))
+    AND c.colonia like (CONCAT('%',colonia,'%'))
+    AND c.municipio like (CONCAT('%',municipio,'%'))
+    AND c.cp like (CONCAT('%',cp,'%'))
+    AND c.estado like (CONCAT('%',estado,'%'))
+    AND status = 'activo';
+;
+
+ 
+ 
+ 
+ 
+ 
  
  
  /***********************************************************Procedimientos de CATEGORIA*/
