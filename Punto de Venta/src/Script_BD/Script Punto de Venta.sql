@@ -78,7 +78,7 @@ status varchar(20)
 
 create table Producto(
 id_producto int not null primary key auto_increment,
-codigo_producto varchar(13) not null ,
+codigo_producto varchar(13) not null UNIQUE,
 descripcion varchar(400) not null,
 marca varchar(200) null,
 costo float(15) null,
