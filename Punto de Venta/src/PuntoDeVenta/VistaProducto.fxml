@@ -20,22 +20,22 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controlador.ControladorVistaProducto">
+<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="1201.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controlador.ControladorVistaProducto">
     <children>
       <JFXTabPane layoutX="8.0" layoutY="48.0" prefHeight="544.0" prefWidth="1181.0">
          <tabs>
             <Tab text="Acciones">
               <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" onKeyReleased="#handleTableChange" onMouseClicked="#handleTableChange" prefHeight="180.0" prefWidth="200.0">
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <Label fx:id="lblAyuda" layoutX="58.0" layoutY="52.0" prefHeight="27.0" prefWidth="24.0" textFill="#e80505">
+                        <Label fx:id="lblAyuda" layoutX="58.0" layoutY="52.0" prefHeight="20.0" prefWidth="913.0" textFill="#e80505">
                            <font>
                               <Font name="System Bold Italic" size="14.0" />
                            </font>
                         </Label>
-                        <ScrollPane layoutX="14.0" layoutY="301.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="206.0" prefWidth="1140.0">
+                        <ScrollPane layoutX="13.0" layoutY="301.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="192.0" prefWidth="1156.0">
                            <content>
-                              <TableView fx:id="tblDatosProducto" cache="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyReleased="#handleTableChange" onMouseClicked="#handleTableChange" prefHeight="200.0" prefWidth="1117.0">
+                              <TableView fx:id="tblDatosProducto" cache="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyReleased="#handleTableChange" onMouseClicked="#handleTableChange" prefHeight="173.0" prefWidth="1193.0">
                                  <columns>
                                     <TableColumn fx:id="tbcID" minWidth="-1.0" prefWidth="36.0" text="ID" />
                                     <TableColumn fx:id="tbcCodigo" maxWidth="600.0" minWidth="-1.0" prefWidth="115.99996948242188" text="Código" />
@@ -47,34 +47,34 @@
                                     <TableColumn fx:id="tbcStock" maxWidth="600.0" minWidth="-1.0" prefWidth="48.0" text="Stock" />
                                     <TableColumn fx:id="tbcStockMinimo" minWidth="-1.0" prefWidth="91.0" text="Stock Minimo" />
                                     <TableColumn fx:id="tbcCategoria" maxWidth="600.0" minWidth="-1.0" prefWidth="155.0" text="Categoria" />
-                                    <TableColumn fx:id="tbcProveedor" maxWidth="600.0" minWidth="-1.0" prefWidth="81.0" text="Proveedor" />
+                                    <TableColumn fx:id="tbcProveedor" maxWidth="600.0" minWidth="-1.0" prefWidth="113.0" text="Proveedor" />
                                  </columns>
                               </TableView>
                            </content>
                         </ScrollPane>
                         <HBox layoutX="160.0" layoutY="14.0" prefHeight="36.0" prefWidth="881.0" spacing="10.0">
                            <children>
-                              <JFXButton fx:id="btnAgregarProducto" buttonType="RAISED" ripplerFill="#3fb0dd" style="-fx-background-color: #222288;" text="Agregar" textFill="WHITE">
+                              <JFXButton fx:id="btnAgregarProducto" buttonType="RAISED" onAction="#handleButtonAgregar" ripplerFill="#3fb0dd" style="-fx-background-color: #222288;" text="Agregar" textFill="WHITE">
                                  <font>
                                     <Font name="System Bold" size="13.0" />
                                  </font>
                               </JFXButton>
-                              <JFXButton fx:id="btnModificarProducto" buttonType="RAISED" ripplerFill="#3fb0dd" style="-fx-background-color: #222288;" text="Modificar" textFill="WHITE">
+                              <JFXButton fx:id="btnModificarProducto" buttonType="RAISED" onAction="#handleButtonActualizar" ripplerFill="#3fb0dd" style="-fx-background-color: #222288;" text="Modificar" textFill="WHITE">
                                  <font>
                                     <Font name="System Bold" size="13.0" />
                                  </font>
                               </JFXButton>
-                              <JFXButton fx:id="btnEliminarProducto" buttonType="RAISED" ripplerFill="#3fb0dd" style="-fx-background-color: #222288;" text="Eliminar" textFill="WHITE">
+                              <JFXButton fx:id="btnEliminarProducto" buttonType="RAISED" onAction="#handleButtonEliminar" ripplerFill="#3fb0dd" style="-fx-background-color: #222288;" text="Eliminar" textFill="WHITE">
                                  <font>
                                     <Font name="System Bold" size="13.0" />
                                  </font>
                               </JFXButton>
-                              <JFXButton fx:id="btnFiltrarProducto" buttonType="RAISED" ripplerFill="#3fb0dd" style="-fx-background-color: #222288;" text="Filtrar" textFill="WHITE">
+                              <JFXButton fx:id="btnFiltrarProducto" buttonType="RAISED" onAction="#filtrarProducto" ripplerFill="#3fb0dd" style="-fx-background-color: #222288;" text="Filtrar" textFill="WHITE">
                                  <font>
                                     <Font name="System Bold" size="13.0" />
                                  </font>
                               </JFXButton>
-                              <JFXButton fx:id="btnCancelarProducto" buttonType="RAISED" ripplerFill="#3fb0dd" style="-fx-background-color: #222288;" text="Cancelar" textFill="WHITE">
+                              <JFXButton fx:id="btnCancelarProducto" buttonType="RAISED" onAction="#handleButtonCancelar" ripplerFill="#3fb0dd" style="-fx-background-color: #222288;" text="Cancelar" textFill="WHITE">
                                  <font>
                                     <Font name="System Bold" size="13.0" />
                                  </font>
@@ -84,19 +84,19 @@
                                     <Font name="System Bold" size="13.0" />
                                  </font>
                               </JFXButton>
-                              <JFXButton fx:id="btnGuardarInsercionProducto" buttonType="RAISED" ripplerFill="#3fb0dd" style="-fx-background-color: #222288;" text="Guardar Inserción" textFill="WHITE">
+                              <JFXButton fx:id="btnGuardarInsercionProducto" buttonType="RAISED" onAction="#handleButtonGuardarInsercion" ripplerFill="#3fb0dd" style="-fx-background-color: #222288;" text="Guardar Inserción" textFill="WHITE">
                                  <font>
                                     <Font name="System Bold" size="13.0" />
                                  </font>
                               </JFXButton>
-                              <JFXButton fx:id="btnGuardarModificacionProducto" buttonType="RAISED" ripplerFill="#3fb0dd" style="-fx-background-color: #222288;" text="Guardar Modificación" textFill="WHITE">
+                              <JFXButton fx:id="btnGuardarModificacionProducto" buttonType="RAISED" onAction="#handleButtonGuardarModificacion" ripplerFill="#3fb0dd" style="-fx-background-color: #222288;" text="Guardar Modificación" textFill="WHITE">
                                  <font>
                                     <Font name="System Bold" size="13.0" />
                                  </font>
                               </JFXButton>
                            </children>
                         </HBox>
-                        <GridPane layoutX="70.0" layoutY="168.0" prefHeight="120.0" prefWidth="667.0">
+                        <GridPane layoutX="26.0" layoutY="168.0" prefHeight="120.0" prefWidth="667.0">
                           <columnConstraints>
                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                             <ColumnConstraints hgrow="SOMETIMES" maxWidth="160.0" minWidth="10.0" prefWidth="160.0" />
@@ -199,14 +199,14 @@
                               </JFXTextArea>
                            </children>
                         </GridPane>
-                        <Pane layoutX="58.0" layoutY="74.0" prefHeight="94.0" prefWidth="543.0">
+                        <Pane layoutX="26.0" layoutY="75.0" prefHeight="94.0" prefWidth="543.0">
                            <children>
                               <JFXTextField fx:id="txtCodigoProducto" editable="false" layoutX="24.0" layoutY="24.0" prefHeight="29.0" prefWidth="206.0" promptText="Codigo">
                                  <tooltip>
                                     <Tooltip text="Escribe el codigo que desees de 13 digitos o menos o genera uno con el botón de abajo" />
                                  </tooltip>
                               </JFXTextField>
-                              <Label layoutX="72.0" layoutY="4.0" prefHeight="20.0" prefWidth="111.0" text="Código de barras" textFill="#222288" wrapText="true">
+                              <Label layoutX="72.0" layoutY="4.0" prefHeight="20.0" prefWidth="111.0" text="Código" textFill="#222288" wrapText="true">
                                  <font>
                                     <Font size="14.0" />
                                  </font>
@@ -228,7 +228,7 @@
                         </Pane>
                         <Pane fx:id="panelCodigoBarras" layoutX="769.0" layoutY="102.0" prefHeight="188.0" prefWidth="288.0">
                            <children>
-                              <Label layoutX="90.0" layoutY="14.0" text="Código de Barras" textFill="#222288" wrapText="true">
+                              <Label layoutX="49.0" layoutY="14.0" text="Código de Barras (Vista Previa)" textFill="#222288" wrapText="true">
                                  <font>
                                     <Font size="13.0" />
                                  </font>
@@ -237,7 +237,7 @@
                                  </padding>
                               </Label>
                               <Label fx:id="lblCodigoBarras" layoutX="5.0" layoutY="33.0" prefHeight="71.0" prefWidth="284.0" text="dfgfd" />
-                              <JFXButton fx:id="btnImprimirCodigoBarrasProducto" buttonType="RAISED" layoutX="149.0" layoutY="118.0" prefHeight="56.0" prefWidth="100.0" ripplerFill="#3fb0dd" style="-fx-background-color: #222288;" text="Imprimir" textFill="WHITE" wrapText="true">
+                              <JFXButton fx:id="btnImprimirCodigoBarrasProducto" buttonType="RAISED" layoutX="144.0" layoutY="129.0" onAction="#handleButtonGuardarCodigoDeBarras" prefHeight="56.0" prefWidth="100.0" ripplerFill="#3fb0dd" style="-fx-background-color: #222288;" text="Guardar en PDF" textFill="WHITE" wrapText="true">
                                  <font>
                                     <Font name="System Bold" size="13.0" />
                                  </font>
@@ -247,7 +247,7 @@
                                     <Font name="System Bold" size="13.0" />
                                  </font>
                               </JFXButton>
-                              <JFXButton fx:id="btnMostrarCodigoBarrasProducto" buttonType="RAISED" layoutX="5.0" layoutY="125.0" prefHeight="63.0" prefWidth="117.0" ripplerFill="#3fb0dd" style="-fx-background-color: #222288;" text="Mostrar código de barras" textAlignment="JUSTIFY" textFill="WHITE" wrapText="true">
+                              <JFXButton fx:id="btnMostrarCodigoBarrasProducto" buttonType="RAISED" layoutX="5.0" layoutY="125.0" onAction="#handleButtonMostrarCodigoDeBarras" prefHeight="63.0" prefWidth="117.0" ripplerFill="#3fb0dd" style="-fx-background-color: #222288;" text="Mostrar código de barras" textAlignment="JUSTIFY" textFill="WHITE" wrapText="true">
                                  <font>
                                     <Font name="System Bold" size="13.0" />
                                  </font>
@@ -265,6 +265,11 @@
                            </font>
                         </JFXButton>
                         <JFXButton fx:id="btnAccesoDirectoEditarCategoriasProducto" buttonType="RAISED" layoutX="1067.0" layoutY="153.0" prefHeight="60.0" prefWidth="86.0" ripplerFill="#3fb0dd" style="-fx-background-color: #222288;" text="Editar categorias" textFill="WHITE" wrapText="true">
+                           <font>
+                              <Font name="System Bold" size="13.0" />
+                           </font>
+                        </JFXButton>
+                        <JFXButton fx:id="btnImprimirCodigoBarrasVariosProductos" buttonType="RAISED" layoutX="1011.0" layoutY="15.0" onAction="#handleButtonGuardarCodigosDeBarrasVariosProductos" prefHeight="56.0" prefWidth="100.0" ripplerFill="#3fb0dd" style="-fx-background-color: #222288;" text="Guardar en PDF" textFill="WHITE" wrapText="true">
                            <font>
                               <Font name="System Bold" size="13.0" />
                            </font>

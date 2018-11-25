@@ -61,6 +61,7 @@ import java.util.logging.Logger;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.stage.FileChooser;
 import javax.swing.ImageIcon;
 
 /**
@@ -78,9 +79,9 @@ public class ControladorVistaProducto implements Initializable {
     //ManejadorFiltroKey manejador;
     private boolean filtrarActivado, agregarActivado, modificarActivado;
 
-    private static String MARCA_DEFAULT = "-";
-    private static String PROVEEDOR_DEFAULT = "-";
-    private static String CATEGORIA_DEFAULT = "-";
+    private static String MARCA_DEFAULT = "Eliger marca";
+    private static String PROVEEDOR_DEFAULT = "Elegir Proveedor";
+    private static String CATEGORIA_DEFAULT = "Elegir Categoria";
 
     private static String AYUDA_AL_AGREGAR = "Escribe en los campos los datos deseados, da clic en Guardar Cambios, o da clic en cancelar";
     private static String AYUDA_AL_MODIFICAR = "Seleccionar un registro, Escribe en los campos los datos deseados, da clic en Guardar Cambios, o da clic en cancelar";
@@ -127,13 +128,26 @@ public class ControladorVistaProducto implements Initializable {
 
     @FXML
     private TableColumn<Producto, Integer> tbcID,
-            tbcStock, tbcStockMinimo, tbcCategoria, tbcProveedor;
+            tbcStock, tbcStockMinimo;
 
+    /*
+     @FXML
+    private TableColumn<Producto, Integer> tbcID,
+            tbcStock, tbcStockMinimo, tbcCategoria, tbcProveedor;
+     */
+
+ /*
     @FXML
     private TableColumn<Producto, String> tbcCodigo,
             tbcDescripcion,
             tbcMarca,
             tbcUnidad;
+     */
+    @FXML
+    private TableColumn<Producto, String> tbcCodigo,
+            tbcDescripcion,
+            tbcMarca,
+            tbcUnidad, tbcCategoria, tbcProveedor;
 
     @FXML
     private TableColumn<Producto, Double> tbcCosto,
@@ -154,7 +168,9 @@ public class ControladorVistaProducto implements Initializable {
             btnImprimirCodigoBarrasProducto,
             btnAccesoDirectoEditarProveedoresProducto,
             btnAccesoDirectoEditarCategoriasProducto,
-            btnAccesoDirectoEditarMarcasProducto;
+            btnAccesoDirectoEditarMarcasProducto,
+            btnImprimirCodigoBarrasVariosProductos;
+    
 
     @FXML
     private Label lblAyuda, lblCodigoBarras;
@@ -164,18 +180,18 @@ public class ControladorVistaProducto implements Initializable {
 
     @FXML
     private void handleButtonAgregar(ActionEvent event) {
-        /*agregarUsuarioActivado();*/
+        agregarUsuarioActivado();
     }
 
     @FXML
     private void handleButtonActualizar(ActionEvent event) {
-        /*modificarUsuarioActivado();*/
+        modificarUsuarioActivado();
     }
 
     @FXML
-    private void handleButtonAgregarCambios(ActionEvent event) {
+    private void handleButtonGuardarInsercion(ActionEvent event) {
         if (agregarActivado) {
-            /* agregarUsuario();*/
+            agregarProducto();
             llenarTabla(productoDB.getProductos());
             //limpiarCampos();
         }
@@ -183,9 +199,9 @@ public class ControladorVistaProducto implements Initializable {
     }
 
     @FXML
-    private void handleButtonActualizarCambios(ActionEvent event) {
+    private void handleButtonGuardarModificacion(ActionEvent event) {
         if (modificarActivado) {
-            /* actualizarUsuario();*/
+            actualizarProducto();
             llenarTabla(productoDB.getProductos());
             //limpiarCampos();
 
@@ -195,7 +211,7 @@ public class ControladorVistaProducto implements Initializable {
 
     @FXML
     private void handleButtonEliminar(ActionEvent event) {
-        /*eliminarUsuario();*/
+        eliminarProducto();
         llenarTabla(productoDB.getProductos());
         /*limpiarCampos();*/
     }
@@ -203,14 +219,33 @@ public class ControladorVistaProducto implements Initializable {
     @FXML
     private void handleButtonCancelar(ActionEvent event) {
         /*limpiarCampos();*/
- /*regresarBotonesAFormaOriginal();*/
+        regresarBotonesAFormaOriginal();
         lblAyuda.setText("");
     }
 
     @FXML
+    private void handleButtonMostrarCodigoDeBarras(ActionEvent event) {
+        verificarMostrarCodigoBarras();
+
+    }
+
+    @FXML
+    private void handleButtonGuardarCodigoDeBarras(ActionEvent event) {
+        verificarGuardarCodigoBarras();
+
+    }
+
+    @FXML
+    private void handleButtonGuardarCodigosDeBarrasVariosProductos(ActionEvent event) {
+
+        guardarCodigoBarrasProductosFiltrados();
+
+    }
+
+    @FXML
     private void filtroBusqueda(ActionEvent event) {
-        filtrarActivado=!filtrarActivado;
-        
+        //filtrarActivado = !filtrarActivado;
+
         ManejadorFiltro();
     }
 
@@ -231,7 +266,7 @@ public class ControladorVistaProducto implements Initializable {
         listaObjetosCategorias = new ArrayList<Categoria>();
 
         llenarCbosOpciones();
-        mostraCodigoBarras();
+        //mostraCodigoBarras();
 
         llenarTabla(productoDB.getProductos());
 
@@ -261,44 +296,6 @@ public class ControladorVistaProducto implements Initializable {
         txtCodigoProducto.setText(cadena);
     }
 
-    void regresarBotonesAFormaOriginal() {
-        modificarActivado = false;
-        agregarActivado = false;
-        filtrarActivado = false;
-
-        //ESTADO ORIGINAL DE LOS BOTONES
-        btnAgregarProducto.setDisable(false);
-        //btnAgregarUsuario.setStyle("fx-background-color: #222288");
-        btnModificarProducto.setDisable(false);
-        //btnModificarUsuario.setStyle("fx-background-color: #222288");
-        btnEliminarProducto.setDisable(false);
-        btnFiltrarProducto.setDisable(false);
-        //btnRegresarUsuario.setDisable(false);
-
-        btnRegresarProducto.setVisible(true);
-
-        btnCancelarProducto.setVisible(false);
-        btnGuardarInsercionProducto.setVisible(false);
-        btnGuardarModificacionProducto.setVisible(false);
-
-        //POR DEFECTO NO SE PUEDE EDITAR EN LOS TXT
-        txtCodigoProducto.setEditable(false);
-        txaDescripcionProducto.setEditable(false);
-        txtPrecioProducto.setEditable(false);
-        txtCostoProducto.setEditable(false);
-        txtUnidadProducto.setEditable(false);
-        txtStockProducto.setEditable(false);
-        txtStockMinimoProducto.setEditable(false);
-
-        cboMarcaProducto.getSelectionModel().select(0);
-        cboCategoriaProducto.getSelectionModel().select(0);
-        cboProveedorProducto.getSelectionModel().select(0);
-
-        lblAyuda.setText("");
-        lblCodigoBarras.setText("");
-
-    }
-
     @FXML
     private void handleTableChange(Event event) {
         Producto producto = tblDatosProducto.getSelectionModel().getSelectedItem();
@@ -315,6 +312,7 @@ public class ControladorVistaProducto implements Initializable {
             txtStockProducto.setText(String.valueOf(producto.getStock()));
             txtStockMinimoProducto.setText(String.valueOf(producto.getStock_minimo()));
 
+            /*
             int idProveedor;
             int idCategoria;
             idProveedor = producto.getProveedor();
@@ -323,7 +321,7 @@ public class ControladorVistaProducto implements Initializable {
             for (int i = 0; i < listaObjetosProveedores.size(); i++) {
                 if (listaObjetosProveedores.get(i).getId_proveedor() == idProveedor) {
                     cboProveedorProducto.getSelectionModel().select(listaObjetosProveedores.get(i).getNombre_proveedor());
-                    
+
                     break;
                 }
             }
@@ -334,22 +332,157 @@ public class ControladorVistaProducto implements Initializable {
                     break;
                 }
             }
+             */
+            String nombreProveedor = producto.getNombreProveedor();
+            String nombreCategoria = producto.getNombreCategoria();
+
+            cboProveedorProducto.getSelectionModel().select(nombreProveedor);
+            cboCategoriaProducto.getSelectionModel().select(nombreCategoria);
+
         }
     }
 
     private void llenarTabla(ArrayList<Producto> listaProductos) {
+
+        for (int i = 0; i < listaProductos.size(); i++) {
+            int id = listaProductos.get(i).getId();
+            String codigo = listaProductos.get(i).getCodigo();
+            String descripcion = listaProductos.get(i).getDescripcion();
+            String marca = listaProductos.get(i).getMarca();
+            double costo = listaProductos.get(i).getCosto();
+            double precio = listaProductos.get(i).getPrecio();
+            String presentacion = listaProductos.get(i).getPresentacion();
+            int stock = listaProductos.get(i).getStock();
+            int stock_minimo = listaProductos.get(i).getStock_minimo();
+            int categoria = listaProductos.get(i).getCategoria();
+            int proveedor = listaProductos.get(i).getProveedor();
+
+            //System.out.println("FK categoria leida= " + categoria);
+            //System.out.println("FK proveedor leid= " + proveedor);
+            String nombreProvedor = "";
+            String nombreCategoria = "";
+
+            for (int j = 0; j < listaObjetosCategorias.size(); j++) {
+                if (listaObjetosCategorias.get(j).getId_categoria() == categoria) {
+                    nombreCategoria = listaObjetosCategorias.get(j).getNombre();
+                    //System.out.println(nombreCategoria);
+                    break;
+                }
+            }
+
+            for (int j = 0; j < listaObjetosProveedores.size(); j++) {
+                if (listaObjetosProveedores.get(j).getId_proveedor() == proveedor) {
+                    nombreProvedor = listaObjetosProveedores.get(j).getNombre_proveedor();
+                    //System.out.println(nombreProvedor);
+                    break;
+                }
+            }
+
+            Producto productoConNombreCategoriaYProveedor = new Producto();
+            productoConNombreCategoriaYProveedor.setId(id);
+            productoConNombreCategoriaYProveedor.setCodigo(codigo);
+            productoConNombreCategoriaYProveedor.setDescripcion(descripcion);
+            productoConNombreCategoriaYProveedor.setMarca(marca);
+            productoConNombreCategoriaYProveedor.setCosto(costo);
+            productoConNombreCategoriaYProveedor.setPrecio(precio);
+            productoConNombreCategoriaYProveedor.setPresentacion(presentacion);
+            productoConNombreCategoriaYProveedor.setStock(stock);
+            productoConNombreCategoriaYProveedor.setStock_minimo(stock_minimo);
+            productoConNombreCategoriaYProveedor.setNombreCategoria(nombreCategoria);
+            productoConNombreCategoriaYProveedor.setNombreProveedor(nombreProvedor);
+
+            //System.out.println("Categoria cambiada a "+productoConNombreCategoriaYProveedor.getNombreCategoria());
+            //System.out.println("proveedor cambiada a "+productoConNombreCategoriaYProveedor.getNombreProveedor());
+            listaProductos.set(i, productoConNombreCategoriaYProveedor);
+
+        }
+
         tblDatosProducto.getItems().clear();
 
-        /*
-        private int id;
-    private String ;
-    private String ;
-    private String ;
-    private double ;
-    private double ;
-    private String presentacion;
-        
-         */
+        tbcID.setCellValueFactory(new PropertyValueFactory<>("id"));
+        tbcStock.setCellValueFactory(new PropertyValueFactory<>("stock"));
+        tbcStockMinimo.setCellValueFactory(new PropertyValueFactory<>("stock_minimo"));
+        tbcCategoria.setCellValueFactory(new PropertyValueFactory<>("nombreCategoria"));
+        tbcProveedor.setCellValueFactory(new PropertyValueFactory<>("nombreProveedor"));
+
+        tbcCodigo.setCellValueFactory(new PropertyValueFactory<>("codigo"));
+        tbcDescripcion.setCellValueFactory(new PropertyValueFactory<>("descripcion"));
+        tbcMarca.setCellValueFactory(new PropertyValueFactory<>("marca"));
+        tbcUnidad.setCellValueFactory(new PropertyValueFactory<>("presentacion"));
+
+        tbcCosto.setCellValueFactory(new PropertyValueFactory<>("costo"));
+        tbcPrecio.setCellValueFactory(new PropertyValueFactory<>("precio"));
+
+        for (Producto producto : listaProductos) {
+            tblDatosProducto.getItems().add(producto);
+        }
+    }
+
+    void verificarMostrarCodigoBarras() {
+        contenidoTxtCodigoProducto = txtCodigoProducto.getText();
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+
+        if (!contenidoTxtCodigoProducto.equals("")) {
+            mostraCodigoBarras(contenidoTxtCodigoProducto);
+        } else {
+
+            alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Información");
+            alert.setHeaderText(null);
+            alert.setContentText("El campo de codigo de barras esta vacio");
+            alert.show();
+        }
+    }
+
+    void verificarGuardarCodigoBarras() {
+        contenidoTxtCodigoProducto = txtCodigoProducto.getText();
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+
+        if (!contenidoTxtCodigoProducto.equals("")) {
+            guardarCodigoBarras(contenidoTxtCodigoProducto);
+        } else {
+
+            alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Información");
+            alert.setHeaderText(null);
+            alert.setContentText("El campo de codigo de barras esta vacio");
+            alert.show();
+        }
+    }
+
+    void guardarCodigoBarrasProductosFiltrados() {
+        contenidoTxtCodigoProducto = txtCodigoProducto.getText();
+        Alert alert ;
+
+        alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmación");
+        alert.setHeaderText(null);
+        alert.setContentText("¿Realmente deseas guardar en PDF los codigos de de barras de los productos filtrados?");
+
+        if (alert.showAndWait().get() == ButtonType.OK) {
+
+            guardarVariosCodigoBarras();
+
+            alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Información");
+            alert.setHeaderText(null);
+            alert.setContentText("La operación se ha realizado con éxito");
+            alert.show();
+
+        } else {
+            alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Información");
+            alert.setHeaderText(null);
+            alert.setContentText("Se ha cancelado la operación");
+            alert.show();
+        }
+
+    }
+
+    /*
+    private void llenarTabla(ArrayList<Producto> listaProductos) {
+        tblDatosProducto.getItems().clear();
+
         tbcID.setCellValueFactory(new PropertyValueFactory<>("id"));
         tbcStock.setCellValueFactory(new PropertyValueFactory<>("stock"));
         tbcStockMinimo.setCellValueFactory(new PropertyValueFactory<>("stock_minimo"));
@@ -368,7 +501,7 @@ public class ControladorVistaProducto implements Initializable {
             tblDatosProducto.getItems().add(producto);
         }
     }
-
+     */
     private void llenarCbosOpciones() {
         actualizarComboCategorias();
         actualizarComboMarcas();
@@ -379,6 +512,7 @@ public class ControladorVistaProducto implements Initializable {
         cboCategoriaProducto.getItems().clear();
         this.listaObjetosCategorias = new ArrayList<Categoria>(categoriaDB.getCategorias());
 
+        /*
         System.out.println("\n*****************Las CATEGORIAS almacenadas son :");
         for (Categoria categoria : listaObjetosCategorias) {
             System.out.println(categoria.getId_categoria()
@@ -386,7 +520,8 @@ public class ControladorVistaProducto implements Initializable {
                     + "         " + categoria.getDescripcion()
             );
         }
-
+         */
+        cboCategoriaProducto.getItems().add(CATEGORIA_DEFAULT);
         for (int i = 0; i < listaObjetosCategorias.size(); i++) {
             cboCategoriaProducto.getItems().add(listaObjetosCategorias.get(i).getNombre());
         }
@@ -399,12 +534,14 @@ public class ControladorVistaProducto implements Initializable {
     private void actualizarComboMarcas() {
         cboMarcaProducto.getItems().clear();
         this.listaObjetosMarcas = new ArrayList<Marca>(marcaDB.getMarcas());
-
+        /*
         System.out.println("*****************Las Marcas almacenadas son :");
         for (int i = 0; i < listaObjetosMarcas.size(); i++) {
             System.out.println(listaObjetosMarcas.get(i).getId_marca() + "         " + listaObjetosMarcas.get(i).getMarca());
         }
+         */
 
+        cboMarcaProducto.getItems().add(MARCA_DEFAULT);
         for (int i = 0; i < listaObjetosMarcas.size(); i++) {
             cboMarcaProducto.getItems().add(listaObjetosMarcas.get(i).getMarca());
         }
@@ -419,6 +556,7 @@ public class ControladorVistaProducto implements Initializable {
 
         this.listaObjetosProveedores = new ArrayList<Proveedor>(proveedorDB.getProveedores());
 
+        /*
         System.out.println("\n*****************Los PROVEEDORES almacenados son :");
         for (int i = 0; i < listaObjetosProveedores.size(); i++) {
             System.out.println(listaObjetosProveedores.get(i).getId_proveedor()
@@ -432,7 +570,8 @@ public class ControladorVistaProducto implements Initializable {
                     + "         " + listaObjetosProveedores.get(i).getEstado()
             );
         }
-
+         */
+        cboProveedorProducto.getItems().add(PROVEEDOR_DEFAULT);
         for (int i = 0; i < listaObjetosProveedores.size(); i++) {
             cboProveedorProducto.getItems().add(listaObjetosProveedores.get(i).getNombre_proveedor());
         }
@@ -442,33 +581,45 @@ public class ControladorVistaProducto implements Initializable {
         }
     }
 
-    private void mostraCodigoBarras() {
+    private void mostraCodigoBarras(String Codigo) {
+
+        Barcode128 codigoBarra = new Barcode128();
+        codigoBarra.setCode(Codigo);
+        java.awt.Image imagenAWT = codigoBarra.createAwtImage(java.awt.Color.black, java.awt.Color.white);
+
+        BufferedImage bufferedImage = convertirABufferedImage(imagenAWT);
+        BufferedImage buferredImageAumentada = aumentarTamañoDeBufferedImage(bufferedImage, 270, 70);
+        javafx.scene.image.Image imagenFX = SwingFXUtils.toFXImage(buferredImageAumentada, null);
+
+        ImageView imageView = new ImageView();
+        imageView.setImage(imagenFX);
+        lblCodigoBarras.setGraphic(imageView);
+
+    }
+
+    private void guardarCodigoBarras(String Codigo) {
         Document documento = new Document();
         try {
-            PdfWriter pdf = PdfWriter.getInstance(documento, new FileOutputStream("codigos.pdf"));
-            documento.open();
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Elije donde guardar el codigo de barras");
+            String ruta;
+            try {
+                ruta = fileChooser.showSaveDialog(null).getPath();
+            } catch (Exception e) {
+                ruta = "";
+            }
 
-            Barcode128 code2 = new Barcode128();
-            code2.setCode("145784kkh512");
+            if (!ruta.equals("")) {
+                PdfWriter pdf = PdfWriter.getInstance(documento, new FileOutputStream(ruta + ".pdf"));
+                documento.open();
+                Barcode128 code2 = new Barcode128();
+                code2.setCode(Codigo);
 
-            Image img2 = code2.createImageWithBarcode(pdf.getDirectContent(), BaseColor.BLACK, BaseColor.BLACK);
-            img2.scalePercent(200);
-            documento.add(img2);
-            documento.close();
-
-            Barcode128 code3 = new Barcode128();
-            code3.setCode("145784kkh512");
-            java.awt.Image imgawt = code3.createAwtImage(java.awt.Color.black, java.awt.Color.white);
-            //java.awt.Image imgawt = code3.createAwtImage(java.awt.Color.darkGray, java.awt.Color.darkGray);
-
-            BufferedImage bImage = toBufferedImage(imgawt);
-            BufferedImage nuevaBImage = scale(bImage, 270, 70);
-            javafx.scene.image.Image imgfx = SwingFXUtils.toFXImage(nuevaBImage, null);
-
-            ImageView imageView = new ImageView();
-            imageView.setImage(imgfx);
-            lblCodigoBarras.setGraphic(imageView);
-            //lblCodigoBarras.setGraphic(imageView);
+                Image img2 = code2.createImageWithBarcode(pdf.getDirectContent(), BaseColor.BLACK, BaseColor.BLACK);
+                img2.scalePercent(200);
+                documento.add(img2);
+                documento.close();
+            }
 
         } catch (FileNotFoundException ex) {
             Logger.getLogger(ControladorVistaProducto.class.getName()).log(Level.SEVERE, null, ex);
@@ -478,7 +629,49 @@ public class ControladorVistaProducto implements Initializable {
 
     }
 
-    public static BufferedImage toBufferedImage(java.awt.Image img) {
+    private void guardarVariosCodigoBarras() {
+        Document documento = new Document();
+        try {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Elije donde guardar el codigo de barras");
+            String ruta;
+            try {
+                ruta = fileChooser.showSaveDialog(null).getPath();
+            } catch (Exception e) {
+                ruta = "";
+            }
+
+            if (!ruta.equals("")) {
+                PdfWriter pdf = PdfWriter.getInstance(documento, new FileOutputStream(ruta + ".pdf"));
+                documento.open();
+
+                int cantidadProductos = tblDatosProducto.getItems().size();
+
+                for (int i = 0; i < cantidadProductos; i++) {
+                    Producto producto = tblDatosProducto.getItems().get(i);
+                    String codigo=producto.getCodigo();
+                    Barcode128 codigoBarras = new Barcode128();
+                    
+                    codigoBarras.setCode(codigo);
+
+                    Image imagenCodigoBarrasParaPDF = codigoBarras.createImageWithBarcode(pdf.getDirectContent(), BaseColor.BLACK, BaseColor.BLACK);
+                    imagenCodigoBarrasParaPDF.scalePercent(200);
+                    documento.add(imagenCodigoBarrasParaPDF);
+                    documento.add(new Paragraph(" "));
+                }
+
+                documento.close();
+            }
+
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(ControladorVistaProducto.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (DocumentException ex) {
+            Logger.getLogger(ControladorVistaProducto.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    public static BufferedImage convertirABufferedImage(java.awt.Image img) {
         if (img instanceof BufferedImage) {
             return (BufferedImage) img;
         }
@@ -493,7 +686,7 @@ public class ControladorVistaProducto implements Initializable {
 
     }
 
-    public static BufferedImage scale(BufferedImage src, int w, int h) {
+    public static BufferedImage aumentarTamañoDeBufferedImage(BufferedImage src, int w, int h) {
         BufferedImage img
                 = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
         int x, y;
@@ -513,133 +706,289 @@ public class ControladorVistaProducto implements Initializable {
         return img;
     }
 
-    /*
-    private void agregarUsuario() {
+    private void agregarProducto() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 
-        try {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Confirmación");
-            alert.setHeaderText(null);
-            alert.setContentText("¿Realmente deseas agregar a este Usuario?");
+        if (!camposImportantesPorCompletar()) {
 
-            if (!camposPorCompletar()) {
-                if (alert.showAndWait().get() == ButtonType.OK) {
-                    contenidoTxtNombreUsuario = txtNombreUsuario.getText();
-                    contenidoTxtLoginUsuario = txtLoginUsuario.getText();
-                    contenidoTxtPasswordUsuario = txtPasswordUsuario.getText();
-                    contenidoCboRolUsuario = cboRolUsuario.getSelectionModel().getSelectedItem().toString();
+            String codigoProducto = txtCodigoProducto.getText();
+            String descripcionProducto = txaDescripcionProducto.getText();
+            String costoProducto = txtCostoProducto.getText();
+            String PrecioProducto = txtPrecioProducto.getText();
+            String UnidadProducto = txtUnidadProducto.getText();
+            String stockProducto = txtStockProducto.getText();
+            String stockMinimoProducto = txtStockMinimoProducto.getText();
+            String nombreMarcaProducto = "";
+            String nombreCategoriaProducto = "";
+            String nombreProveedorProducto = "";
+            nombreMarcaProducto = cboMarcaProducto.getSelectionModel().getSelectedItem().toString();
+            nombreCategoriaProducto = cboCategoriaProducto.getSelectionModel().getSelectedItem().toString();
+            nombreProveedorProducto = cboProveedorProducto.getSelectionModel().getSelectedItem().toString();
 
-                    productoDB.addUsuario(contenidoTxtNombreUsuario, contenidoTxtLoginUsuario,
-                            contenidoTxtPasswordUsuario, contenidoCboRolUsuario);
-                    alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Información");
-                    alert.setHeaderText(null);
-                    alert.setContentText("La operación se ha realizado con éxito");
-                    alert.show();
-                    regresarBotonesAFormaOriginal();
-                    limpiarCampos();
-                    lblAyuda.setText("");
+            if (isNumeric(stockProducto)) {
+                if (isNumeric(stockMinimoProducto)) {
+                    if (isDouble(PrecioProducto)) {
+                        if (isDouble(costoProducto)) {
+                            try {
+                                alert = new Alert(Alert.AlertType.CONFIRMATION);
+                                alert.setTitle("Confirmación");
+                                alert.setHeaderText(null);
+                                alert.setContentText("¿Realmente deseas agregar este Producto?");
+                                if (alert.showAndWait().get() == ButtonType.OK) {
 
+                                    int categoria = obtenerIDdeCategoria(nombreCategoriaProducto);
+                                    int proveedor = obtenerIDdeProveedor(nombreProveedorProducto);
+                                    double prec = Double.parseDouble(PrecioProducto);
+                                    double cost = Double.parseDouble(costoProducto);
+                                    int stock = Integer.parseInt(stockProducto);
+                                    int stockMinimo = Integer.parseInt(stockMinimoProducto);
+
+                                    productoDB.addProducto(codigoProducto, descripcionProducto,
+                                            nombreMarcaProducto, cost, prec, UnidadProducto, stock, stockMinimo, categoria, proveedor);
+
+                                    alert = new Alert(Alert.AlertType.INFORMATION);
+                                    alert.setTitle("Información");
+                                    alert.setHeaderText(null);
+                                    alert.setContentText("La operación se ha realizado con éxito");
+                                    alert.show();
+                                    regresarBotonesAFormaOriginal();
+                                    limpiarCampos();
+                                    lblAyuda.setText("");
+
+                                } else {
+                                    alert = new Alert(Alert.AlertType.INFORMATION);
+                                    alert.setTitle("Información");
+                                    alert.setHeaderText(null);
+                                    alert.setContentText("Se ha cancelado la operación");
+                                    alert.show();
+                                }
+
+                            } catch (SQLIntegrityConstraintViolationException ex2) {
+                                Alert alert2 = new Alert(Alert.AlertType.ERROR);
+                                alert2.setTitle("Error");
+                                alert2.setHeaderText("Un error ha ocurrido");
+                                alert2.setContentText("El ID ya existe en la base de datos");
+                                alert2.show();
+                            } catch (SQLException ex) {
+                                Alert alert3 = new Alert(Alert.AlertType.ERROR);
+                                alert3.setTitle("Error");
+                                alert3.setHeaderText("Un error ha ocurrido");
+                                alert3.setContentText("El producto no se ha podido agregar. Error al acceder a la base de datos");
+                                alert3.show();
+                            }
+                        } else {
+                            alert = new Alert(Alert.AlertType.INFORMATION);
+                            alert.setTitle("Costo en formato erroneo");
+                            alert.setHeaderText(null);
+                            alert.setContentText("El costo del producto debe ser númerico");
+                            alert.show();
+                        }
+                    } else {
+                        alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle("Precio en formato erroneo");
+                        alert.setHeaderText(null);
+                        alert.setContentText("El precio del producto debe ser númerico");
+                        alert.show();
+                    }
                 } else {
                     alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Información");
+                    alert.setTitle("Stock minimo con informacion incorrecta");
                     alert.setHeaderText(null);
-                    alert.setContentText("Se ha cancelado la operación");
-                    alert.show();
-                }
-            } else {
-
-                alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Información");
-                alert.setHeaderText(null);
-                alert.setContentText("Aun existen campos por completar");
-                alert.show();
-            }
-
-        } catch (SQLIntegrityConstraintViolationException ex2) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Un error ha ocurrido");
-            alert.setContentText("El ID " + contenidoTxtIDUsuario + " ya existe en la base de datos");
-            alert.show();
-        } catch (SQLException ex) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Un error ha ocurrido");
-            alert.setContentText("El Usuario no se ha podido agregar. Error al acceder a la base de datos");
-            alert.show();
-        }
-
-    }*/
- /*
-    private void actualizarUsuario() {
-        int idDeUsuarioSeleccionado = 0;
-
-        try {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Confirmación");
-            alert.setHeaderText(null);
-            alert.setContentText("¿Realmente deseas modificar el registro de este Usuario?");
-
-            if (!camposPorCompletar()) {
-                if (tblDatosUsuario.getSelectionModel().getSelectedItems().isEmpty()) {
-                    Alert alertSeleccion = new Alert(Alert.AlertType.WARNING);
-                    alertSeleccion.setTitle("Advertencia");
-                    alertSeleccion.setHeaderText(null);
-                    alertSeleccion.setContentText("Por favor elige un registro para modificar");
-                    alertSeleccion.show();
-                    return;
-                }
-                
-                if (alert.showAndWait().get() == ButtonType.OK) {//solo si se acepto continuar
-                    idDeUsuarioSeleccionado = tblDatosUsuario.getSelectionModel().getSelectedItem().getId();
-                    contenidoTxtNombreUsuario = txtNombreUsuario.getText();
-                    contenidoTxtLoginUsuario = txtLoginUsuario.getText();
-                    contenidoTxtPasswordUsuario = txtPasswordUsuario.getText();
-                    contenidoCboRolUsuario = cboRolUsuario.getSelectionModel().getSelectedItem().toString();
-
-                    productoDB.updateUsuario(idDeUsuarioSeleccionado, contenidoTxtNombreUsuario,
-                            contenidoTxtLoginUsuario, contenidoTxtPasswordUsuario, contenidoCboRolUsuario);
-                    alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Información");
-                    alert.setHeaderText(null);
-                    alert.setContentText("La operación se ha realizado con éxito");
-                    alert.show();
-                    regresarBotonesAFormaOriginal();
-                    limpiarCampos();
-                    lblAyuda.setText("");
-                } else {
-                    alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Información");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Se ha cancelado la operación");
+                    alert.setContentText("El Stock minimo debe ser númerico");
                     alert.show();
                 }
 
             } else {
-
                 alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Información");
+                alert.setTitle("Stock con informacion incorrecta");
                 alert.setHeaderText(null);
-                alert.setContentText("Aun existen campos por completar");
+                alert.setContentText("El Stock debe ser númerico");
                 alert.show();
             }
 
-        } catch (SQLException ex) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
+        } else {
+
+            alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Información");
             alert.setHeaderText(null);
-            alert.setContentText("El Usuario no se ha podido actualizar. Error al acceder a la base de datos");
+            alert.setContentText("Aun existen campos por completar");
             alert.show();
-            ex.printStackTrace();
         }
 
-    }*/
+    }
 
- /*
-    private void eliminarUsuario() {
+    private int obtenerIDdeProveedor(String proveedor) {
+        int idProveedor = 0;
+        for (int i = 0; i < listaObjetosProveedores.size(); i++) {
+            if (listaObjetosProveedores.get(i).getNombre_proveedor().equals(proveedor)) {
+                idProveedor = listaObjetosProveedores.get(i).getId_proveedor();
+            }
+
+        }
+        return idProveedor;
+    }
+
+    private int obtenerIDdeCategoria(String categoria) {
+        int idCategoria = 0;
+        for (int i = 0; i < listaObjetosCategorias.size(); i++) {
+            if (listaObjetosCategorias.get(i).getNombre().equals(categoria)) {
+                idCategoria = listaObjetosCategorias.get(i).getId_categoria();
+            }
+
+        }
+        return idCategoria;
+    }
+
+    public static boolean isNumeric(String cadena) {
+
+        boolean resultado;
+
         try {
-            if (tblDatosUsuario.getSelectionModel().getSelectedItems().isEmpty()) {
+            Integer.parseInt(cadena);
+            resultado = true;
+        } catch (NumberFormatException excepcion) {
+            resultado = false;
+        }
+
+        return resultado;
+    }
+
+    public static boolean isDouble(String cadena) {
+
+        boolean resultado;
+
+        try {
+            Double.parseDouble(cadena);
+            resultado = true;
+        } catch (NumberFormatException excepcion) {
+            resultado = false;
+        }
+
+        return resultado;
+    }
+
+    private void actualizarProducto() {
+        int idDeProductoSeleccionado = 0;
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+
+        if (!camposImportantesPorCompletar()) {
+
+            String codigoProducto = txtCodigoProducto.getText();
+            String descripcionProducto = txaDescripcionProducto.getText();
+            String costoProducto = txtCostoProducto.getText();
+            String PrecioProducto = txtPrecioProducto.getText();
+            String UnidadProducto = txtUnidadProducto.getText();
+            String stockProducto = txtStockProducto.getText();
+            String stockMinimoProducto = txtStockMinimoProducto.getText();
+            String nombreMarcaProducto = "";
+            String nombreCategoriaProducto = "";
+            String nombreProveedorProducto = "";
+            nombreMarcaProducto = cboMarcaProducto.getSelectionModel().getSelectedItem().toString();
+            nombreCategoriaProducto = cboCategoriaProducto.getSelectionModel().getSelectedItem().toString();
+            nombreProveedorProducto = cboProveedorProducto.getSelectionModel().getSelectedItem().toString();
+
+            if (isNumeric(stockProducto)) {
+                if (isNumeric(stockMinimoProducto)) {
+                    if (isDouble(PrecioProducto)) {
+                        if (isDouble(costoProducto)) {
+                            try {
+
+                                if (tblDatosProducto.getSelectionModel().getSelectedItems().isEmpty()) {
+                                    Alert alertSeleccion = new Alert(Alert.AlertType.WARNING);
+                                    alertSeleccion.setTitle("Advertencia");
+                                    alertSeleccion.setHeaderText(null);
+                                    alertSeleccion.setContentText("Por favor elige un registro para modificar");
+                                    alertSeleccion.show();
+                                    return;
+                                }
+
+                                alert = new Alert(Alert.AlertType.CONFIRMATION);
+                                alert.setTitle("Confirmación");
+                                alert.setHeaderText(null);
+                                alert.setContentText("¿Realmente deseas modificar este Producto?");
+
+                                if (alert.showAndWait().get() == ButtonType.OK) {
+                                    idDeProductoSeleccionado = tblDatosProducto.getSelectionModel().getSelectedItem().getId();
+                                    int categoria = obtenerIDdeCategoria(nombreCategoriaProducto);
+                                    int proveedor = obtenerIDdeProveedor(nombreProveedorProducto);
+                                    double prec = Double.parseDouble(PrecioProducto);
+                                    double cost = Double.parseDouble(costoProducto);
+                                    int stock = Integer.parseInt(stockProducto);
+                                    int stockMinimo = Integer.parseInt(stockMinimoProducto);
+
+                                    productoDB.updateProducto(idDeProductoSeleccionado, codigoProducto, descripcionProducto,
+                                            nombreMarcaProducto, cost, prec, UnidadProducto, stock, stockMinimo, categoria, proveedor);
+
+                                    alert = new Alert(Alert.AlertType.INFORMATION);
+                                    alert.setTitle("Información");
+                                    alert.setHeaderText(null);
+                                    alert.setContentText("La operación se ha realizado con éxito");
+                                    alert.show();
+                                    regresarBotonesAFormaOriginal();
+                                    limpiarCampos();
+                                    lblAyuda.setText("");
+
+                                } else {
+                                    alert = new Alert(Alert.AlertType.INFORMATION);
+                                    alert.setTitle("Información");
+                                    alert.setHeaderText(null);
+                                    alert.setContentText("Se ha cancelado la operación");
+                                    alert.show();
+                                }
+
+                            } catch (SQLException ex) {
+                                Alert alert3 = new Alert(Alert.AlertType.ERROR);
+                                alert3.setTitle("Error");
+                                alert3.setHeaderText("Un error ha ocurrido");
+                                alert3.setContentText("El producto no se ha podido modificar. Error al acceder a la base de datos");
+                                alert3.show();
+                                ex.printStackTrace();
+                            }
+                        } else {
+                            alert = new Alert(Alert.AlertType.INFORMATION);
+                            alert.setTitle("Costo en formato erroneo");
+                            alert.setHeaderText(null);
+                            alert.setContentText("El costo del producto debe ser númerico");
+                            alert.show();
+                        }
+                    } else {
+                        alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle("Precio en formato erroneo");
+                        alert.setHeaderText(null);
+                        alert.setContentText("El precio del producto debe ser númerico");
+                        alert.show();
+                    }
+                } else {
+                    alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Stock minimo con informacion incorrecta");
+                    alert.setHeaderText(null);
+                    alert.setContentText("El Stock minimo debe ser númerico");
+                    alert.show();
+                }
+
+            } else {
+                alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Stock con informacion incorrecta");
+                alert.setHeaderText(null);
+                alert.setContentText("El Stock debe ser númerico");
+                alert.show();
+            }
+
+        } else {
+
+            alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Información");
+            alert.setHeaderText(null);
+            alert.setContentText("Aun existen campos por completar");
+            alert.show();
+        }
+
+    }
+
+    private void eliminarProducto() {
+        try {
+            if (tblDatosProducto.getSelectionModel().getSelectedItems().isEmpty()) {
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.setTitle("Advertencia");
                 alert.setHeaderText(null);
@@ -647,18 +996,21 @@ public class ControladorVistaProducto implements Initializable {
                 alert.show();
                 return;
             }
+
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Confirmación");
             alert.setHeaderText(null);
-            alert.setContentText("¿Realmente deseas eliminar el registro de este Usuario?");
+            alert.setContentText("¿Realmente deseas eliminar el registro de este Producto?");
             if (alert.showAndWait().get() == ButtonType.OK) {
-                int ID = tblDatosUsuario.getSelectionModel().getSelectedItem().getId();
-                productoDB.deleteUsuario(ID);
+                int ID = tblDatosProducto.getSelectionModel().getSelectedItem().getId();
+                productoDB.deleteProducto(ID);
                 alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setHeaderText(null);
                 alert.setTitle("Información");
                 alert.setContentText("La operación se ha realizado con éxito");
                 alert.show();
+
+                limpiarCampos();
             } else {
                 alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Información");
@@ -672,45 +1024,39 @@ public class ControladorVistaProducto implements Initializable {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText("Un error ha ocurrido");
-            alert.setContentText("El Usuario no se ha podido eliminar. Error al acceder a la base de datos");
+            alert.setContentText("El Producto no se ha podido eliminar. Error al acceder a la base de datos");
             alert.show();
         }
 
-    }*/
- /*
-    private boolean camposPorCompletar() {
-        String nombre = txtNombreUsuario.getText();
-        String login = txtLoginUsuario.getText();
-        String password = txtPasswordUsuario.getText();
-        String rol = "";
+    }
 
-//        String rol =ROL_DEFAULT;
-//        try{
-//             rol = cboRolUsuario.getSelectionModel().getSelectedItem().toString();
-//        }catch(Exception e){
-//             rol =ROL_DEFAULT;
-//             
-//        }
-        rol = cboRolUsuario.getSelectionModel().getSelectedItem().toString();
+    private boolean camposImportantesPorCompletar() {
+        String codigo = txtCodigoProducto.getText();
+        String descripcion = txaDescripcionProducto.getText();
+        String costo = txtCostoProducto.getText();
+        String Precio = txtPrecioProducto.getText();
+        String Unidad = txtUnidadProducto.getText();
+        String stock = txtStockProducto.getText();
+        String stockMinimo = txtStockMinimoProducto.getText();
+        String marca = "";
+        String categoria = "";
+        String proveedor = "";
 
-        if (nombre.equals("") || login.equals("") || password.equals("") || rol.equals(MARCA_DEFAULT)) {
+        marca = cboMarcaProducto.getSelectionModel().getSelectedItem().toString();
+        categoria = cboCategoriaProducto.getSelectionModel().getSelectedItem().toString();
+        proveedor = cboProveedorProducto.getSelectionModel().getSelectedItem().toString();
+
+        if (codigo.equals("") || descripcion.equals("") || costo.equals("")
+                || Precio.equals("") || Unidad.equals("") || stock.equals("") || stockMinimo.equals("")
+                || marca.equals(MARCA_DEFAULT) || proveedor.equals(PROVEEDOR_DEFAULT) || categoria.equals(CATEGORIA_DEFAULT)) {
             return true;
         } else {
             return false;
         }
 
     }
-     */
- /*
-    private void limpiarCampos() {
-        txtIDUsuario.clear();
-        txtNombreUsuario.clear();
-        txtLoginUsuario.clear();
-        txtPasswordUsuario.clear();
-        cboRolUsuario.getSelectionModel().select(0);
-    }
-     */
- /*
+
+    /*
     @FXML
     private void filtrarUsuario() {
         
@@ -883,44 +1229,323 @@ public class ControladorVistaProducto implements Initializable {
     }*/
     void ManejadorFiltro() {
 
-        /*
-        System.out.println("si entra al metodo");
+        // System.out.println("si entra al metodo");
         if (filtrarActivado) {
-            if (txtIDUsuario.getText().equals("") || isNumeric(txtIDUsuario.getText())) {
-                int id;
-                String nombre, login, rol;
-                System.out.println("Si entra if");
 
-                if (txtIDUsuario.getText().equals("")) {
-                    id = 0;
-                } else {
-                    id = Integer.valueOf(txtIDUsuario.getText());
-                }
-                nombre = txtNombreUsuario.getText();
-                login = txtLoginUsuario.getText();
-                rol = cboRolUsuario.getSelectionModel().getSelectedItem().toString();
-                if (rol.equals(MARCA_DEFAULT)) {
-                    rol = "";
-                }
-                System.out.println("ID para filtrar: " + id);
-                System.out.println("nombre para filtrar: " + nombre);
-                System.out.println("login para filtrar: " + login);
-                System.out.println("rol para filtrar: " + rol);
+            //System.out.println("Si entra if");
+            String codigoProducto = txtCodigoProducto.getText();
+            String descripcionProducto = txaDescripcionProducto.getText();
+            String costoProducto = txtCostoProducto.getText();
+            String PrecioProducto = txtPrecioProducto.getText();
+            String UnidadProducto = txtUnidadProducto.getText();
+            String stockProducto = txtStockProducto.getText();
+            String stockMinimoProducto = txtStockMinimoProducto.getText();
+            String nombreMarcaProducto = "";
+            String nombreCategoriaProducto = "";
+            String nombreProveedorProducto = "";
+            nombreMarcaProducto = cboMarcaProducto.getSelectionModel().getSelectedItem().toString();
+            nombreCategoriaProducto = cboCategoriaProducto.getSelectionModel().getSelectedItem().toString();
+            nombreProveedorProducto = cboProveedorProducto.getSelectionModel().getSelectedItem().toString();
 
-                leerFiltrarTabla(id, nombre, login, rol);
-                System.out.println(nombre);
-            } else {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Información");
-                alert.setHeaderText(null);
-                alert.setContentText("El ID debe ser numerico para realizar el filtro");
-                alert.show();
-                txtIDUsuario.clear();
+            String categoria = "";
+            String proveedor = "";
+
+            if (nombreMarcaProducto.equals(MARCA_DEFAULT)) {
+                nombreMarcaProducto = "";
             }
+
+            if (nombreCategoriaProducto.equals(CATEGORIA_DEFAULT)) {
+                categoria = "";
+            } else {
+                categoria = String.valueOf(obtenerIDdeCategoria(nombreCategoriaProducto));
+            }
+
+            if (nombreProveedorProducto.equals(PROVEEDOR_DEFAULT)) {
+                proveedor = "";
+            } else {
+                proveedor = String.valueOf(obtenerIDdeProveedor(nombreProveedorProducto));
+            }
+
+            leerFiltrarTabla("", codigoProducto, descripcionProducto, nombreMarcaProducto, costoProducto,
+                    PrecioProducto, UnidadProducto, stockProducto, stockMinimoProducto, categoria, proveedor);
+
         }
+
+    }
+
+    private void leerFiltrarTabla(String id, String codigo, String descripcion, String marca, String costo, String precio,
+            String unidad, String stock, String stock_minimo,
+            String categoria, String proveedor) {
+        llenarTabla(productoDB.getProductosFiltro2(id, codigo, descripcion, marca, costo, precio,
+                unidad, stock, stock_minimo, categoria, proveedor));
+    }
+
+    void regresarBotonesAFormaOriginal() {
+        modificarActivado = false;
+        agregarActivado = false;
+        filtrarActivado = false;
+
+        //ESTADO ORIGINAL DE LOS BOTONES
+        btnAgregarProducto.setDisable(false);
+        //btnAgregarUsuario.setStyle("fx-background-color: #222288");
+        btnModificarProducto.setDisable(false);
+        //btnModificarUsuario.setStyle("fx-background-color: #222288");
+        btnEliminarProducto.setDisable(false);
+        btnFiltrarProducto.setDisable(false);
+        //btnRegresarUsuario.setDisable(false);
+
+        btnRegresarProducto.setVisible(true);
+
+        btnCancelarProducto.setVisible(false);
+        btnGuardarInsercionProducto.setVisible(false);
+        btnGuardarModificacionProducto.setVisible(false);
+
+        btnGenerarCodigoAleatorioProducto.setVisible(false);
+        btnLeerCodigoProducto.setVisible(false);
+        btnAccesoDirectoEditarProveedoresProducto.setVisible(false);
+        btnAccesoDirectoEditarCategoriasProducto.setVisible(false);
+        btnAccesoDirectoEditarMarcasProducto.setVisible(false);
+
+        panelCodigoBarras.setVisible(true);
         
-        
-         */
+        btnImprimirCodigoBarrasVariosProductos.setVisible(false);
+
+        //POR DEFECTO NO SE PUEDE EDITAR EN LOS TXT
+        txtCodigoProducto.setEditable(false);
+        txaDescripcionProducto.setEditable(false);
+        txtPrecioProducto.setEditable(false);
+        txtCostoProducto.setEditable(false);
+        txtUnidadProducto.setEditable(false);
+        txtStockProducto.setEditable(false);
+        txtStockMinimoProducto.setEditable(false);
+
+        //cboMarcaProducto.setEditable(false);
+        //cboCategoriaProducto.setEditable(false);
+        //cboProveedorProducto.setEditable(false);
+        cboMarcaProducto.getSelectionModel().select(0);
+        cboCategoriaProducto.getSelectionModel().select(0);
+        cboProveedorProducto.getSelectionModel().select(0);
+
+        lblAyuda.setText("");
+        lblCodigoBarras.setText("");
+
+        limpiarCampos();
+
+    }
+
+    void agregarUsuarioActivado() {
+        agregarActivado = true;
+        modificarActivado = false;
+
+        limpiarCampos();
+        if (agregarActivado) {
+            lblAyuda.setText(AYUDA_AL_AGREGAR);
+
+            btnAgregarProducto.setDisable(true);
+            //btnAgregarUsuario.setStyle("fx-background-color: #0FFF09");
+            btnModificarProducto.setDisable(true);
+            btnEliminarProducto.setDisable(true);
+            btnFiltrarProducto.setDisable(true);
+
+            btnCancelarProducto.setVisible(true);
+            btnRegresarProducto.setVisible(false);
+            btnGuardarInsercionProducto.setVisible(true);
+            btnGuardarModificacionProducto.setVisible(false);
+
+            btnGenerarCodigoAleatorioProducto.setVisible(true);
+            btnLeerCodigoProducto.setVisible(false);
+            btnAccesoDirectoEditarProveedoresProducto.setVisible(true);
+            btnAccesoDirectoEditarCategoriasProducto.setVisible(true);
+            btnAccesoDirectoEditarMarcasProducto.setVisible(true);
+
+            panelCodigoBarras.setVisible(true);
+            
+            btnImprimirCodigoBarrasVariosProductos.setVisible(false);
+
+            txaDescripcionProducto.setEditable(true);
+            txtCodigoProducto.setEditable(true);
+            txtPrecioProducto.setEditable(true);
+            txtCostoProducto.setEditable(true);
+            txtUnidadProducto.setEditable(true);
+            txtStockProducto.setEditable(true);
+            txtStockMinimoProducto.setEditable(true);
+
+            //cboMarcaProducto.setEditable(true);
+            //cboCategoriaProducto.setEditable(true);
+            //cboProveedorProducto.setEditable(true);
+            cboMarcaProducto.getSelectionModel().select(0);
+            cboCategoriaProducto.getSelectionModel().select(0);
+            cboProveedorProducto.getSelectionModel().select(0);
+
+        } else {
+
+        }
+    }
+
+    void modificarUsuarioActivado() {
+        modificarActivado = true;
+        agregarActivado = false;
+
+        limpiarCampos();
+        if (modificarActivado) {
+            lblAyuda.setText(AYUDA_AL_MODIFICAR);
+
+            btnAgregarProducto.setDisable(true);
+            btnModificarProducto.setDisable(true);
+            //btnModificarUsuario.setStyle("fx-background-color: #0FFF09");
+            btnEliminarProducto.setDisable(true);
+            btnFiltrarProducto.setDisable(true);
+
+            btnCancelarProducto.setVisible(true);
+            btnRegresarProducto.setVisible(false);
+            btnGuardarInsercionProducto.setVisible(false);
+            btnGuardarModificacionProducto.setVisible(true);
+
+            btnGenerarCodigoAleatorioProducto.setVisible(true);
+            btnLeerCodigoProducto.setVisible(false);
+            btnAccesoDirectoEditarProveedoresProducto.setVisible(true);
+            btnAccesoDirectoEditarCategoriasProducto.setVisible(true);
+            btnAccesoDirectoEditarMarcasProducto.setVisible(true);
+
+            panelCodigoBarras.setVisible(true);
+            
+            btnImprimirCodigoBarrasVariosProductos.setVisible(false);
+
+            txaDescripcionProducto.setEditable(true);
+            txtCodigoProducto.setEditable(true);
+            txtPrecioProducto.setEditable(true);
+            txtCostoProducto.setEditable(true);
+            txtUnidadProducto.setEditable(true);
+            txtStockProducto.setEditable(true);
+            txtStockMinimoProducto.setEditable(true);
+
+            //cboMarcaProducto.setEditable(true);
+            //cboCategoriaProducto.setEditable(true);
+            //cboProveedorProducto.setEditable(true);
+            cboMarcaProducto.getSelectionModel().select(0);
+            cboCategoriaProducto.getSelectionModel().select(0);
+            cboProveedorProducto.getSelectionModel().select(0);
+
+        } else {
+
+        }
+    }
+
+    @FXML
+    private void filtrarProducto() {
+
+        filtrarActivado = !filtrarActivado;
+        limpiarCampos();
+        if (filtrarActivado) {
+            lblAyuda.setText(AYUDA_AL_FILTRAR);
+
+            btnAgregarProducto.setDisable(true);
+            btnModificarProducto.setDisable(true);
+            btnEliminarProducto.setDisable(true);
+
+            btnRegresarProducto.setVisible(false);
+
+            btnGenerarCodigoAleatorioProducto.setVisible(false);
+            btnLeerCodigoProducto.setVisible(false);
+            btnAccesoDirectoEditarProveedoresProducto.setVisible(false);
+            btnAccesoDirectoEditarCategoriasProducto.setVisible(false);
+            btnAccesoDirectoEditarMarcasProducto.setVisible(false);
+
+            panelCodigoBarras.setVisible(false);
+            
+            btnImprimirCodigoBarrasVariosProductos.setVisible(true);
+
+            txaDescripcionProducto.setEditable(true);
+            txtCodigoProducto.setEditable(true);
+            txtPrecioProducto.setEditable(true);
+            txtCostoProducto.setEditable(true);
+            txtUnidadProducto.setEditable(true);
+            txtStockProducto.setEditable(true);
+            txtStockMinimoProducto.setEditable(true);
+
+            //cboMarcaProducto.setEditable(true);
+            //cboCategoriaProducto.setEditable(true);
+            //cboProveedorProducto.setEditable(true);
+            cboMarcaProducto.getSelectionModel().select(0);
+            cboCategoriaProducto.getSelectionModel().select(0);
+            cboProveedorProducto.getSelectionModel().select(0);
+
+            txaDescripcionProducto.textProperty().addListener(manejador);
+            txtCodigoProducto.textProperty().addListener(manejador);
+            txtPrecioProducto.textProperty().addListener(manejador);
+            txtCostoProducto.textProperty().addListener(manejador);
+            txtUnidadProducto.textProperty().addListener(manejador);
+            txtStockProducto.textProperty().addListener(manejador);
+            txtStockMinimoProducto.textProperty().addListener(manejador);
+
+            cboMarcaProducto.valueProperty().addListener(manejador);
+            cboCategoriaProducto.valueProperty().addListener(manejador);
+            cboProveedorProducto.valueProperty().addListener(manejador);
+
+        } else {
+            btnAgregarProducto.setDisable(false);
+            btnModificarProducto.setDisable(false);
+            btnEliminarProducto.setDisable(false);
+
+            btnRegresarProducto.setVisible(true);
+
+            btnGenerarCodigoAleatorioProducto.setVisible(false);
+            btnLeerCodigoProducto.setVisible(false);
+            btnAccesoDirectoEditarProveedoresProducto.setVisible(false);
+            btnAccesoDirectoEditarCategoriasProducto.setVisible(false);
+            btnAccesoDirectoEditarMarcasProducto.setVisible(false);
+
+            panelCodigoBarras.setVisible(true);
+            
+            btnImprimirCodigoBarrasVariosProductos.setVisible(false);
+
+            txaDescripcionProducto.setEditable(false);
+            txtCodigoProducto.setEditable(false);
+            txtPrecioProducto.setEditable(false);
+            txtCostoProducto.setEditable(false);
+            txtUnidadProducto.setEditable(false);
+            txtStockProducto.setEditable(false);
+            txtStockMinimoProducto.setEditable(false);
+
+            cboMarcaProducto.setEditable(false);
+            cboCategoriaProducto.setEditable(false);
+            cboProveedorProducto.setEditable(false);
+            cboMarcaProducto.getSelectionModel().select(0);
+            cboCategoriaProducto.getSelectionModel().select(0);
+            cboProveedorProducto.getSelectionModel().select(0);
+
+            txaDescripcionProducto.textProperty().removeListener(manejador);
+            txtCodigoProducto.textProperty().removeListener(manejador);
+            txtPrecioProducto.textProperty().removeListener(manejador);
+            txtCostoProducto.textProperty().removeListener(manejador);
+            txtUnidadProducto.textProperty().removeListener(manejador);
+            txtStockProducto.textProperty().removeListener(manejador);
+            txtStockMinimoProducto.textProperty().removeListener(manejador);
+
+            cboMarcaProducto.valueProperty().removeListener(manejador);
+            cboCategoriaProducto.valueProperty().removeListener(manejador);
+            cboProveedorProducto.valueProperty().removeListener(manejador);
+
+            llenarTabla(productoDB.getProductos());
+            //limpiarCampos();//----------------------------------------------------------
+            lblAyuda.setText("");
+
+        }
+    }
+
+    private void limpiarCampos() {
+        txaDescripcionProducto.clear();
+        txtCodigoProducto.clear();
+        txtPrecioProducto.clear();
+        txtCostoProducto.clear();
+        txtUnidadProducto.clear();
+        txtStockProducto.clear();
+        txtStockMinimoProducto.clear();
+
+        cboMarcaProducto.getSelectionModel().select(0);
+        cboCategoriaProducto.getSelectionModel().select(0);
+        cboProveedorProducto.getSelectionModel().select(0);
+
     }
 
     class ManejadorFiltroKey implements ChangeListener {
@@ -930,5 +1555,6 @@ public class ControladorVistaProducto implements Initializable {
             ManejadorFiltro();
         }
     }
-
 }
+
+
