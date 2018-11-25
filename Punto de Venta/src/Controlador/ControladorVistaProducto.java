@@ -170,7 +170,6 @@ public class ControladorVistaProducto implements Initializable {
             btnAccesoDirectoEditarCategoriasProducto,
             btnAccesoDirectoEditarMarcasProducto,
             btnImprimirCodigoBarrasVariosProductos;
-    
 
     @FXML
     private Label lblAyuda, lblCodigoBarras;
@@ -180,12 +179,12 @@ public class ControladorVistaProducto implements Initializable {
 
     @FXML
     private void handleButtonAgregar(ActionEvent event) {
-        agregarUsuarioActivado();
+        agregarProductoActivado();
     }
 
     @FXML
     private void handleButtonActualizar(ActionEvent event) {
-        modificarUsuarioActivado();
+        modificarProductoActivado();
     }
 
     @FXML
@@ -285,15 +284,40 @@ public class ControladorVistaProducto implements Initializable {
 
     @FXML
     private void generarCodigoBarrasAleatorio(ActionEvent event) {
-        String cadena = "";
+        String cadena;
+        do {
+            cadena = "";
 
-        //corregir para que solo genere numeros
-        for (int i = 0; i < 13; i++) {
-            cadena = cadena + (char) (Math.random() * 9);
+            //corregir para que solo genere numeros
+            for (int i = 0; i < 13; i++) {
+                //cadena = cadena + (char) (Math.random() * 9);
+                cadena = cadena + (int) (Math.random() * 9);
+            }
+
+        } while (yaExisteCodigo(cadena));//antes verificar que otro producto no lo tenga ya
+
+        txtCodigoProducto.setText(cadena);
+    }
+
+    private boolean yaExisteCodigo(String cadena) {
+        boolean existe = false;
+
+        if (cadena.equals("")) {
+            existe = true;
+        } else {
+            int cantidadProductos = tblDatosProducto.getItems().size();
+
+            for (int i = 0; i < cantidadProductos; i++) {
+                Producto producto = tblDatosProducto.getItems().get(i);
+                String codigo = producto.getCodigo();
+                if (codigo.equals(cadena)) {
+                    existe = true;
+                    break;
+                }
+            }
         }
 
-        //antes verificar que otro producto no lo tenga ya
-        txtCodigoProducto.setText(cadena);
+        return existe;
     }
 
     @FXML
@@ -423,7 +447,7 @@ public class ControladorVistaProducto implements Initializable {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
 
         if (!contenidoTxtCodigoProducto.equals("")) {
-            mostraCodigoBarras(contenidoTxtCodigoProducto);
+            mostrarImagenCodigoBarras(contenidoTxtCodigoProducto);
         } else {
 
             alert = new Alert(Alert.AlertType.INFORMATION);
@@ -452,7 +476,7 @@ public class ControladorVistaProducto implements Initializable {
 
     void guardarCodigoBarrasProductosFiltrados() {
         contenidoTxtCodigoProducto = txtCodigoProducto.getText();
-        Alert alert ;
+        Alert alert;
 
         alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirmación");
@@ -581,7 +605,7 @@ public class ControladorVistaProducto implements Initializable {
         }
     }
 
-    private void mostraCodigoBarras(String Codigo) {
+    private void mostrarImagenCodigoBarras(String Codigo) {
 
         Barcode128 codigoBarra = new Barcode128();
         codigoBarra.setCode(Codigo);
@@ -594,37 +618,41 @@ public class ControladorVistaProducto implements Initializable {
         ImageView imageView = new ImageView();
         imageView.setImage(imagenFX);
         lblCodigoBarras.setGraphic(imageView);
+        lblCodigoBarras.setText(".");
 
     }
 
     private void guardarCodigoBarras(String Codigo) {
-        Document documento = new Document();
-        try {
-            FileChooser fileChooser = new FileChooser();
-            fileChooser.setTitle("Elije donde guardar el codigo de barras");
-            String ruta;
+        if (!(lblCodigoBarras.getText().equals(""))) {
+            Document documento = new Document();
             try {
-                ruta = fileChooser.showSaveDialog(null).getPath();
-            } catch (Exception e) {
-                ruta = "";
+                FileChooser fileChooser = new FileChooser();
+                fileChooser.setTitle("Elije donde guardar el codigo de barras");
+                String ruta;
+                try {
+                    ruta = fileChooser.showSaveDialog(null).getPath();
+                } catch (Exception e) {
+                    ruta = "";
+                }
+
+                if (!ruta.equals("")) {
+                    PdfWriter pdf = PdfWriter.getInstance(documento, new FileOutputStream(ruta + ".pdf"));
+                    documento.open();
+                    Barcode128 code2 = new Barcode128();
+                    code2.setCode(Codigo);
+
+                    Image img2 = code2.createImageWithBarcode(pdf.getDirectContent(), BaseColor.BLACK, BaseColor.BLACK);
+                    img2.scalePercent(200);
+                    documento.add(img2);
+                    documento.close();
+                }
+
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(ControladorVistaProducto.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (DocumentException ex) {
+                Logger.getLogger(ControladorVistaProducto.class.getName()).log(Level.SEVERE, null, ex);
             }
 
-            if (!ruta.equals("")) {
-                PdfWriter pdf = PdfWriter.getInstance(documento, new FileOutputStream(ruta + ".pdf"));
-                documento.open();
-                Barcode128 code2 = new Barcode128();
-                code2.setCode(Codigo);
-
-                Image img2 = code2.createImageWithBarcode(pdf.getDirectContent(), BaseColor.BLACK, BaseColor.BLACK);
-                img2.scalePercent(200);
-                documento.add(img2);
-                documento.close();
-            }
-
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(ControladorVistaProducto.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (DocumentException ex) {
-            Logger.getLogger(ControladorVistaProducto.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
@@ -649,9 +677,9 @@ public class ControladorVistaProducto implements Initializable {
 
                 for (int i = 0; i < cantidadProductos; i++) {
                     Producto producto = tblDatosProducto.getItems().get(i);
-                    String codigo=producto.getCodigo();
+                    String codigo = producto.getCodigo();
                     Barcode128 codigoBarras = new Barcode128();
-                    
+
                     codigoBarras.setCode(codigo);
 
                     Image imagenCodigoBarrasParaPDF = codigoBarras.createImageWithBarcode(pdf.getDirectContent(), BaseColor.BLACK, BaseColor.BLACK);
@@ -1056,177 +1084,6 @@ public class ControladorVistaProducto implements Initializable {
 
     }
 
-    /*
-    @FXML
-    private void filtrarUsuario() {
-        
-        filtrarActivado = !filtrarActivado;
-        limpiarCampos();
-        if (filtrarActivado) {
-            lblAyuda.setText(AYUDA_AL_FILTRAR);
-            
-            btnAgregarProducto.setDisable(true);
-            btnModificarProducto.setDisable(true);
-            btnEliminarProducto.setDisable(true);
-
-            btnRegresarUsuario.setVisible(false);
-
-            txtIDUsuario.setEditable(true);
-            txtNombreUsuario.setEditable(true);
-            txtLoginUsuario.setEditable(true);
-            txtPasswordUsuario.setEditable(true);
-            cboRolUsuario.setEditable(true);
-            cboRolUsuario.getSelectionModel().select(0);
-
-            txtIDUsuario.textProperty().addListener(manejador);
-            txtNombreUsuario.textProperty().addListener(manejador);
-            txtLoginUsuario.textProperty().addListener(manejador);
-
-            //cboRolUsuario.promptTextProperty().addListener(manejador);
-            cboRolUsuario.valueProperty().addListener(manejador);
-            //limpiarCampos();
-        } else {
-            btnAgregarProducto.setDisable(false);
-            btnModificarProducto.setDisable(false);
-            btnEliminarProducto.setDisable(false);
-
-            btnAgregarProducto.setDisable(false);
-            btnModificarProducto.setDisable(false);
-            btnEliminarProducto.setDisable(false);
-
-            btnRegresarUsuario.setVisible(true);
-
-            txtIDUsuario.setEditable(false);
-            txtNombreUsuario.setEditable(false);
-            txtLoginUsuario.setEditable(false);
-            txtPasswordUsuario.setEditable(false);
-            cboRolUsuario.setEditable(false);
-            cboRolUsuario.getSelectionModel().select(0);
-
-            txtIDUsuario.textProperty().removeListener(manejador);
-            txtNombreUsuario.textProperty().removeListener(manejador);
-            txtLoginUsuario.textProperty().removeListener(manejador);
-
-            //cboRolUsuario.promptTextProperty().removeListener(manejador);
-            cboRolUsuario.valueProperty().removeListener(manejador);
-
-            llenarTabla(productoDB.getUsuarios());
-            //limpiarCampos();//----------------------------------------------------------
-        }
-    }*/
- /*
-    void agregarUsuarioActivado() {
-        agregarActivado = true;
-        modificarActivado = false;
-
-        limpiarCampos();
-        if (agregarActivado) {
-            lblAyuda.setText(AYUDA_AL_AGREGAR);
-            
-            btnAgregarProducto.setDisable(true);
-            //btnAgregarUsuario.setStyle("fx-background-color: #0FFF09");
-            btnModificarProducto.setDisable(true);
-            btnEliminarProducto.setDisable(true);
-            btnFiltrarProducto.setDisable(true);
-
-            btnCancelarUsuario.setVisible(true);
-            btnRegresarUsuario.setVisible(false);
-            btnGuardarInsercionProducto.setVisible(true);
-            btnGuardarCambiosModificarUsuario.setVisible(false);
-
-            txtIDUsuario.setEditable(false);
-            txtNombreUsuario.setEditable(true);
-            txtLoginUsuario.setEditable(true);
-            txtPasswordUsuario.setEditable(true);
-            cboRolUsuario.setEditable(true);
-            cboRolUsuario.getSelectionModel().select(0);
-
-        } else {
-
-        }
-    }*/
- /*
-    void modificarUsuarioActivado() {
-        modificarActivado = true;
-        agregarActivado = false;
-
-        limpiarCampos();
-        if (modificarActivado) {
-            lblAyuda.setText(AYUDA_AL_MODIFICAR);
-            
-            btnAgregarProducto.setDisable(true);
-            btnModificarProducto.setDisable(true);
-            //btnModificarUsuario.setStyle("fx-background-color: #0FFF09");
-            btnEliminarProducto.setDisable(true);
-            btnFiltrarProducto.setDisable(true);
-
-            btnCancelarUsuario.setVisible(true);
-            btnRegresarUsuario.setVisible(false);
-            btnGuardarInsercionProducto.setVisible(false);
-            btnGuardarCambiosModificarUsuario.setVisible(true);
-
-            txtIDUsuario.setEditable(false);
-            txtNombreUsuario.setEditable(true);
-            txtLoginUsuario.setEditable(true);
-            txtPasswordUsuario.setEditable(true);
-            cboRolUsuario.setEditable(true);
-            cboRolUsuario.getSelectionModel().select(0);
-
-        } else {
-
-        }
-    }
-     */
- /*
-    void regresarBotonesAFormaOriginal() {
-        modificarActivado = false;
-        agregarActivado = false;
-
-        btnAgregarProducto.setDisable(false);
-        //btnAgregarUsuario.setStyle("fx-background-color: #222288");
-        btnModificarProducto.setDisable(false);
-        //btnModificarUsuario.setStyle("fx-background-color: #222288");
-        btnEliminarProducto.setDisable(false);
-        btnFiltrarProducto.setDisable(false);
-
-        btnCancelarUsuario.setVisible(false);
-        btnRegresarUsuario.setVisible(true);
-        btnGuardarInsercionProducto.setVisible(false);
-        btnGuardarCambiosModificarUsuario.setVisible(false);
-
-        txtIDUsuario.setEditable(false);
-        txtNombreUsuario.setEditable(false);
-        txtLoginUsuario.setEditable(false);
-        txtPasswordUsuario.setEditable(false);
-        cboRolUsuario.setEditable(false);
-        cboRolUsuario.getSelectionModel().select(0);
-
-        lblAyuda.setText("");
-    }
-     */
- /*
-    public static boolean isNumeric(String cadena) {
-
-        boolean resultado;
-
-        try {
-            Integer.parseInt(cadena);
-            resultado = true;
-        } catch (NumberFormatException excepcion) {
-            resultado = false;
-        }
-
-        return resultado;
-    }
-     */
- /*
-    private void leerFiltrarTabla(int id, String nombre, String login, String rol) {
-        if (id == 0) {
-            llenarTabla(productoDB.getUsuariosFiltro1(nombre, login, rol));
-        } else {
-            llenarTabla(productoDB.getUsuariosFiltro2(id, nombre, login, rol));
-        }
-    }*/
     void ManejadorFiltro() {
 
         // System.out.println("si entra al metodo");
@@ -1307,7 +1164,7 @@ public class ControladorVistaProducto implements Initializable {
         btnAccesoDirectoEditarMarcasProducto.setVisible(false);
 
         panelCodigoBarras.setVisible(true);
-        
+
         btnImprimirCodigoBarrasVariosProductos.setVisible(false);
 
         //POR DEFECTO NO SE PUEDE EDITAR EN LOS TXT
@@ -1333,7 +1190,7 @@ public class ControladorVistaProducto implements Initializable {
 
     }
 
-    void agregarUsuarioActivado() {
+    void agregarProductoActivado() {
         agregarActivado = true;
         modificarActivado = false;
 
@@ -1359,7 +1216,7 @@ public class ControladorVistaProducto implements Initializable {
             btnAccesoDirectoEditarMarcasProducto.setVisible(true);
 
             panelCodigoBarras.setVisible(true);
-            
+
             btnImprimirCodigoBarrasVariosProductos.setVisible(false);
 
             txaDescripcionProducto.setEditable(true);
@@ -1382,7 +1239,7 @@ public class ControladorVistaProducto implements Initializable {
         }
     }
 
-    void modificarUsuarioActivado() {
+    void modificarProductoActivado() {
         modificarActivado = true;
         agregarActivado = false;
 
@@ -1408,7 +1265,7 @@ public class ControladorVistaProducto implements Initializable {
             btnAccesoDirectoEditarMarcasProducto.setVisible(true);
 
             panelCodigoBarras.setVisible(true);
-            
+
             btnImprimirCodigoBarrasVariosProductos.setVisible(false);
 
             txaDescripcionProducto.setEditable(true);
@@ -1452,7 +1309,7 @@ public class ControladorVistaProducto implements Initializable {
             btnAccesoDirectoEditarMarcasProducto.setVisible(false);
 
             panelCodigoBarras.setVisible(false);
-            
+
             btnImprimirCodigoBarrasVariosProductos.setVisible(true);
 
             txaDescripcionProducto.setEditable(true);
@@ -1496,7 +1353,7 @@ public class ControladorVistaProducto implements Initializable {
             btnAccesoDirectoEditarMarcasProducto.setVisible(false);
 
             panelCodigoBarras.setVisible(true);
-            
+
             btnImprimirCodigoBarrasVariosProductos.setVisible(false);
 
             txaDescripcionProducto.setEditable(false);
@@ -1556,5 +1413,3 @@ public class ControladorVistaProducto implements Initializable {
         }
     }
 }
-
-
