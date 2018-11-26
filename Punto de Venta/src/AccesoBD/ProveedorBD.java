@@ -79,16 +79,50 @@ public class ProveedorBD {
         System.out.println(statement);
         statement.execute();
     }
+    
+    public ArrayList<Proveedor> getProveedoresFiltro1(String nombre, String telefono,
+            String correo, String direccion, String colonia, String municipio, String cp, String estado) {
+        ArrayList<Proveedor> listaProveedores = new ArrayList<>();
 
-    public ArrayList<Proveedor> getProveedoresFiltro(String id,String nombre, String telefono, String correo, String direccion, String colonia,
+        try {
+            //ResultSet rs = connect.prepareCall("EXEC getBusquedaUsuario").executeQuery(); //Para SQL Server
+            PreparedStatement statement = connect.prepareStatement("CALL  getBusquedaProveedor1( ?, ?, ?, ?, ?, ? ,? ,?)"); //Para MySql
+
+            statement.setString(1, nombre);
+            statement.setString(2, telefono);
+            statement.setString(3, correo);
+            statement.setString(4, direccion);
+            statement.setString(5, colonia);
+            statement.setString(6, municipio);
+            statement.setString(7, cp);
+            statement.setString(8, estado);
+
+            System.out.println(statement);
+            ResultSet rs = statement.executeQuery();
+
+            while (rs.next()) {
+                listaProveedores.add(new Proveedor(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
+                        rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9)));
+            }
+
+            rs.close();
+            statement.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(ClienteBD.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return listaProveedores;
+    }
+
+    public ArrayList<Proveedor> getProveedoresFiltro2(int id,String nombre, String telefono, String correo, String direccion, String colonia,
             String municipio, String cp, String estado) {
         ArrayList<Proveedor> listaProveedores = new ArrayList<>();
 
         try {
             //ResultSet rs = connect.prepareCall("EXEC getBusquedaProveedor").executeQuery(); //Para SQL Server
-            PreparedStatement ps = connect.prepareStatement("CALL  getBusquedaProveedor(?,?,?,?,?,?,?,?,?)"); //Para MySql
+            PreparedStatement ps = connect.prepareStatement("CALL  getBusquedaProveedor2(?,?,?,?,?,?,?,?,?)"); //Para MySql
 
-            ps.setString(1, id);
+            ps.setInt(1, id);
             ps.setString(2, nombre);
             ps.setString(3, telefono);
             ps.setString(4, correo);

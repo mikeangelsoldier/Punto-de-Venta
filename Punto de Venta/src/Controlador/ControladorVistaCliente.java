@@ -169,7 +169,7 @@ public class ControladorVistaCliente implements Initializable {
         tbcCorreo.setCellValueFactory(new PropertyValueFactory<>("correo"));
         tbcDireccion.setCellValueFactory(new PropertyValueFactory<>("direccion"));
         tbcColonia.setCellValueFactory(new PropertyValueFactory<>("colonia"));
-        tbcMunicipio.setCellValueFactory(new PropertyValueFactory<>("minicipio"));
+        tbcMunicipio.setCellValueFactory(new PropertyValueFactory<>("municipio"));
         tbcCP.setCellValueFactory(new PropertyValueFactory<>("cp"));
         tbcEstado.setCellValueFactory(new PropertyValueFactory<>("estado"));
         for (Cliente cliente : listaClientes) {
@@ -195,9 +195,11 @@ public class ControladorVistaCliente implements Initializable {
         }
     }
     
+    @FXML
     private void filtrarCliente() {
         
         filtrarActivado = !filtrarActivado;
+        System.out.println(filtrarActivado);
         limpiarCampos();
         if (filtrarActivado) {
             lblAyuda.setText(AYUDA_AL_FILTRAR);
