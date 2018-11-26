@@ -412,10 +412,9 @@ municipio varchar(200),
 cp varchar(5),
 estado varchar(200))
 	SELECT * from Cliente AS c
-	where c.id_cliente like (CONCAT('%',id,'%')) 
+	where c.id_cliente like (CONCAT('%',id_cliente,'%')) 
     AND c.nombre like (CONCAT('%',nombre,'%'))
 	AND  c.rfc like (CONCAT('%',rfc,'%'))
-	AND  c.fecha_nacimiento like (CONCAT('%',fecha_nacimiento,'%'))
     AND c.telefono like (CONCAT('%',telefono,'%'))
     AND c.correo like (CONCAT('%',correo,'%'))
     AND c.direccion like (CONCAT('%',direccion,'%'))
@@ -795,10 +794,35 @@ WHERE p.id_proveedor = id_proveedor;
 call deleteProveedor(4);
 */
 
+use punto_de_venta
+
+SELECT * FRom proveedor;
 
 
-DROP PROCEDURE IF EXISTS getBusquedaProveedor;
-CREATE PROCEDURE getBusquedaProveedor( 
+DROP PROCEDURE IF EXISTS getBusquedaProveedor1;
+CREATE PROCEDURE getBusquedaProveedor1(  
+nombre_proveedor varchar(100),
+telefono varchar(10),
+correo varchar(100),
+direccion varchar(100),
+colonia varchar(100),
+municipio varchar(200),
+cp varchar(5),
+estado varchar(200))
+	SELECT * from proveedor AS p
+	where  p.nombre_proveedor like (CONCAT('%',nombre_proveedor,'%'))
+    AND p.telefono like (CONCAT('%',telefono,'%'))
+    AND p.correo like (CONCAT('%',correo,'%'))
+    AND p.direccion like (CONCAT('%',direccion,'%'))
+    AND p.colonia like (CONCAT('%',colonia,'%'))
+    AND p.municipio like (CONCAT('%',municipio,'%'))
+    AND p.cp like (CONCAT('%',cp,'%'))
+    AND p.estado like (CONCAT('%',estado,'%'))
+    AND status = 'activo'
+;
+
+DROP PROCEDURE IF EXISTS getBusquedaProveedor2;
+CREATE PROCEDURE getBusquedaProveedor2( 
 id_proveedor varchar(100),
 nombre_proveedor varchar(40),
 telefono varchar(10),
@@ -820,6 +844,9 @@ estado varchar(200))
     AND p.estado like (CONCAT('%',estado,'%'))
     AND status='activo';
 ;
+
+
+
 
 /*	
 
