@@ -95,17 +95,15 @@ public class CategoriaBD {
         return listaCategorias;
     }
     
-    
-    public ArrayList<Categoria> getCategoriasFiltro2(int id,String nombre, String descripcion) {
+    public ArrayList<Categoria> getCategoriasFiltro2(int id, String nombre, String descripcion) {
         ArrayList<Categoria> listaCategorias = new ArrayList<>();
 
         try {
-            //ResultSet rs = connect.prepareCall("EXEC getBusquedaCategoria2").executeQuery(); //Para SQL Server
-            PreparedStatement ps = connect.prepareStatement("CALL  getBusquedaCategoria2(?, ?, ?)"); //Para MySql
-
+            //ResultSet rs = connect.prepareCall("EXEC getBusquedaCategoria1").executeQuery(); //Para SQL Server
+            PreparedStatement ps = connect.prepareStatement("CALL  getBusquedaCategoria3(?,?, ?)"); //Para MySql
             ps.setInt(1, id);
             ps.setString(2, nombre);
-            ps.setString(2, descripcion);
+            ps.setString(3, descripcion);
 
             System.out.println(ps);
             ResultSet rs = ps.executeQuery();
@@ -123,30 +121,6 @@ public class CategoriaBD {
         return listaCategorias;
     }
     
-    public ArrayList<Categoria> getCategoriasFiltro3(String id,String nombre, String descripcion) {
-        ArrayList<Categoria> listaCategorias = new ArrayList<>();
-
-        try {
-            //ResultSet rs = connect.prepareCall("EXEC getBusquedaCategoria3").executeQuery(); //Para SQL Server
-            PreparedStatement ps = connect.prepareStatement("CALL  getBusquedaCategoria3(?, ?, ?)"); //Para MySql
-            
-            ps.setString(1, id);
-            ps.setString(1, nombre);
-            ps.setString(2, descripcion);
-
-            System.out.println(ps);
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-                listaCategorias.add(new Categoria(rs.getInt(1), rs.getString(2), rs.getString(3)));
-            }
-
-            rs.close();
-            ps.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(CategoriaBD.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        return listaCategorias;
-    }
+    
+    
 }

@@ -508,6 +508,9 @@ descripcion VARCHAR(300))
     AND  status='activo';
 ;
 
+
+
+
 /*
 
 call getBusquedaCategoria1('','a');
@@ -527,13 +530,25 @@ descripcion VARCHAR(300))
     AND a.status='activo';
 ;
 
+DROP PROCEDURE IF EXISTS getBusquedaCategoria4;/*RECOMIENDO USAr la opcion 3*/
+CREATE PROCEDURE getBusquedaCategoria4(
+id_cat int,  
+nombre VARCHAR(200), 
+descripcion VARCHAR(300))
+	SELECT * from Categoria AS a
+	where a.id_categoria like(CONCAT('%',id_cat,'%'))
+    AND a.nombre like (CONCAT('%',nombre,'%'))
+	AND  a.descripcion like (CONCAT('%',descripcion,'%'))
+    AND  status='activo';
+;
+
 /*
 
 call getBusquedaCategoria2(1,'','');
-call getBusquedaCategoria2(2,'','');
+call getBusquedaCategoria3('','Ele','');
  
  */
- 
+ use punto_de_venta
  
  DROP PROCEDURE IF EXISTS getBusquedaCategoria3;
 CREATE PROCEDURE getBusquedaCategoria3( 
@@ -1193,6 +1208,141 @@ call getBusquedaProducto2('','','','','','','','','','');
 call getBusquedaProducto2('00000','','','','','','','','','');
 	
 */
+
+
+
+/***********************************************************Procedimientos de Sucursal*/
+SELECT * FROM Sucursal;
+
+
+
+
+
+DROP PROCEDURE IF EXISTS getSucursales;
+CREATE PROCEDURE getSucursales()
+	SELECT * FROM Sucursal WHERE status='activo';
+    
+
+id_sucursal int not null primary key auto_increment,
+nombre varchar(100) not null,
+sucursal varchar(50) not null,
+telefono varchar(10) null,
+correo varchar(100) null,
+direccion varchar(100) not null,
+colonia varchar(100) null,
+municipio varchar(200) null,
+cp varchar(5) null,
+estado varchar(200) null,
+status varchar(20)
+
+
+DROP PROCEDURE IF EXISTS addSucursal;
+CREATE PROCEDURE addSucursal(
+nombre varchar(100),
+sucursal varchar(50),
+telefono varchar(10),
+correo varchar(100),
+direccion varchar(100),
+colonia varchar(100),
+municipio varchar(200),
+cp varchar(5),
+estado varchar(200))
+INSERT INTO Sucursal (nombre,sucursal,telefono,correo,direccion,colonia,municipio,cp,estado,status) 
+				VALUES(nombre,sucursal,telefono,correo,direccion,colonia,municipio,cp,estado,'activo');
+
+
+DROP PROCEDURE IF EXISTS updateSucursal;
+CREATE PROCEDURE updateSucursal(
+id_sucursal int,
+nombre varchar(100),
+sucursal varchar(50),
+telefono varchar(10),
+correo varchar(100),
+direccion varchar(100),
+colonia varchar(100),
+municipio varchar(200),
+cp varchar(5),
+estado varchar(200))
+UPDATE Sucursal as s
+	SET 
+		s.nombre=nombre,
+        s.sucursal=sucursal,
+		s.telefono=telefono,
+		s.correo=correo,
+		s.direccion=direccion,
+		s.colonia=colonia,
+		s.municipio=municipio,
+		s.cp=cp,
+		s.estado=estado
+WHERE s.id_sucursal = id_sucursal;
+
+DROP PROCEDURE IF EXISTS deleteSucursal;
+CREATE PROCEDURE deleteSucursal(
+id_sucursal int)
+UPDATE Sucursal as s 
+	SET 
+		s.status='inactivo'
+WHERE s.id_sucursal = id_sucursal;
+  
+
+
+DROP PROCEDURE IF EXISTS getBusquedaSucursal1;
+CREATE PROCEDURE getBusquedaSucursal1(  
+nombre varchar(100),
+sucursal varchar(50),
+telefono varchar(10),
+correo varchar(100),
+direccion varchar(100),
+colonia varchar(100),
+municipio varchar(200),
+cp varchar(5),
+estado varchar(200))
+	SELECT * from Sucursal AS s
+	where  s.nombre like (CONCAT('%',nombre,'%'))
+    AND s.sucursal like (CONCAT('%',sucursal,'%'))
+    AND s.telefono like (CONCAT('%',telefono,'%'))
+    AND s.correo like (CONCAT('%',correo,'%'))
+    AND s.direccion like (CONCAT('%',direccion,'%'))
+    AND s.colonia like (CONCAT('%',colonia,'%'))
+    AND s.municipio like (CONCAT('%',municipio,'%'))
+    AND s.cp like (CONCAT('%',cp,'%'))
+    AND s.estado like (CONCAT('%',estado,'%'))
+    AND status = 'activo'
+;
+
+DROP PROCEDURE IF EXISTS getBusquedaSucursal2;
+CREATE PROCEDURE getBusquedaSucursal2( 
+id_sucursal varchar(100),
+nombre varchar(100),
+sucursal varchar(50),
+telefono varchar(10),
+correo varchar(100),
+direccion varchar(100),
+colonia varchar(100),
+municipio varchar(200),
+cp varchar(5),
+estado varchar(200))
+	SELECT * from Sucursal AS s
+	where CONVERT(s.id_sucursal,CHAR)  like (CONCAT('%',id_sucursal,'%'))
+    AND s.nombre like (CONCAT('%',nombre,'%'))
+	AND s.telefono like (CONCAT('%',telefono,'%'))
+	AND s.correo like (CONCAT('%',correo,'%'))/*Uso convert para comparar el valor char recibido con un int o double*/
+    AND s.direccion  like (CONCAT('%',direccion,'%'))
+	AND s.colonia like (CONCAT('%',colonia,'%'))
+    AND s.municipio like (CONCAT('%',municipio,'%'))
+	AND s.cp like (CONCAT('%',cp,'%'))
+    AND s.estado like (CONCAT('%',estado,'%'))
+    AND status='activo';
+;
+
+
+
+
+
+
+
+
+
 
 
 
