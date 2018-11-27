@@ -34,10 +34,13 @@
                   <TableColumn fx:id="tbcTotalProductoDetalleVenta" prefWidth="113.0" text="Total" />
                </columns>
             </TableView>
-            <JFXTextField fx:id="txtSubtotalVenta" layoutX="521.0" layoutY="520.0" promptText="Subtotal" unFocusColor="#4d4d4d" />
-            <JFXTextField fx:id="txtIvaVenta" layoutX="521.0" layoutY="559.0" promptText="Iva 16%" unFocusColor="#4d4d4d" />
-            <JFXTextField fx:id="txtTotalAPagarVenta" layoutX="799.0" layoutY="527.0" promptText="Total" unFocusColor="#4d4d4d" />
-            <JFXComboBox fx:id="cboFormaPago" layoutX="126.0" layoutY="513.0" prefHeight="25.0" prefWidth="135.0" promptText="Tipo de pago" />
+            <JFXTextField fx:id="txtSubtotalVenta" editable="false" layoutX="683.0" layoutY="515.0" promptText="Subtotal" unFocusColor="#4d4d4d" />
+            <JFXTextField fx:id="txtIvaVenta" editable="false" layoutX="683.0" layoutY="554.0" promptText="Iva 16%" unFocusColor="#4d4d4d" />
+            <JFXTextField fx:id="txtTotalAPagarVenta" editable="false" layoutX="1003.0" layoutY="539.0" prefHeight="28.0" prefWidth="171.0" promptText="Total" unFocusColor="#4d4d4d">
+               <font>
+                  <Font size="18.0" />
+               </font></JFXTextField>
+            <JFXComboBox fx:id="cboFormaPago" layoutX="398.0" layoutY="537.0" prefHeight="25.0" prefWidth="135.0" promptText="Tipo de pago" />
             <Pane layoutX="51.0" layoutY="56.0" prefHeight="49.0" prefWidth="731.0" style="-fx-border-color: #3fb0dd;">
                <children>
                   <Label layoutX="391.0" layoutY="11.0" prefHeight="29.0" prefWidth="72.0" text="Fecha" textFill="#222288">
@@ -48,59 +51,59 @@
                   <JFXDatePicker fx:id="dpkFechaVenta" layoutX="478.0" layoutY="11.0" />
                </children>
             </Pane>
-            <Label layoutX="428.0" layoutY="558.0" prefHeight="29.0" prefWidth="67.0" text="Iva" textFill="#222288">
+            <Label layoutX="590.0" layoutY="553.0" prefHeight="29.0" prefWidth="67.0" text="Iva" textFill="#222288">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label layoutX="667.0" layoutY="525.0" prefHeight="29.0" prefWidth="113.0" text="Total a Pagar" textFill="#222288">
+            <Label layoutX="862.0" layoutY="547.0" prefHeight="29.0" prefWidth="113.0" text="Total a Pagar" textFill="#222288">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label layoutX="301.0" layoutY="530.0" prefHeight="29.0" prefWidth="89.0" text="Tipo de pago" textFill="#222288">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label layoutX="29.0" layoutY="506.0" prefHeight="29.0" prefWidth="89.0" text="Tipo de pago" textFill="#222288">
+            <Label layoutX="590.0" layoutY="513.0" prefHeight="29.0" prefWidth="67.0" text="Subtotal" textFill="#222288">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label layoutX="428.0" layoutY="518.0" prefHeight="29.0" prefWidth="67.0" text="Subtotal" textFill="#222288">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </Label>
-            <JFXButton fx:id="btnNuevaVenta" buttonType="RAISED" layoutX="860.0" layoutY="361.0" ripplerFill="#3fb0dd" style="-fx-background-color: #222288;" text="Nueva Venta" textFill="WHITE">
+            <JFXButton fx:id="btnNuevaVenta" buttonType="RAISED" layoutX="992.0" layoutY="350.0" ripplerFill="#3fb0dd" style="-fx-background-color: #222288;" text="Nueva Venta" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="13.0" />
                </font>
             </JFXButton>
-            <JFXButton fx:id="btnGenerarVenta" buttonType="RAISED" layoutX="856.0" layoutY="394.0" ripplerFill="#3fb0dd" style="-fx-background-color: #222288;" text="Generar Venta" textFill="WHITE">
+            <JFXButton fx:id="btnGenerarVenta" buttonType="RAISED" layoutX="987.0" layoutY="390.0" ripplerFill="#3fb0dd" style="-fx-background-color: #222288;" text="Generar Venta" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="13.0" />
                </font>
             </JFXButton>
-            <JFXButton fx:id="btnCancelarVenta" buttonType="RAISED" layoutX="874.0" layoutY="470.0" ripplerFill="#3fb0dd" style="-fx-background-color: #222288;" text="Cancelar" textFill="WHITE">
+            <JFXButton fx:id="btnCancelarVenta" buttonType="RAISED" layoutX="1005.0" layoutY="476.0" ripplerFill="#3fb0dd" style="-fx-background-color: #222288;" text="Cancelar" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="13.0" />
                </font>
             </JFXButton>
-            <JFXButton fx:id="btnImporteRecibido" buttonType="RAISED" layoutX="847.0" layoutY="435.0" ripplerFill="#3fb0dd" style="-fx-background-color: #222288;" text="Importe Recibido" textFill="WHITE">
+            <JFXButton fx:id="btnImporteRecibido" buttonType="RAISED" layoutX="978.0" layoutY="427.0" ripplerFill="#3fb0dd" style="-fx-background-color: #222288;" text="Importe Recibido" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="13.0" />
                </font>
             </JFXButton>
-            <JFXTextField fx:id="txtImporte" layoutX="126.0" layoutY="535.0" unFocusColor="#4d4d4d" />
-            <JFXTextField fx:id="txtCambio" layoutX="126.0" layoutY="560.0" unFocusColor="#4d4d4d" />
+            <JFXTextField fx:id="txtImporte" editable="false" layoutX="126.0" layoutY="515.0" unFocusColor="#4d4d4d" />
+            <JFXTextField fx:id="txtCambio" editable="false" layoutX="126.0" layoutY="554.0" unFocusColor="#4d4d4d" />
             <Label layoutX="40.0" layoutY="558.0" prefHeight="29.0" prefWidth="67.0" text="Cambio" textFill="#222288">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label layoutX="40.0" layoutY="531.0" prefHeight="29.0" prefWidth="67.0" text="Importe" textFill="#222288">
+            <Label layoutX="40.0" layoutY="523.0" prefHeight="29.0" prefWidth="67.0" text="Importe" textFill="#222288">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <JFXButton fx:id="btnInsertarProfesor" buttonType="RAISED" layoutX="889.0" layoutY="318.0" ripplerFill="#011245" style="-fx-background-color: #222288;" text="Clientes" textFill="WHITE">
+            <JFXButton fx:id="btnInsertarProfesor" buttonType="RAISED" layoutX="1073.0" layoutY="307.0" ripplerFill="#011245" style="-fx-background-color: #222288;" text="Clientes" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="13.0" />
                </font>
@@ -129,7 +132,7 @@
                                           <Font size="14.0" />
                                        </font>
                                     </Label>
-                                    <JFXTextField fx:id="txtTotalProductoAntesDeAgregar" layoutX="317.0" layoutY="8.0" promptText="total" unFocusColor="#4d4d4d" />
+                                    <JFXTextField fx:id="txtTotalProductoAntesDeAgregar" editable="false" layoutX="317.0" layoutY="8.0" promptText="total" unFocusColor="#4d4d4d" />
                                     <Label layoutX="250.0" layoutY="4.0" prefHeight="29.0" prefWidth="67.0" text="total" textFill="#222288">
                                        <font>
                                           <Font size="14.0" />
@@ -160,13 +163,13 @@
                                           <Font size="14.0" />
                                        </font>
                                     </Label>
-                                    <JFXTextField fx:id="txtStockProducto" layoutX="384.0" layoutY="19.0" unFocusColor="#4d4d4d" />
+                                    <JFXTextField fx:id="txtStockProducto" editable="false" layoutX="384.0" layoutY="19.0" unFocusColor="#4d4d4d" />
                                     <Label layoutX="309.0" layoutY="5.0" prefHeight="29.0" prefWidth="67.0" text="stock" textFill="#222288">
                                        <font>
                                           <Font size="14.0" />
                                        </font>
                                     </Label>
-                                    <JFXTextField fx:id="txtPrecioProducto" layoutX="384.0" layoutY="58.0" unFocusColor="#4d4d4d" />
+                                    <JFXTextField fx:id="txtPrecioProducto" editable="false" layoutX="384.0" layoutY="58.0" unFocusColor="#4d4d4d" />
                                     <Label layoutX="309.0" layoutY="56.0" prefHeight="29.0" prefWidth="67.0" text="precio" textFill="#222288">
                                        <font>
                                           <Font size="14.0" />
@@ -177,7 +180,7 @@
                                           <Font name="System Bold" size="13.0" />
                                        </font>
                                     </JFXButton>
-                                    <JFXTextArea fx:id="txaDescripcionProductoVenta" layoutX="146.0" layoutY="48.0" prefHeight="42.0" prefWidth="148.0" />
+                                    <JFXTextArea fx:id="txaDescripcionProductoVenta" layoutX="84.0" layoutY="48.0" prefHeight="59.0" prefWidth="210.0" wrapText="true" />
                                  </children>
                               </Pane>
                            </children>
@@ -188,7 +191,7 @@
                      <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <JFXTextField layoutX="93.0" layoutY="17.0" promptText="cliente" unFocusColor="#4d4d4d" />
+                              <JFXTextField fx:id="txtIdClienteVenta" layoutX="93.0" layoutY="17.0" promptText="cliente" unFocusColor="#4d4d4d" />
                               <Label layoutX="14.0" layoutY="15.0" prefHeight="29.0" prefWidth="67.0" text="Cliente" textFill="#222288">
                                  <font>
                                     <Font size="14.0" />
@@ -199,12 +202,29 @@
                                     <Font name="System Bold" size="13.0" />
                                  </font>
                               </JFXButton>
+                              <JFXTextField fx:id="txtNombreClienteVenta" layoutX="110.0" layoutY="68.0" prefHeight="27.0" prefWidth="210.0" promptText="nombre del cliente" unFocusColor="#4d4d4d" />
+                              <Label layoutX="31.0" layoutY="66.0" prefHeight="29.0" prefWidth="67.0" text="Nombre" textFill="#222288">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              <JFXTextField fx:id="txtRfcClienteVenta" layoutX="110.0" layoutY="122.0" prefHeight="25.0" prefWidth="171.0" promptText="RFC" unFocusColor="#4d4d4d" />
+                              <Label layoutX="31.0" layoutY="120.0" prefHeight="29.0" prefWidth="67.0" text="RFC" textFill="#222288">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
                            </children>
                         </AnchorPane>
                      </content>
                   </Tab>
                </tabs>
             </JFXTabPane>
+            <Label layoutX="983.0" layoutY="547.0" prefHeight="28.0" prefWidth="18.0" text="\$" textFill="#222288">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
          </children>
       </Pane>
       <Pane fx:id="panelBuscarClientes" layoutX="14.0" layoutY="55.0" prefHeight="500.0" prefWidth="1150.0" style="-fx-background-color: #b1b1df;" visible="false">
@@ -241,7 +261,7 @@
                   <JFXTextField fx:id="txtRfcClienteFiltroVenta" promptText="RFC" unFocusColor="#4d4d4d" />
                </children>
             </HBox>
-            <JFXButton fx:id="btnAgregarClienteAAventa" buttonType="RAISED" layoutX="406.0" layoutY="81.0" prefHeight="19.0" prefWidth="210.0" style="-fx-background-color: #7777ee;" text="Elegir Cliente para la Venta" textFill="WHITE" />
+            <JFXButton fx:id="btnAgregarClienteAAventa" buttonType="RAISED" layoutX="406.0" layoutY="81.0" onAction="#btnAgregarClienteAVentaEvento" prefHeight="19.0" prefWidth="210.0" style="-fx-background-color: #7777ee;" text="Elegir Cliente para la Venta" textFill="WHITE" />
             <TableView fx:id="tblDatosClienteFiltroVenta" layoutX="70.0" layoutY="222.0" prefHeight="217.0" prefWidth="1066.0">
                <columns>
                   <TableColumn fx:id="tbcIDBusquedaCliente" prefWidth="110.00003051757812" text="ID " />
@@ -301,7 +321,7 @@
                   <JFXComboBox fx:id="cboMarcaProductoFiltroVenta" prefHeight="27.0" prefWidth="138.0" />
                </children>
             </HBox>
-            <JFXButton fx:id="btnAgregarProductoAAventa" buttonType="RAISED" layoutX="406.0" layoutY="81.0" prefHeight="19.0" prefWidth="210.0" style="-fx-background-color: #7777ee;" text="Agregar Producto a Venta" textFill="WHITE" />
+            <JFXButton fx:id="btnAgregarProductoAAventa" buttonType="RAISED" layoutX="406.0" layoutY="81.0" onAction="#btnAgregarProductoAVentaEvento" prefHeight="19.0" prefWidth="210.0" style="-fx-background-color: #7777ee;" text="Agregar Producto a Venta" textFill="WHITE" />
             <TableView fx:id="tblDatosProductoFiltroVenta" cache="true" layoutX="21.0" layoutY="193.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="270.0" prefWidth="1130.0">
                <columns>
                   <TableColumn fx:id="tbcIDProductoFiltroVenta" minWidth="-1.0" prefWidth="36.0" text="ID" />

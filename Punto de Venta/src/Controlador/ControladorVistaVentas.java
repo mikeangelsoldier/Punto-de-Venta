@@ -23,18 +23,26 @@ import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javax.swing.JTextArea;
 
@@ -75,7 +83,10 @@ public class ControladorVistaVentas implements Initializable {
             txtSubtotalVenta,
             txtIvaVenta,
             txtTotalAPagarVenta,
-            txtNumVenta;
+            txtNumVenta,
+            txtIdClienteVenta,
+            txtNombreClienteVenta,
+            txtRfcClienteVenta;
 
     @FXML
     private JFXTextArea txaDescripcionProductoVenta;
@@ -187,6 +198,20 @@ public class ControladorVistaVentas implements Initializable {
     ManejadorFiltroKeyProducto manejadorProducto;
 
     @FXML
+    private void btnAgregarClienteAVentaEvento(ActionEvent event) {
+        //panel2Grupos.setVisible(false);
+        agregarClienteAVenta();
+
+    }
+
+    @FXML
+    private void btnAgregarProductoAVentaEvento(ActionEvent event) {
+        //panel2Grupos.setVisible(false);
+        agregarPrepararProductoParaAgregarAAventa();
+
+    }
+
+    @FXML
     private void btnBuscarClientesEvento(ActionEvent event) {
         //panel2Grupos.setVisible(false);
         panelPrincipalVentas.setDisable(true);
@@ -207,17 +232,17 @@ public class ControladorVistaVentas implements Initializable {
     private void btnClienteRegresarAVentaEvento(ActionEvent event) {
         panelPrincipalVentas.setDisable(false);
         panelBuscarClientes.setVisible(false);
-        
-        txtIdClienteFiltroVenta.textProperty().removeListener(manejadorProducto);
-        txtNombreClienteFiltroVenta.textProperty().removeListener(manejadorProducto);
-        txtRfcClienteFiltroVenta.textProperty().removeListener(manejadorProducto);
+
+        txtIdClienteFiltroVenta.textProperty().removeListener(manejadorCliente);
+        txtNombreClienteFiltroVenta.textProperty().removeListener(manejadorCliente);
+        txtRfcClienteFiltroVenta.textProperty().removeListener(manejadorCliente);
     }
 
     @FXML
     private void btnProductoRegresarAVentaEvento(ActionEvent event) {
         panelPrincipalVentas.setDisable(false);
         panelBuscarProductos.setVisible(false);
-        
+
         txtCodigoProductoFiltroVenta.textProperty().removeListener(manejadorProducto);
         txtDescripcionProductoFiltroVenta.textProperty().removeListener(manejadorProducto);
         cboMarcaProductoFiltroVenta.valueProperty().removeListener(manejadorProducto);
@@ -251,6 +276,16 @@ public class ControladorVistaVentas implements Initializable {
         //regresarBotonesAFormaOriginal();
         manejador = new ManejadorFiltroKey();
 
+        //txtCantidadProductosAAgregar.textProperty().addListener( manejadorCantidadProducto);
+        //txtCantidadProductosAAgregar.
+        EventHandler<KeyEvent> handler1 = (KeyEvent event) -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                colocarPrecioPorProducto();
+            }
+        };
+
+        txtCantidadProductosAAgregar.setOnKeyPressed(handler1);
+
     }
 
     private void iniciarVistaBusquedaClientes() {
@@ -283,7 +318,7 @@ public class ControladorVistaVentas implements Initializable {
         llenarTablaBusquedaProducto(productoBD.getProductos());
         regresarBotonesVistaBusquedaProductoAFormaOriginal();
         manejadorProducto = new ManejadorFiltroKeyProducto();
-        
+
         txtCodigoProductoFiltroVenta.textProperty().addListener(manejadorProducto);
         txtDescripcionProductoFiltroVenta.textProperty().addListener(manejadorProducto);
         cboMarcaProductoFiltroVenta.valueProperty().addListener(manejadorProducto);
@@ -430,6 +465,107 @@ public class ControladorVistaVentas implements Initializable {
         }
     }
 
+    private void agregarClienteAVenta() {
+        try {
+            if (tblDatosClienteFiltroVenta.getSelectionModel().getSelectedItems().isEmpty()) {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Advertencia");
+                alert.setHeaderText(null);
+                alert.setContentText("Por favor elige un registro");
+                alert.show();
+                return;
+            }
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Confirmación");
+            alert.setHeaderText(null);
+            alert.setContentText("¿Realmente deseas asignar este cliente a la venta actual?");
+
+            if (alert.showAndWait().get() == ButtonType.OK) {
+
+                String idCliente = String.valueOf(tblDatosClienteFiltroVenta.getSelectionModel().getSelectedItem().getId());
+                String nombreCliente = tblDatosClienteFiltroVenta.getSelectionModel().getSelectedItem().getNombre();
+                String rfcCliente = tblDatosClienteFiltroVenta.getSelectionModel().getSelectedItem().getRfc();
+
+                txtIdClienteVenta.setText(idCliente);
+                txtNombreClienteVenta.setText(nombreCliente);
+                txtRfcClienteVenta.setText(rfcCliente);
+
+                alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setHeaderText(null);
+                alert.setTitle("Información");
+                alert.setContentText("La operación se ha realizado con éxito");
+                alert.show();
+            } else {
+                alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Información");
+                alert.setHeaderText(null);
+                alert.setContentText("Se ha cancelado la operación");
+                alert.show();
+            }
+
+        } catch (Exception ex) {
+
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Un error ha ocurrido");
+            alert.setContentText("El Cliente no se ha podido agregar");
+            alert.show();
+        }
+
+    }
+
+    void agregarPrepararProductoParaAgregarAAventa() {
+        try {
+            if (tblDatosProductoFiltroVenta.getSelectionModel().getSelectedItems().isEmpty()) {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Advertencia");
+                alert.setHeaderText(null);
+                alert.setContentText("Por favor elige un registro");
+                alert.show();
+                return;
+            }
+
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Confirmación");
+            alert.setHeaderText(null);
+            alert.setContentText("¿Realmente deseas agregar este producto a la venta?");
+            if (alert.showAndWait().get() == ButtonType.OK) {
+
+                String codigoProducto = tblDatosProductoFiltroVenta.getSelectionModel().getSelectedItem().getCodigo();
+                String descripion = tblDatosProductoFiltroVenta.getSelectionModel().getSelectedItem().getDescripcion();
+
+                String stock = String.valueOf(tblDatosProductoFiltroVenta.getSelectionModel().getSelectedItem().getStock());
+                String precio = String.valueOf(tblDatosProductoFiltroVenta.getSelectionModel().getSelectedItem().getPrecio());
+
+                txtCodigoProducto.setText(codigoProducto);
+                txaDescripcionProductoVenta.setText(descripion);
+                txtStockProducto.setText(stock);
+                txtPrecioProducto.setText(precio);
+
+                alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setHeaderText(null);
+                alert.setTitle("Información");
+                alert.setContentText("La operación se ha realizado con éxito");
+                alert.show();
+
+            } else {
+                alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Información");
+                alert.setHeaderText(null);
+                alert.setContentText("Se ha cancelado la operación");
+                alert.show();
+            }
+
+        } catch (Exception ex) {
+
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Un error ha ocurrido");
+            alert.setContentText("El Producto no se ha agregar");
+            alert.show();
+        }
+    }
+
     class ManejadorFiltroKey implements ChangeListener {
 
         @Override
@@ -452,6 +588,92 @@ public class ControladorVistaVentas implements Initializable {
         public void changed(ObservableValue observable, Object oldValue, Object newValue) {
             ManejadorFiltroProducto();
         }
+    }
+    
+    public static boolean isNumeric(String cadena) {
+
+        boolean resultado;
+
+        try {
+            Integer.parseInt(cadena);
+            resultado = true;
+        } catch (NumberFormatException excepcion) {
+            resultado = false;
+        }
+
+        return resultado;
+    }
+
+    private void colocarPrecioPorProducto() {
+         
+         
+        if (txtStockProducto.getText().equals("")) {
+
+            Alert alertStockProducto = new Alert(Alert.AlertType.WARNING);
+            alertStockProducto.setTitle("Advertencia");
+            alertStockProducto.setHeaderText(null);
+            alertStockProducto.setContentText("¡¡¡¡Primero debe de seleccionar un producto para ingresar una cantidad");
+            alertStockProducto.show();
+            return;
+        }
+        
+        if (txtCantidadProductosAAgregar.getText().equals("")) {
+
+            Alert alertStockProducto = new Alert(Alert.AlertType.INFORMATION);
+            alertStockProducto.setTitle("Informacion");
+            alertStockProducto.setHeaderText(null);
+            alertStockProducto.setContentText("¡¡¡¡Escribe una cantidad");
+            alertStockProducto.show();
+            return;
+        }
+        
+        if (isNumeric(txtCantidadProductosAAgregar.getText())==false){
+            Alert alertStockProducto = new Alert(Alert.AlertType.WARNING);
+            alertStockProducto.setTitle("Advertencia");
+            alertStockProducto.setHeaderText(null);
+            alertStockProducto.setContentText("Se debe de escribir una cantidad numerica");
+            alertStockProducto.show();
+            return;
+        }
+                
+        
+        if(txtStockProducto.getText().equals("0")){
+            Alert alertStockProducto = new Alert(Alert.AlertType.WARNING);
+            alertStockProducto.setTitle("Advertencia");
+            alertStockProducto.setHeaderText(null);
+            alertStockProducto.setContentText("¡¡¡¡Ya no se cuenta con existencias de este producto, revisa el catalogo de producto o el almacen");
+            alertStockProducto.show();
+            return;
+        }
+
+        try {
+
+            int stockDelProducto = Integer.valueOf(txtStockProducto.getText());
+            int cantidadAAgregar = Integer.valueOf(txtCantidadProductosAAgregar.getText());
+
+            if (cantidadAAgregar > stockDelProducto) {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Advertencia");
+                alert.setHeaderText(null);
+                alert.setContentText("¡¡¡¡La cantidad a vender debe ser menor al stock!!!! \n Solo se cuenta con " + stockDelProducto + " existencias de este producto");
+                alert.show();
+                return;
+            }
+
+            double precioProductoAAgregar = Double.valueOf(txtPrecioProducto.getText());
+            double totalProductoAAgregarAVenta = (precioProductoAAgregar * cantidadAAgregar);
+
+            txtTotalProductoAntesDeAgregar.setText(String.valueOf(totalProductoAAgregarAVenta));
+
+        } catch (Exception ex) {
+
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Un error ha ocurrido");
+            alert.setContentText("");
+            alert.show();
+        }
+
     }
 
     void ManejadorFiltroProducto() {
