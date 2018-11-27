@@ -6,8 +6,8 @@
 package Controlador;
 
 import AccesoBD.ConectaBD_Punto_de_venta;
-import AccesoBD.ProveedorBD;
-import Modelo.Proveedor;
+import AccesoBD.SucursalBD;
+import Modelo.Sucursal;
 import PuntoDeVenta.*;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
@@ -40,9 +40,9 @@ import javafx.scene.paint.Color;
  *
  * @author Mike
  */
-public class ControladorVistaProveedor implements Initializable {
+public class ControladorVistaSucursal implements Initializable {
 
-    ProveedorBD ProveedorDB;
+    SucursalBD SucursalDB;
     ConectaBD_Punto_de_venta conectaBD_PuntoVenta;
     //ManejadorFiltroKey manejador;
     private boolean filtrarActivado, agregarActivado, modificarActivado;
@@ -52,29 +52,29 @@ public class ControladorVistaProveedor implements Initializable {
     private static String AYUDA_AL_MODIFICAR = "Seleccionar un registro, Escribe en los campos los datos deseados, da clic en Guardar Cambios, o da clic en cancelar";
     private static String AYUDA_AL_FILTRAR = "Escribe en los campos la informacion con la que deben coincidir los registros del filtro. Da clic en Filtro nuevamente para salir";
 
-    String contenidoTxtID, contenidoTxtProveedor, contenidoTxtTelefono, contenidoTxtCorreo, 
+    String contenidoTxtID, contenidoTxtNombre,contenidoTxtSucursal, contenidoTxtTelefono, contenidoTxtCorreo, 
            contenidoTxtDireccion,contenidoTxtColonia, contenidotxtMunicipio, contenidoTxtCP, 
            contenidotxtEstado;
     ManejadorFiltroKey manejador;
 
     @FXML
-    private JFXTextField txtID,txtProveedor,txtTelefono,
+    private JFXTextField txtID,txtNombre,txtSucursal,txtTelefono,
             txtCorreo,txtDireccion,txtColonia,txtMunicipio,txtCP,
             txtEstado;
     @FXML
-    private TableView<Proveedor> tblDatosProveedor;
+    private TableView<Sucursal> tblDatosSucursal;
 
     @FXML
-    private TableColumn<Proveedor, Integer> tbcID;
+    private TableColumn<Sucursal,Integer> tbcID;
 
     @FXML
-    private TableColumn<Proveedor, String> tbcEmpresa,
+    private TableColumn<Sucursal, String> tbcNombre,tbcSucursal,
             tbcTelefono, tbcCorreo, tbcDireccion,tbcColonia,tbcMunicipio,tbcCP,
             tbcEstado;
 
     @FXML
-    private JFXButton btnAgregarProveedor, btnModificarProveedor, btnEliminarProveedor, btnCancelarProveedor, btnFiltrarProveedor, btnRegresarProveedor,
-            btnGuardarInsercionProveedor, btnGuardarModificacionProveedor;
+    private JFXButton btnAgregarSucursal, btnModificarSucursal, btnEliminarSucursal, btnCancelarSucursal, btnFiltrarSucursal, btnRegresarSucursal,
+            btnGuardarInsercionSucursal, btnGuardarModificacionSucursal;
 
     @FXML
     private Label lblAyuda;
@@ -86,19 +86,19 @@ public class ControladorVistaProveedor implements Initializable {
 
     @FXML
     private void handleButtonAgregar(ActionEvent event) {
-        agregarProveedorActivado();
+        agregarSucursalActivado();
     }
 
     @FXML
     private void handleButtonActualizar(ActionEvent event) {
-        modificarProveedorActivado();
+        modificarSucursalActivado();
     }
 
     @FXML
     private void handleButtonGuardarInsercion(ActionEvent event) {
         if (agregarActivado) {
-            agregarProveedor();
-            llenarTabla(ProveedorDB.getProveedores());
+            agregarSucursal();
+            llenarTabla(SucursalDB.getSucursales());
             //limpiarCampos();
         }
 
@@ -107,8 +107,8 @@ public class ControladorVistaProveedor implements Initializable {
     @FXML
     private void handleButtonGuardarModificacion(ActionEvent event) {
         if (modificarActivado) {
-            actualizarProveedor();
-            llenarTabla(ProveedorDB.getProveedores());
+            actualizarSucursal();
+            llenarTabla(SucursalDB.getSucursales());
             //limpiarCampos();
 
         }
@@ -118,7 +118,7 @@ public class ControladorVistaProveedor implements Initializable {
     @FXML
     private void handleButtonEliminar(ActionEvent event) {
         eliminarProveedor();
-        llenarTabla(ProveedorDB.getProveedores());
+        llenarTabla(SucursalDB.getSucursales());
         limpiarCampos();
     }
 
@@ -137,15 +137,16 @@ public class ControladorVistaProveedor implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         conectaBD_PuntoVenta = new ConectaBD_Punto_de_venta();
-        ProveedorDB = new ProveedorBD(conectaBD_PuntoVenta.getConnection());
+        SucursalDB = new SucursalBD(conectaBD_PuntoVenta.getConnection());
         filtrarActivado = false;
         agregarActivado = false;
         modificarActivado = false;
 
-        llenarTabla(ProveedorDB.getProveedores());
+        llenarTabla(SucursalDB.getSucursales());
 
         txtID.setEditable(false);
-        txtProveedor.setEditable(false);
+        txtNombre.setEditable(false);
+        txtSucursal.setEditable(false);
         txtTelefono.setEditable(false);
         txtCorreo.setEditable(false);
         txtDireccion.setEditable(false);
@@ -168,25 +169,27 @@ public class ControladorVistaProveedor implements Initializable {
 
     @FXML
     private void handleTableChange(Event event) {
-        Proveedor proveedor = tblDatosProveedor.getSelectionModel().getSelectedItem();
+        Sucursal sucursal = tblDatosSucursal.getSelectionModel().getSelectedItem();
 
-        if (proveedor != null) {
-            txtID.setText(String.valueOf(proveedor.getId_proveedor()));
-            txtProveedor.setText(proveedor.getNombre_proveedor());
-            txtTelefono.setText(proveedor.getTelefono());
-            txtCorreo.setText(proveedor.getCorreo());
-            txtDireccion.setText(proveedor.getDireccion());
-            txtColonia.setText(proveedor.getColonia());
-            txtMunicipio.setText(proveedor.getMunicipio());
-            txtCP.setText(proveedor.getCp());
-            txtEstado.setText(proveedor.getEstado());
+        if (sucursal != null) {
+            txtID.setText(String.valueOf(sucursal.getId_sucursal()));
+            txtNombre.setText(sucursal.getNombre_sucursal());
+            txtSucursal.setText(sucursal.getSucursal());
+            txtTelefono.setText(sucursal.getTelefono());
+            txtCorreo.setText(sucursal.getCorreo());
+            txtDireccion.setText(sucursal.getDireccion());
+            txtColonia.setText(sucursal.getColonia());
+            txtMunicipio.setText(sucursal.getMunicipio());
+            txtCP.setText(sucursal.getCp());
+            txtEstado.setText(sucursal.getEstado());
         }
     }
 
-    private void llenarTabla(ArrayList<Proveedor> listaProveedores) {
-        tblDatosProveedor.getItems().clear();
-        tbcID.setCellValueFactory(new PropertyValueFactory<>("id_proveedor"));
-        tbcEmpresa.setCellValueFactory(new PropertyValueFactory<>("nombre_proveedor"));
+    private void llenarTabla(ArrayList<Sucursal> listaSucursal) {
+        tblDatosSucursal.getItems().clear();
+        tbcID.setCellValueFactory(new PropertyValueFactory<>("id_sucursal"));
+        tbcNombre.setCellValueFactory(new PropertyValueFactory<>("nombre_sucursal"));
+        tbcSucursal.setCellValueFactory(new PropertyValueFactory<>("sucursal"));
         tbcTelefono.setCellValueFactory(new PropertyValueFactory<>("telefono"));
         tbcCorreo.setCellValueFactory(new PropertyValueFactory<>("correo"));
         tbcDireccion.setCellValueFactory(new PropertyValueFactory<>("direccion"));
@@ -194,22 +197,23 @@ public class ControladorVistaProveedor implements Initializable {
         tbcMunicipio.setCellValueFactory(new PropertyValueFactory<>("municipio"));
         tbcCP.setCellValueFactory(new PropertyValueFactory<>("cp"));
         tbcEstado.setCellValueFactory(new PropertyValueFactory<>("estado"));
-        for (Proveedor proveedor : listaProveedores) {
-            tblDatosProveedor.getItems().add(proveedor);
+        for (Sucursal sucursal : listaSucursal) {
+            tblDatosSucursal.getItems().add(sucursal);
         }
     }
 
-    private void agregarProveedor() {
+    private void agregarSucursal() {
 
         try {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Confirmación");
             alert.setHeaderText(null);
-            alert.setContentText("¿Realmente deseas agregar a este Proveedor?");
+            alert.setContentText("¿Realmente deseas agregar a esta Sucursal?");
 
             if (!camposPorCompletar()) {
                 if (alert.showAndWait().get() == ButtonType.OK) {
-                    contenidoTxtProveedor = txtProveedor.getText();
+                    contenidoTxtNombre = txtNombre.getText();
+                    contenidoTxtSucursal = txtSucursal.getText();
                     contenidoTxtTelefono= txtTelefono.getText();
                     contenidoTxtCorreo = txtCorreo.getText();
                     contenidoTxtDireccion = txtDireccion.getText();
@@ -218,7 +222,7 @@ public class ControladorVistaProveedor implements Initializable {
                     contenidoTxtCP = txtCP.getText();
                     contenidotxtEstado = txtEstado.getText();
 
-                    ProveedorDB.addProveedor(contenidoTxtProveedor,
+                    SucursalDB.addSucursal(contenidoTxtNombre,contenidoTxtSucursal,
                             contenidoTxtTelefono, contenidoTxtCorreo,contenidoTxtDireccion,
                             contenidoTxtColonia, contenidotxtMunicipio, contenidoTxtCP, contenidotxtEstado);
                     alert = new Alert(Alert.AlertType.INFORMATION);
@@ -256,23 +260,23 @@ public class ControladorVistaProveedor implements Initializable {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText("Un error ha ocurrido");
-            alert.setContentText("El Proveedor no se ha podido agregar. Error al acceder a la base de datos");
+            alert.setContentText("La sucursal no se ha podido agregar. Error al acceder a la base de datos");
             alert.show();
         }
 
     }
 
-    private void actualizarProveedor() {
-        int idProveedorSeleccionado = 0;
+    private void actualizarSucursal() {
+        int idSucursalSeleccionada = 0;
 
         try {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Confirmación");
             alert.setHeaderText(null);
-            alert.setContentText("¿Realmente deseas modificar el registro de este Proveedor?");
+            alert.setContentText("¿Realmente deseas modificar el registro de esta Sucursal?");
 
             if (!camposPorCompletar()) {
-                if (tblDatosProveedor.getSelectionModel().getSelectedItems().isEmpty()) {
+                if (tblDatosSucursal.getSelectionModel().getSelectedItems().isEmpty()) {
                     Alert alertSeleccion = new Alert(Alert.AlertType.WARNING);
                     alertSeleccion.setTitle("Advertencia");
                     alertSeleccion.setHeaderText(null);
@@ -282,8 +286,9 @@ public class ControladorVistaProveedor implements Initializable {
                 }
 
                 if (alert.showAndWait().get() == ButtonType.OK) {//solo si se acepto continuar
-                    idProveedorSeleccionado = tblDatosProveedor.getSelectionModel().getSelectedItem().getId_proveedor();
-                    contenidoTxtProveedor = txtProveedor.getText();
+                    idSucursalSeleccionada = tblDatosSucursal.getSelectionModel().getSelectedItem().getId_sucursal();
+                    contenidoTxtNombre = txtNombre.getText();
+                    contenidoTxtSucursal = txtSucursal.getText();
                     contenidoTxtTelefono= txtTelefono.getText();
                     contenidoTxtCorreo = txtCorreo.getText();
                     contenidoTxtDireccion = txtDireccion.getText();
@@ -292,7 +297,7 @@ public class ControladorVistaProveedor implements Initializable {
                     contenidoTxtCP = txtCP.getText();
                     contenidotxtEstado = txtEstado.getText();
 
-                   ProveedorDB.updateProveedor(idProveedorSeleccionado,contenidoTxtProveedor,
+                   SucursalDB.updateSucursal(idSucursalSeleccionada,contenidoTxtNombre,contenidoTxtSucursal,
                             contenidoTxtTelefono, contenidoTxtCorreo,contenidoTxtDireccion,
                             contenidoTxtColonia, contenidotxtMunicipio, contenidoTxtCP, contenidotxtEstado);
                     alert = new Alert(Alert.AlertType.INFORMATION);
@@ -324,7 +329,7 @@ public class ControladorVistaProveedor implements Initializable {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText(null);
-            alert.setContentText("El Proveedor no se ha podido actualizar. Error al acceder a la base de datos");
+            alert.setContentText("La sucursal no se ha podido actualizar. Error al acceder a la base de datos");
             alert.show();
             ex.printStackTrace();
         }
@@ -333,7 +338,7 @@ public class ControladorVistaProveedor implements Initializable {
 
     private void eliminarProveedor() {
         try {
-            if (tblDatosProveedor.getSelectionModel().getSelectedItems().isEmpty()) {
+            if (tblDatosSucursal.getSelectionModel().getSelectedItems().isEmpty()) {
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.setTitle("Advertencia");
                 alert.setHeaderText(null);
@@ -344,10 +349,10 @@ public class ControladorVistaProveedor implements Initializable {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Confirmación");
             alert.setHeaderText(null);
-            alert.setContentText("¿Realmente deseas eliminar el registro de este Proveedor?");
+            alert.setContentText("¿Realmente deseas eliminar el registro de esta Sucursal?");
             if (alert.showAndWait().get() == ButtonType.OK) {
-                int ID = tblDatosProveedor.getSelectionModel().getSelectedItem().getId_proveedor();
-                ProveedorDB.deleteProveedor(ID);
+                int ID = tblDatosSucursal.getSelectionModel().getSelectedItem().getId_sucursal();
+                SucursalDB.deleteSucursal(ID);
                 alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setHeaderText(null);
                 alert.setTitle("Información");
@@ -366,14 +371,15 @@ public class ControladorVistaProveedor implements Initializable {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText("Un error ha ocurrido");
-            alert.setContentText("El Proveedor no se ha podido eliminar. Error al acceder a la base de datos");
+            alert.setContentText("La sucursal no se ha podido eliminar. Error al acceder a la base de datos");
             alert.show();
         }
 
     }
 
     private boolean camposPorCompletar() {
-            String nombre = txtProveedor.getText();
+            String nombre = txtNombre.getText();
+            String sucursal = txtSucursal.getText();
             String telefono = txtTelefono.getText();
             String  correo = txtCorreo.getText();
             String direccion = txtDireccion.getText();
@@ -390,7 +396,7 @@ public class ControladorVistaProveedor implements Initializable {
 //             
 //        }
 
-        if (nombre.equals("") || telefono.equals("") || 
+        if (nombre.equals("") ||sucursal.equals("")|| telefono.equals("") || 
                 correo.equals("") || direccion.equals("") || colonia.equals("") || 
                 municipio.equals("") || cp.equals("") || estado.equals("")) {
             return true;
@@ -402,7 +408,8 @@ public class ControladorVistaProveedor implements Initializable {
 
     private void limpiarCampos() {
         txtID.clear();
-        txtProveedor.clear();
+        txtNombre.clear();
+        txtSucursal.clear();
         txtTelefono.clear();
         txtCorreo.clear();
         txtDireccion.clear();
@@ -420,14 +427,15 @@ public class ControladorVistaProveedor implements Initializable {
         if (filtrarActivado) {
             lblAyuda.setText(AYUDA_AL_FILTRAR);
             
-            btnAgregarProveedor.setDisable(true);
-            btnModificarProveedor.setDisable(true);
-            btnEliminarProveedor.setDisable(true);
+            btnAgregarSucursal.setDisable(true);
+            btnModificarSucursal.setDisable(true);
+            btnEliminarSucursal.setDisable(true);
 
-            btnRegresarProveedor.setVisible(false);
+            btnRegresarSucursal.setVisible(false);
 
             txtID.setEditable(true);
-            txtProveedor.setEditable(true);
+            txtNombre.setEditable(true);
+            txtSucursal.setEditable(true);
             txtTelefono.setEditable(true);
             txtCorreo.setEditable(true);
             txtDireccion.setEditable(true);
@@ -437,7 +445,8 @@ public class ControladorVistaProveedor implements Initializable {
             txtEstado.setEditable(true);
 
             txtID.textProperty().addListener(manejador);
-            txtProveedor.textProperty().addListener(manejador);
+            txtNombre.textProperty().addListener(manejador);
+            txtSucursal.textProperty().addListener(manejador);
             txtTelefono.textProperty().addListener(manejador);
             txtCorreo.textProperty().addListener(manejador);
             txtDireccion.textProperty().addListener(manejador);
@@ -446,14 +455,15 @@ public class ControladorVistaProveedor implements Initializable {
             txtCP.textProperty().addListener(manejador);
             txtEstado.textProperty().addListener(manejador);
         } else {
-            btnAgregarProveedor.setDisable(false);
-            btnModificarProveedor.setDisable(false);
-            btnEliminarProveedor.setDisable(false);
+            btnAgregarSucursal.setDisable(false);
+            btnModificarSucursal.setDisable(false);
+            btnEliminarSucursal.setDisable(false);
 
-            btnRegresarProveedor.setVisible(true);
+            btnRegresarSucursal.setVisible(true);
             
             txtID.setEditable(false);
-            txtProveedor.setEditable(false);
+            txtNombre.setEditable(false);
+            txtSucursal.setEditable(false);
             txtTelefono.setEditable(false);
             txtCorreo.setEditable(false);
             txtDireccion.setEditable(false);
@@ -463,7 +473,8 @@ public class ControladorVistaProveedor implements Initializable {
             txtEstado.setEditable(false);
             
             txtID.textProperty().addListener(manejador);
-            txtProveedor.textProperty().addListener(manejador);
+            txtNombre.textProperty().addListener(manejador);
+            txtSucursal.textProperty().addListener(manejador);
             txtTelefono.textProperty().addListener(manejador);
             txtCorreo.textProperty().addListener(manejador);
             txtDireccion.textProperty().addListener(manejador);
@@ -472,13 +483,13 @@ public class ControladorVistaProveedor implements Initializable {
             txtCP.textProperty().addListener(manejador);
             txtEstado.textProperty().addListener(manejador);
 
-            llenarTabla(ProveedorDB.getProveedores());
+            llenarTabla(SucursalDB.getSucursales());
             //limpiarCampos();//----------------------------------------------------------
             lblAyuda.setText("");
         }
     }
 
-    void agregarProveedorActivado() {
+    void agregarSucursalActivado() {
         agregarActivado = true;
         modificarActivado = false;
 
@@ -486,19 +497,20 @@ public class ControladorVistaProveedor implements Initializable {
         if (agregarActivado) {
             lblAyuda.setText(AYUDA_AL_AGREGAR);
 
-            btnAgregarProveedor.setDisable(true);
+            btnAgregarSucursal.setDisable(true);
             //btnAgregarUsuario.setStyle("fx-background-color: #0FFF09");
-            btnModificarProveedor.setDisable(true);
-            btnEliminarProveedor.setDisable(true);
-            btnFiltrarProveedor.setDisable(true);
+            btnModificarSucursal.setDisable(true);
+            btnEliminarSucursal.setDisable(true);
+            btnFiltrarSucursal.setDisable(true);
 
-            btnCancelarProveedor.setVisible(true);
-            btnRegresarProveedor.setVisible(false);
-            btnGuardarInsercionProveedor.setVisible(true);
-            btnGuardarModificacionProveedor.setVisible(false);
+            btnCancelarSucursal.setVisible(true);
+            btnRegresarSucursal.setVisible(false);
+            btnGuardarInsercionSucursal.setVisible(true);
+            btnGuardarModificacionSucursal.setVisible(false);
 
             txtID.setEditable(false);
-            txtProveedor.setEditable(true);
+            txtNombre.setEditable(true);
+            txtSucursal.setEditable(true);
             txtTelefono.setEditable(true);
             txtCorreo.setEditable(true);
             txtDireccion.setEditable(true);
@@ -512,7 +524,7 @@ public class ControladorVistaProveedor implements Initializable {
         }
     }
 
-    void modificarProveedorActivado() {
+    void modificarSucursalActivado() {
         modificarActivado = true;
         agregarActivado = false;
 
@@ -520,19 +532,20 @@ public class ControladorVistaProveedor implements Initializable {
         if (modificarActivado) {
             lblAyuda.setText(AYUDA_AL_MODIFICAR);
 
-            btnAgregarProveedor.setDisable(true);
-            btnModificarProveedor.setDisable(true);
+            btnAgregarSucursal.setDisable(true);
+            btnModificarSucursal.setDisable(true);
             //btnModificarUsuario.setStyle("fx-background-color: #0FFF09");
-            btnEliminarProveedor.setDisable(true);
-            btnFiltrarProveedor.setDisable(true);
+            btnEliminarSucursal.setDisable(true);
+            btnFiltrarSucursal.setDisable(true);
 
-            btnCancelarProveedor.setVisible(true);
-            btnRegresarProveedor.setVisible(false);
-            btnGuardarInsercionProveedor.setVisible(false);
-            btnGuardarModificacionProveedor.setVisible(true);
+            btnCancelarSucursal.setVisible(true);
+            btnRegresarSucursal.setVisible(false);
+            btnGuardarInsercionSucursal.setVisible(false);
+            btnGuardarModificacionSucursal.setVisible(true);
 
             txtID.setEditable(false);
-            txtProveedor.setEditable(true);
+            txtNombre.setEditable(true);
+            txtSucursal.setEditable(true);
             txtTelefono.setEditable(true);
             txtCorreo.setEditable(true);
             txtDireccion.setEditable(true);
@@ -551,22 +564,23 @@ public class ControladorVistaProveedor implements Initializable {
         agregarActivado = false;
         filtrarActivado = false;
 
-        btnAgregarProveedor.setDisable(false);
+        btnAgregarSucursal.setDisable(false);
         //btnAgregarUsuario.setStyle("fx-background-color: #222288");
-        btnModificarProveedor.setDisable(false);
+        btnModificarSucursal.setDisable(false);
         //btnModificarUsuario.setStyle("fx-background-color: #222288");
-        btnEliminarProveedor.setDisable(false);
-        btnFiltrarProveedor.setDisable(false);
+        btnEliminarSucursal.setDisable(false);
+        btnFiltrarSucursal.setDisable(false);
         //btnRegresarUsuario.setDisable(false);
 
-        btnRegresarProveedor.setVisible(true);
+        btnRegresarSucursal.setVisible(true);
 
-        btnCancelarProveedor.setVisible(false);
-        btnGuardarInsercionProveedor.setVisible(false);
-        btnGuardarModificacionProveedor.setVisible(false);
+        btnCancelarSucursal.setVisible(false);
+        btnGuardarInsercionSucursal.setVisible(false);
+        btnGuardarModificacionSucursal.setVisible(false);
 
             txtID.setEditable(false);
-            txtProveedor.setEditable(false);
+            txtNombre.setEditable(false);
+            txtSucursal.setEditable(false);
             txtTelefono.setEditable(false);
             txtCorreo.setEditable(false);
             txtDireccion.setEditable(false);
@@ -592,13 +606,13 @@ public class ControladorVistaProveedor implements Initializable {
         return resultado;
     }
     
-    private void leerFiltrarTabla(int id,String nombre,String telefono,
+    private void leerFiltrarTabla(int id,String nombre,String sucursal,String telefono,
             String correo,String direccion,String colonia,String municipio,String cp,String estado) {
         if (id == 0) {
-            llenarTabla(ProveedorDB.getProveedoresFiltro1(nombre,
+            llenarTabla(SucursalDB.getSucursalesFiltro1(nombre,sucursal,
                     telefono,correo,direccion,colonia,municipio,cp,estado));
         } else {
-            llenarTabla(ProveedorDB.getProveedoresFiltro2(id, nombre,
+            llenarTabla(SucursalDB.getSucursalesFiltro2(id, nombre,sucursal,
                     telefono,correo,direccion,colonia,municipio,cp,estado));
         }
     }
@@ -617,7 +631,8 @@ public class ControladorVistaProveedor implements Initializable {
                 } else {
                     id = Integer.valueOf(txtID.getText());
                 }
-                String nombre = txtProveedor.getText();
+                String nombre = txtNombre.getText();
+                String sucursal = txtSucursal.getText();
                 String telefono = txtTelefono.getText();
                 String  correo = txtCorreo.getText();
                 String direccion = txtDireccion.getText();
@@ -626,7 +641,7 @@ public class ControladorVistaProveedor implements Initializable {
                 String  cp = txtCP.getText();
                 String estado = txtEstado.getText();
 
-                leerFiltrarTabla(id, nombre,telefono,correo,direccion,colonia,municipio,
+                leerFiltrarTabla(id, nombre,sucursal,telefono,correo,direccion,colonia,municipio,
                 cp,estado);
                 System.out.println(nombre);
             } else {

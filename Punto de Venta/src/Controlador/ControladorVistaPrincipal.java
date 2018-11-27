@@ -111,4 +111,24 @@ public class ControladorVistaPrincipal implements Initializable {
         }
     }
     
+    @FXML
+    public void cambiarAVistaCategoria (ActionEvent e) throws Exception {
+        try {
+            panel_principal.getChildren().clear();
+            panel_principal.getChildren().add(FXMLLoader.load(getClass().getResource("/PuntoDeVenta/VistaCategoria_1.fxml")));
+        } catch (IOException ex) {
+            Logger.getLogger(ControladorVistaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    @FXML
+    public void cambiarAVistaSucursales (ActionEvent e) throws Exception {
+        try {
+            panel_principal.getChildren().clear();
+            panel_principal.getChildren().add(FXMLLoader.load(getClass().getResource("/PuntoDeVenta/VistaSucursal.fxml")));
+        } catch (IOException ex) {
+            Logger.getLogger(ControladorVistaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
 }
