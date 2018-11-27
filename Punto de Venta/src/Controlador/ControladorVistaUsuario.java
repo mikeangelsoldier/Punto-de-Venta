@@ -53,8 +53,8 @@ public class ControladorVistaUsuario implements Initializable {
     private static String ROL_EMPLEADO = "Empleado";
     private static String ROL_ENCARGADO_ALMACEN = "Encargado de Almacen";
 
-    private static String AYUDA_AL_AGREGAR = "Escribe en los campos los datos deseados, da clic en Guardar Cambios, o da clic en cancelar";
-    private static String AYUDA_AL_MODIFICAR = "Seleccionar un registro, Escribe en los campos los datos deseados, da clic en Guardar Cambios, o da clic en cancelar";
+    private static String AYUDA_AL_AGREGAR = "Escribe en los campos los datos deseados, da clic en Guardar Inserción, o da clic en cancelar";
+    private static String AYUDA_AL_MODIFICAR = "Seleccionar un registro, Escribe en los campos los datos deseados, da clic en Guardar modificación, o da clic en cancelar";
     private static String AYUDA_AL_FILTRAR = "Escribe en los campos la informacion con la que deben coincidir los registros del filtro. Da clic en Filtro nuevamente para salir";
 
     String contenidoTxtIDUsuario, contenidoTxtNombreUsuario, contenidoTxtLoginUsuario, contenidoTxtPasswordUsuario, contenidoCboRolUsuario;
