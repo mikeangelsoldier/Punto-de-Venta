@@ -163,8 +163,75 @@ public class ClienteBD {
         }
 
         return listaClientes;
-    } 
-    
+    }
+   
+   public ArrayList<Cliente> getClientesFiltro3(String id, String nombre, String rfc, String telefono,
+            String correo, String direccion, String colonia, String municipio, String cp, String estado) {
+        ArrayList<Cliente> listaClientes = new ArrayList<>();
+
+        try {
+            //ResultSet rs = connect.prepareCall("EXEC getBusquedaUsuario").executeQuery(); //Para SQL Server
+            PreparedStatement statement = connect.prepareStatement("CALL  getBusquedaCliente3(? ,?, ?, ?, ?, ?, ?, ? ,? ,?)"); //Para MySql
+            
+            statement.setString(1,id);
+            statement.setString(2, nombre);
+            statement.setString(3, rfc);
+            statement.setString(4, telefono);
+            statement.setString(5, correo);
+            statement.setString(6, direccion);
+            statement.setString(7, colonia);
+            statement.setString(8, municipio);
+            statement.setString(9, cp);
+            statement.setString(10, estado);
+
+            System.out.println(statement);
+            ResultSet rs = statement.executeQuery();
+
+            while (rs.next()) {
+                listaClientes.add(new Cliente(rs.getInt(1),rs.getString(2), rs.getString(3), 
+                        rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8),
+                rs.getString(9), rs.getString(10),rs.getString(11)));
+            }
+
+            rs.close();
+            statement.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(ClienteBD.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return listaClientes;
+    }
+   
+   
+   
+     public ArrayList<Cliente> getClientesFiltro4(String id, String nombre, String rfc) {
+        ArrayList<Cliente> listaClientes = new ArrayList<>();
+
+        try {
+            //ResultSet rs = connect.prepareCall("EXEC getBusquedaUsuario").executeQuery(); //Para SQL Server
+            PreparedStatement statement = connect.prepareStatement("CALL  getBusquedaCliente4(? ,?, ?)"); //Para MySql
+            
+            statement.setString(1,id);
+            statement.setString(2, nombre);
+            statement.setString(3, rfc);
+            
+            System.out.println(statement);
+            ResultSet rs = statement.executeQuery();
+
+            while (rs.next()) {
+                listaClientes.add(new Cliente(rs.getInt(1),rs.getString(2), rs.getString(3), 
+                        rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8),
+                rs.getString(9), rs.getString(10),rs.getString(11)));
+            }
+
+            rs.close();
+            statement.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(ClienteBD.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return listaClientes;
+    }
     
     
 }

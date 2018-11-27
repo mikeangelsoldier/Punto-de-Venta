@@ -165,4 +165,33 @@ public class ProductoBD {
         return listaProductos;
     }
     
+    
+    public ArrayList<Producto> getProductosFiltro4(String codigo, String descripcion, String marca) {
+        ArrayList<Producto> listaProductos = new ArrayList<>();
+
+        try {
+            //ResultSet rs = connect.prepareCall("EXEC getBusquedaUsuario").executeQuery(); //Para SQL Server
+            PreparedStatement ps = connect.prepareStatement("CALL  getBusquedaProducto4(?,?,?)"); //Para MySql
+            
+            ps.setString(1, codigo);
+            ps.setString(2, descripcion);
+            ps.setString(3, marca);
+
+            System.out.println(ps);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                listaProductos.add(new Producto(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getDouble(5),
+                        rs.getDouble(6), rs.getString(7), rs.getInt(8), rs.getInt(9), rs.getInt(10),rs.getInt(11)));
+            }
+
+            rs.close();
+            ps.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductoBD.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return listaProductos;
+    }
+    
 }
