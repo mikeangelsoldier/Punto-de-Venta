@@ -965,6 +965,18 @@ SELECT * FROM PRODUCTO;
 */
 
 
+DROP PROCEDURE IF EXISTS getProductosFaltantes;
+CREATE PROCEDURE getProductosFaltantes ()
+	SELECT * FROM Producto WHERE (producto.stock<=producto.stock_minimo) AND status='activo';
+    
+/*	
+
+call getProductosFaltantes();
+SELECT * FROM PRODUCTO;
+	
+*/
+
+
 DROP PROCEDURE IF EXISTS getIdProductoCodigo;
 CREATE PROCEDURE getIdProductoCodigo (
 codigo_producto varchar(13)
@@ -1035,7 +1047,29 @@ WHERE p.id_producto = id;
 /*	
 call getProductos();
 call updateProducto(4,'000000000004','Escale de Tijera C/Plataforma Escalumex 3 Exc Sta-4',7,607,800,'pieza',3,1,4,1);
-call updateProducto(4,'000004000004','Escalera de Tijera C/Plataforma Escalumex 3 Exc Sta-4',7,607,800,'pieza',3,1,4,1);
+call updateProducto(4,'000004000004','Escalera de Tijera C/Plataforma Escalumex 3 Exc Sta-4',7,607,800,'pieza',4,4,4,1);
+
+	
+*/
+
+
+
+DROP PROCEDURE IF EXISTS reducirStockProducto;
+CREATE PROCEDURE reducirStockProducto(
+codigo_producto varchar(13),
+cantidad int)
+UPDATE Producto as p 
+	SET p.stock=(p.stock-cantidad)
+WHERE p.codigo_producto = codigo_producto;
+
+
+/*	
+call getProductos();
+
+call getProductosFaltantes();
+
+call reducirStockProducto('7501000664221',15);
+call reducirStockProducto('000004000004',7);
 
 	
 */
