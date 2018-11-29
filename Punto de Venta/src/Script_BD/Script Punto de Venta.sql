@@ -1413,3 +1413,75 @@ estado varchar(200))
 	AND s.cp like (CONCAT('%',cp,'%'))
     AND s.estado like (CONCAT('%',estado,'%'))
     AND status='activo';
+
+
+
+
+
+-- ------------------Procedimientos Factura Pedido ---------------------------------
+DROP PROCEDURE IF EXISTS getPedidos;
+CREATE PROCEDURE getPedidos ()
+	SELECT * FROM Factura_Pedido WHERE status='activo';
+    
+DROP PROCEDURE IF EXISTS addPedido;
+CREATE PROCEDURE addPedido(
+id_proveedor int,
+id_usuario int,
+montoFactura float(15),
+fecha date)
+INSERT INTO Factura_Pedido (id_proveedor,id_usuario,montoFactura,fecha,status) 
+				VALUES(id_proveedor,id_usuario,montoFactura,fecha,'activo');
+
+DROP PROCEDURE IF EXISTS updatePedido;
+CREATE PROCEDURE updatePedido(
+folio_factura int,
+id_proveedor int,
+id_usuario int,
+montoFactura float(15),
+fecha date)
+UPDATE Factura_Pedido as f
+	SET 
+		f.id_proveedor=id_proveedor,
+		f.id_usuario=id_usuario,
+		f.montoFactura=montoFactura,
+		f.fecha=fecha
+WHERE f.folio_factura = folio_factura;
+
+DROP PROCEDURE IF EXISTS deletePedido;
+CREATE PROCEDURE deletePedido(
+folio_factura int)
+UPDATE Factura_Pedido as f 
+	SET 
+		f.status='inactivo'
+WHERE f.folio_factura = folio_factura;
+
+DROP PROCEDURE IF EXISTS getBusquedaPedido1;/*Recibe puros string*//*ESTA BIEN ESTA OPCION Y LA 2*/
+CREATE PROCEDURE getBusquedaPedido1( 
+id_proveedor varchar(200),
+id_usuario varchar(200),
+montoFactura varchar(200),
+fecha varchar(200))
+	SELECT * from Factura_Pedido AS f
+	where  CONVERT(f.id_proveedor,CHAR) like (CONCAT('%',id_proveedor,'%'))
+    AND CONVERT(f.id_usuario,CHAR) like (CONCAT('%',id_usuario,'%'))
+	AND CONVERT(f.montoFactura,CHAR) like (CONCAT('%',montoFactura,'%'))
+	AND CONVERT(f.fecha,CHAR) like (CONCAT('%',fecha,'%'))/*Uso convert para comparar el valor char recibido con un int o double*/
+    AND status='activo';
+;
+
+
+DROP PROCEDURE IF EXISTS getBusquedaPedido2;/*Recibe puros string*//*ESTA BIEN ESTA OPCION Y LA 2*/
+CREATE PROCEDURE getBusquedaPedido2( 
+folio_factura varchar(200),
+id_proveedor varchar(200),
+id_usuario varchar(200),
+montoFactura varchar(200),
+fecha varchar(200))
+	SELECT * from Factura_Pedido AS f
+    where CONVERT(f.folio_factura,CHAR) like (CONCAT('%',folio_factura,'%'))
+	AND  CONVERT(f.id_proveedor,CHAR) like (CONCAT('%',id_proveedor,'%'))
+    AND CONVERT(f.id_usuario,CHAR) like (CONCAT('%',id_usuario,'%'))
+	AND CONVERT(f.montoFactura,CHAR) like (CONCAT('%',montoFactura,'%'))
+	AND CONVERT(f.fecha,CHAR) like (CONCAT('%',fecha,'%'))/*Uso convert para comparar el valor char recibido con un int o double*/
+    AND status='activo';
+;
