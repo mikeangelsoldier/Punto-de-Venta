@@ -249,16 +249,16 @@ public class ControladorVistaCliente implements Initializable {
             txtCp_cliente.setEditable(false);
             txtEstado.setEditable(false);
             
-            txtIdcliente.textProperty().addListener(manejador);
-            txtNombre_cliente.textProperty().addListener(manejador);
-            txtRFC.textProperty().addListener(manejador);
-            txtTelefono.textProperty().addListener(manejador);
-            txtCorreo.textProperty().addListener(manejador);
-            txtDireccion.textProperty().addListener(manejador);
-            txtColonia.textProperty().addListener(manejador);
-            txtMunicipio.textProperty().addListener(manejador);
-            txtCp_cliente.textProperty().addListener(manejador);
-            txtEstado.textProperty().addListener(manejador);
+            txtIdcliente.textProperty().removeListener(manejador);
+            txtNombre_cliente.textProperty().removeListener(manejador);
+            txtRFC.textProperty().removeListener(manejador);
+            txtTelefono.textProperty().removeListener(manejador);
+            txtCorreo.textProperty().removeListener(manejador);
+            txtDireccion.textProperty().removeListener(manejador);
+            txtColonia.textProperty().removeListener(manejador);
+            txtMunicipio.textProperty().removeListener(manejador);
+            txtCp_cliente.textProperty().removeListener(manejador);
+            txtEstado.textProperty().removeListener(manejador);
 
             llenarTabla(ClienteDB.getClientes());
             //limpiarCampos();//----------------------------------------------------------
