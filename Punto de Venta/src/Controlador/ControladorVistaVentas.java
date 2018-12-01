@@ -207,7 +207,7 @@ public class ControladorVistaVentas implements Initializable {
     @FXML
     private void btnAgregarProductoAVentaEvento(ActionEvent event) {
         //panel2Grupos.setVisible(false);
-        agregarPrepararProductoParaAgregarAAventa();
+        agregarProductoAVistaVenta();
 
     }
 
@@ -248,6 +248,11 @@ public class ControladorVistaVentas implements Initializable {
         cboMarcaProductoFiltroVenta.valueProperty().removeListener(manejadorProducto);
     }
 
+    @FXML
+    private void btnAgregarProductoADetalleVentaEvento(ActionEvent event) {
+        agregarProductoADetalleDeVenta();
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         panelPrincipalVentas.setVisible(true);
@@ -286,6 +291,17 @@ public class ControladorVistaVentas implements Initializable {
 
         txtCantidadProductosAAgregar.setOnKeyPressed(handler1);
 
+        //-------
+        asignarCamposATableColumnsDeDetalleVenta();
+
+    }
+
+    private void asignarCamposATableColumnsDeDetalleVenta() {
+        tbcCodigoProductoDetalleVenta.setCellValueFactory(new PropertyValueFactory<>("codigo"));
+        tbcDescripcionProductoDetalleVenta.setCellValueFactory(new PropertyValueFactory<>("descripcion"));
+        tbcCantidadProductoDetalleVenta.setCellValueFactory(new PropertyValueFactory<>("cantidadProductoDetalleVenta"));
+        tbcPrecioUnitarioProductoDetalleVenta.setCellValueFactory(new PropertyValueFactory<>("precioUnitarioProductoDetalleVenta"));
+        tbcTotalProductoDetalleVenta.setCellValueFactory(new PropertyValueFactory<>("totalPorProductoDetalleVenta"));
     }
 
     private void iniciarVistaBusquedaClientes() {
@@ -341,6 +357,16 @@ public class ControladorVistaVentas implements Initializable {
         txtDescripcionProductoFiltroVenta.clear();
 
         cboMarcaProductoFiltroVenta.getSelectionModel().select(0);
+    }
+    
+    private void limpiarCamposProductoVistaVenta() {
+        txtCodigoProducto.clear();
+        txtStockProducto.clear();
+        txaDescripcionProductoVenta.clear();
+        txtPrecioProducto.clear();
+        txtCantidadProductosAAgregar.clear();
+        txtTotalProductoAntesDeAgregar.clear();
+                
     }
 
     private void limpiarCamposVistaBusquedaCliente() {
@@ -511,10 +537,9 @@ public class ControladorVistaVentas implements Initializable {
             alert.setContentText("El Cliente no se ha podido agregar");
             alert.show();
         }
-
     }
 
-    void agregarPrepararProductoParaAgregarAAventa() {
+    void agregarProductoAVistaVenta() {
         try {
             if (tblDatosProductoFiltroVenta.getSelectionModel().getSelectedItems().isEmpty()) {
                 Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -589,7 +614,7 @@ public class ControladorVistaVentas implements Initializable {
             ManejadorFiltroProducto();
         }
     }
-    
+
     public static boolean isNumeric(String cadena) {
 
         boolean resultado;
@@ -605,8 +630,7 @@ public class ControladorVistaVentas implements Initializable {
     }
 
     private void colocarPrecioPorProducto() {
-         
-         
+
         if (txtStockProducto.getText().equals("")) {
 
             Alert alertStockProducto = new Alert(Alert.AlertType.WARNING);
@@ -616,7 +640,7 @@ public class ControladorVistaVentas implements Initializable {
             alertStockProducto.show();
             return;
         }
-        
+
         if (txtCantidadProductosAAgregar.getText().equals("")) {
 
             Alert alertStockProducto = new Alert(Alert.AlertType.INFORMATION);
@@ -626,8 +650,8 @@ public class ControladorVistaVentas implements Initializable {
             alertStockProducto.show();
             return;
         }
-        
-        if (isNumeric(txtCantidadProductosAAgregar.getText())==false){
+
+        if (isNumeric(txtCantidadProductosAAgregar.getText()) == false) {
             Alert alertStockProducto = new Alert(Alert.AlertType.WARNING);
             alertStockProducto.setTitle("Advertencia");
             alertStockProducto.setHeaderText(null);
@@ -635,9 +659,8 @@ public class ControladorVistaVentas implements Initializable {
             alertStockProducto.show();
             return;
         }
-                
-        
-        if(txtStockProducto.getText().equals("0")){
+
+        if (txtStockProducto.getText().equals("0")) {
             Alert alertStockProducto = new Alert(Alert.AlertType.WARNING);
             alertStockProducto.setTitle("Advertencia");
             alertStockProducto.setHeaderText(null);
@@ -673,8 +696,127 @@ public class ControladorVistaVentas implements Initializable {
             alert.setContentText("");
             alert.show();
         }
-
     }
+
+    private boolean fueCorrectoElCalculoDelProducto() {
+
+        if (txtStockProducto.getText().equals("")) {
+
+            Alert alertStockProducto = new Alert(Alert.AlertType.WARNING);
+            alertStockProducto.setTitle("Advertencia");
+            alertStockProducto.setHeaderText(null);
+            alertStockProducto.setContentText("¡¡¡¡Primero debe de seleccionar un producto para ingresar una cantidad");
+            alertStockProducto.show();
+
+            return false;
+        }
+
+        if (txtCantidadProductosAAgregar.getText().equals("")) {
+
+            Alert alertStockProducto = new Alert(Alert.AlertType.INFORMATION);
+            alertStockProducto.setTitle("Informacion");
+            alertStockProducto.setHeaderText(null);
+            alertStockProducto.setContentText("¡¡¡¡Escribe una cantidad");
+            alertStockProducto.show();
+            return false;
+        }
+
+        if (isNumeric(txtCantidadProductosAAgregar.getText()) == false) {
+            Alert alertStockProducto = new Alert(Alert.AlertType.WARNING);
+            alertStockProducto.setTitle("Advertencia");
+            alertStockProducto.setHeaderText(null);
+            alertStockProducto.setContentText("Se debe de escribir una cantidad numerica");
+            alertStockProducto.show();
+            return false;
+        }
+
+        if (txtStockProducto.getText().equals("0")) {
+            Alert alertStockProducto = new Alert(Alert.AlertType.WARNING);
+            alertStockProducto.setTitle("Advertencia");
+            alertStockProducto.setHeaderText(null);
+            alertStockProducto.setContentText("¡¡¡¡Ya no se cuenta con existencias de este producto, revisa el catalogo de producto o el almacen");
+            alertStockProducto.show();
+            return false;
+        }
+
+        try {
+
+            int stockDelProducto = Integer.valueOf(txtStockProducto.getText());
+            int cantidadAAgregar = Integer.valueOf(txtCantidadProductosAAgregar.getText());
+
+            if (cantidadAAgregar > stockDelProducto) {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Advertencia");
+                alert.setHeaderText(null);
+                alert.setContentText("¡¡¡¡La cantidad a vender debe ser menor al stock!!!! \n Solo se cuenta con " + stockDelProducto + " existencias de este producto");
+                alert.show();
+                return false;
+            }
+
+            double precioProductoAAgregar = Double.valueOf(txtPrecioProducto.getText());
+            double totalProductoAAgregarAVenta = (precioProductoAAgregar * cantidadAAgregar);
+
+            txtTotalProductoAntesDeAgregar.setText(String.valueOf(totalProductoAAgregarAVenta));
+            return true;
+        } catch (Exception ex) {
+
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Un error ha ocurrido");
+            alert.setContentText("");
+            alert.show();
+            return false;
+        }
+    }
+
+    private void agregarProductoADetalleDeVenta() {
+        if (fueCorrectoElCalculoDelProducto()) {
+            try {
+
+                if (productoExisteEnLaTablaDetalleVenta(txtCodigoProducto.getText())==false) {
+                    
+                    ProductoDetalleVenta productoDetalleVenta = new ProductoDetalleVenta();
+                    productoDetalleVenta.setCodigo(txtCodigoProducto.getText());
+                    productoDetalleVenta.setDescripcion(txaDescripcionProductoVenta.getText());
+                    productoDetalleVenta.setCantidadProductoDetalleVenta(Integer.valueOf(txtCantidadProductosAAgregar.getText()));
+                    productoDetalleVenta.setPrecioUnitarioProductoDetalleVenta(Double.parseDouble(txtPrecioProducto.getText()));
+                    productoDetalleVenta.setTotalPorProductoDetalleVenta(Double.parseDouble(txtTotalProductoAntesDeAgregar.getText()));
+
+                    tblDatosDetalleVenta.getItems().add(productoDetalleVenta);
+                    limpiarCamposProductoVistaVenta();
+                } else {
+                    Alert alerta = new Alert(Alert.AlertType.INFORMATION);
+                    alerta.setTitle("Información");
+                    alerta.setHeaderText("Ese producto ya a sido agredado a la venta");
+                    alerta.setContentText("");
+                    alerta.show();
+                    limpiarCamposProductoVistaVenta();
+                }
+
+            } catch (Exception e) {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("Información");
+                   alert.setHeaderText("Un Error a Ocurrido ");
+                   alert.setContentText("");
+                   alert.show();
+            }
+        }
+    }
+
+    private boolean productoExisteEnLaTablaDetalleVenta(String codigo) {
+        boolean existe=false;
+        
+        for (int i = 0; i < tblDatosDetalleVenta.getItems().size(); i++) {
+            ProductoDetalleVenta productoDetalleVenta = tblDatosDetalleVenta.getItems().get(i);
+            String codigoDeProducto = tblDatosDetalleVenta.getItems().get(i).getCodigo();
+
+            if (codigoDeProducto.equals(codigo)) {
+                existe=true;
+            }
+        }
+        return existe;
+    }
+    
 
     void ManejadorFiltroProducto() {
         String codigoProducto = txtCodigoProductoFiltroVenta.getText();
@@ -696,52 +838,6 @@ public class ControladorVistaVentas implements Initializable {
         String rfc = txtRfcClienteFiltroVenta.getText();
 
         llenarTablaBusquedaCliente(clienteBD.getClientesFiltro4(idCliente, nombre, rfc));
-    }
-
-    void ManejadorFiltro() {
-        /*
-        // System.out.println("si entra al metodo");
-        if (filtrarActivado) {
-
-            //System.out.println("Si entra if");
-            String codigoProducto = txtCodigoProducto.getText();
-            String descripcionProducto = txaDescripcionProducto.getText();
-            String costoProducto = txtCostoProducto.getText();
-            String PrecioProducto = txtPrecioProducto.getText();
-            String UnidadProducto = txtUnidadProducto.getText();
-            String stockProducto = txtStockProducto.getText();
-            String stockMinimoProducto = txtStockMinimoProducto.getText();
-            String nombreMarcaProducto = "";
-            String nombreCategoriaProducto = "";
-            String nombreProveedorProducto = "";
-            nombreMarcaProducto = cboMarcaProducto.getSelectionModel().getSelectedItem().toString();
-            nombreCategoriaProducto = cboCategoriaProducto.getSelectionModel().getSelectedItem().toString();
-            nombreProveedorProducto = cboProveedorProducto.getSelectionModel().getSelectedItem().toString();
-
-            String categoria = "";
-            String proveedor = "";
-
-            if (nombreMarcaProducto.equals(MARCA_DEFAULT)) {
-                nombreMarcaProducto = "";
-            }
-
-            if (nombreCategoriaProducto.equals(CATEGORIA_DEFAULT)) {
-                categoria = "";
-            } else {
-                categoria = String.valueOf(obtenerIDdeCategoria(nombreCategoriaProducto));
-            }
-
-            if (nombreProveedorProducto.equals(PROVEEDOR_DEFAULT)) {
-                proveedor = "";
-            } else {
-                proveedor = String.valueOf(obtenerIDdeProveedor(nombreProveedorProducto));
-            }
-
-            leerFiltrarTabla("", codigoProducto, descripcionProducto, nombreMarcaProducto, costoProducto,
-                    PrecioProducto, UnidadProducto, stockProducto, stockMinimoProducto, categoria, proveedor);
-
-        }
-         */
     }
 
 }
