@@ -117,7 +117,7 @@ status varchar(20)
 )ENGINE=InnoDB;
 
 create table Factura_Pedido(
-folio_factura int not null primary key auto_increment,
+folio_factura varchar(17) not null primary key,
 id_proveedor int not null,
 id_usuario int not null,
 montoFactura float(15) not null,
@@ -966,12 +966,22 @@ SELECT * FROM PRODUCTO;
 
 
 DROP PROCEDURE IF EXISTS getProductosFaltantes;
-CREATE PROCEDURE getProductosFaltantes ()
-	SELECT * FROM Producto WHERE (producto.stock<=producto.stock_minimo) AND status='activo';
+CREATE PROCEDURE getProductosFaltantes (
+marca varchar(200),
+id_categoria varchar(200),
+id_proveedor varchar(200)
+)
+	SELECT * FROM Producto WHERE (producto.stock<=producto.stock_minimo) 
+	AND producto.marca like (CONCAT('%',marca,'%'))
+    AND CONVERT(producto.id_categoria,CHAR) like (CONCAT('%',id_categoria,'%'))
+	AND CONVERT(producto.id_proveedor,CHAR) like (CONCAT('%',id_proveedor,'%'))
+    AND status='activo';
+    
     
 /*	
 
-call getProductosFaltantes();
+call getProductosFaltantes('7','4','1');
+call getProductosFaltantes('','','');
 SELECT * FROM PRODUCTO;
 	
 */
@@ -1047,7 +1057,7 @@ WHERE p.id_producto = id;
 /*	
 call getProductos();
 call updateProducto(4,'000000000004','Escale de Tijera C/Plataforma Escalumex 3 Exc Sta-4',7,607,800,'pieza',3,1,4,1);
-call updateProducto(4,'000004000004','Escalera de Tijera C/Plataforma Escalumex 3 Exc Sta-4',7,607,800,'pieza',4,4,4,1);
+call updateProducto(4,'000004000004','Escalera de Tijera C/Plataforma Escalumex 3 Exc Sta-4',7,607,800,'pieza',8,10,4,1);
 
 	
 */
