@@ -986,6 +986,27 @@ SELECT * FROM PRODUCTO;
 	
 */
 
+DROP PROCEDURE IF EXISTS getProductosPorCodigo;
+CREATE PROCEDURE getProductosPorCodigo (
+codigo varchar(50)
+)
+	SELECT * FROM Producto 
+    WHERE 
+	producto.codigo_producto = codigo
+    AND status='activo';
+    
+    
+/*	
+
+call getProductosPorCodigo('7');
+call getProductosPorCodigo('');
+call getProductosPorCodigo('7501000664221');
+SELECT * FROM PRODUCTO;
+	
+*/
+
+
+
 
 DROP PROCEDURE IF EXISTS getIdProductoCodigo;
 CREATE PROCEDURE getIdProductoCodigo (

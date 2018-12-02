@@ -143,7 +143,7 @@
                                           <Font name="System Bold" size="13.0" />
                                        </font>
                                     </JFXButton>
-                                    <JFXButton fx:id="btnQuitarProductoDeVenta" buttonType="RAISED" layoutX="544.0" layoutY="16.0" prefHeight="29.0" prefWidth="58.0" ripplerFill="#011245" style="-fx-background-color: #222288;" text="-" textFill="WHITE">
+                                    <JFXButton fx:id="btnQuitarProductoDeVenta" buttonType="RAISED" layoutX="544.0" layoutY="16.0" onAction="#btnEliminarProductoDeDetalleVentaEvento" prefHeight="29.0" prefWidth="58.0" ripplerFill="#011245" style="-fx-background-color: #222288;" text="-" textFill="WHITE">
                                        <font>
                                           <Font name="System Bold" size="13.0" />
                                        </font>
@@ -163,24 +163,29 @@
                                           <Font size="14.0" />
                                        </font>
                                     </Label>
-                                    <JFXTextField fx:id="txtStockProducto" editable="false" layoutX="384.0" layoutY="19.0" unFocusColor="#4d4d4d" />
-                                    <Label layoutX="309.0" layoutY="5.0" prefHeight="29.0" prefWidth="67.0" text="stock" textFill="#222288">
+                                    <JFXTextField fx:id="txtStockProducto" editable="false" layoutX="439.0" layoutY="19.0" unFocusColor="#4d4d4d" />
+                                    <Label layoutX="372.0" layoutY="20.0" prefHeight="29.0" prefWidth="67.0" text="stock" textFill="#222288">
                                        <font>
                                           <Font size="14.0" />
                                        </font>
                                     </Label>
-                                    <JFXTextField fx:id="txtPrecioProducto" editable="false" layoutX="384.0" layoutY="58.0" unFocusColor="#4d4d4d" />
-                                    <Label layoutX="309.0" layoutY="56.0" prefHeight="29.0" prefWidth="67.0" text="precio" textFill="#222288">
+                                    <JFXTextField fx:id="txtPrecioProducto" editable="false" layoutX="439.0" layoutY="59.0" unFocusColor="#4d4d4d" />
+                                    <Label layoutX="372.0" layoutY="63.0" prefHeight="29.0" prefWidth="67.0" text="precio" textFill="#222288">
                                        <font>
                                           <Font size="14.0" />
                                        </font>
                                     </Label>
-                                    <JFXButton fx:id="btnBuscarProductoParaVender" buttonType="RAISED" layoutX="238.0" layoutY="5.0" onAction="#btnBuscarProductosEvento" ripplerFill="#3fb0dd" style="-fx-background-color: #222288;" text="Buscar" textFill="WHITE">
+                                    <JFXButton fx:id="btnBuscarYElegirProductoParaVender" buttonType="RAISED" layoutX="294.0" layoutY="6.0" onAction="#btnBuscarYElegirProductosEvento" ripplerFill="#3fb0dd" style="-fx-background-color: #222288;" text="Elegir" textFill="WHITE">
                                        <font>
                                           <Font name="System Bold" size="13.0" />
                                        </font>
                                     </JFXButton>
                                     <JFXTextArea fx:id="txaDescripcionProductoVenta" layoutX="84.0" layoutY="48.0" prefHeight="59.0" prefWidth="210.0" wrapText="true" />
+                                    <JFXButton buttonType="RAISED" layoutX="227.0" layoutY="6.0" onAction="#btnBuscarCodigoPorCodigoEvento" ripplerFill="#3fb0dd" style="-fx-background-color: #222288;" text="Buscar" textFill="WHITE">
+                                       <font>
+                                          <Font name="System Bold" size="13.0" />
+                                       </font>
+                                    </JFXButton>
                                  </children>
                               </Pane>
                            </children>
