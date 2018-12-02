@@ -188,6 +188,7 @@ public class ControladorVistaLogin implements Initializable {
                         }
 
                         loginMeta.idUsuario = String.valueOf(logins.get(i).getId());
+                        loginMeta.nombreUsuario=logins.get(i).getNombre();
                         loginMeta.rolUsuario = logins.get(i).getRol();
                         loginMeta.Password = logins.get(i).getPassword();
                         

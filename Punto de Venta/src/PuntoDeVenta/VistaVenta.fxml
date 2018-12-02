@@ -76,7 +76,7 @@
                   <Font name="System Bold" size="13.0" />
                </font>
             </JFXButton>
-            <JFXButton fx:id="btnGenerarVenta" buttonType="RAISED" layoutX="987.0" layoutY="390.0" ripplerFill="#3fb0dd" style="-fx-background-color: #222288;" text="Generar Venta" textFill="WHITE">
+            <JFXButton fx:id="btnGenerarVenta" buttonType="RAISED" layoutX="987.0" layoutY="390.0" onAction="#btnGenerarVentaEvento" ripplerFill="#3fb0dd" style="-fx-background-color: #222288;" text="Generar Venta" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="13.0" />
                </font>
@@ -86,7 +86,7 @@
                   <Font name="System Bold" size="13.0" />
                </font>
             </JFXButton>
-            <JFXButton fx:id="btnImporteRecibido" buttonType="RAISED" layoutX="978.0" layoutY="427.0" ripplerFill="#3fb0dd" style="-fx-background-color: #222288;" text="Importe Recibido" textFill="WHITE">
+            <JFXButton fx:id="btnImporteRecibido" buttonType="RAISED" layoutX="978.0" layoutY="427.0" onAction="#btnCalcularCambioEvento" ripplerFill="#3fb0dd" style="-fx-background-color: #222288;" text="Efectivo Recibido" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="13.0" />
                </font>
@@ -98,7 +98,7 @@
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label layoutX="40.0" layoutY="523.0" prefHeight="29.0" prefWidth="67.0" text="Importe" textFill="#222288">
+            <Label layoutX="40.0" layoutY="523.0" prefHeight="29.0" prefWidth="67.0" text="Pago" textFill="#222288">
                <font>
                   <Font size="14.0" />
                </font>

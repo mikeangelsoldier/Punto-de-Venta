@@ -11,6 +11,7 @@ package PuntoDeVenta;
  */
 public class loginMeta{
     public static String idUsuario;
+    public static String nombreUsuario;
     public static String rolUsuario;
     public static String Password;
 }

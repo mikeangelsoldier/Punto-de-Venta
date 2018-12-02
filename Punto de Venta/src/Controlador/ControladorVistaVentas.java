@@ -25,10 +25,15 @@ import com.jfoenix.controls.JFXTextField;
 import java.net.URL;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
@@ -40,6 +45,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -68,12 +74,18 @@ public class ControladorVistaVentas implements Initializable {
     private ArrayList<Marca> listaObjetosMarcas;
     private ArrayList<Categoria> listaObjetosCategorias;
     private ArrayList<Producto> listaObjetosProductosBucadosPorCodigo;
-    
-    private Producto objetoProductoAAgregar=new Producto();
+
+    private ArrayList<String> formasPago = new ArrayList<String>();
+
+    ObservableList<String> observableListFormasPago;
+
+    private Producto objetoProductoAAgregar = new Producto();
 
     private boolean existenMarcas = false;
     private boolean existenProveedores = false;
     private boolean existenCategorias = false;
+
+    private String importeParaParaPagarActual = "";
 
     //---------------------------------------------------vista venta
     @FXML
@@ -201,6 +213,8 @@ public class ControladorVistaVentas implements Initializable {
 
     ManejadorFiltroKeyProducto manejadorProducto;
 
+    ManejadorFormaPago manejadorFormaPago;
+
     @FXML
     private void btnAgregarClienteAVentaEvento(ActionEvent event) {
         //panel2Grupos.setVisible(false);
@@ -231,7 +245,7 @@ public class ControladorVistaVentas implements Initializable {
         iniciarVistaBusquedaProductos();
 
     }
-    
+
     @FXML
     private void btnBuscarCodigoPorCodigoEvento(ActionEvent event) {
         colocarDescripcionDeProductoPorCodigo();
@@ -266,6 +280,16 @@ public class ControladorVistaVentas implements Initializable {
     @FXML
     private void btnEliminarProductoDeDetalleVentaEvento(ActionEvent event) {
         eliminarProductoDeDetalleVenta();
+    }
+
+    @FXML
+    private void btnCalcularCambioEvento(ActionEvent event) {
+        calcularCambio();
+    }
+
+    @FXML
+    private void btnGenerarVentaEvento(ActionEvent event) {
+        generarVenta();
     }
 
     @Override
@@ -309,7 +333,7 @@ public class ControladorVistaVentas implements Initializable {
         EventHandler<KeyEvent> handlerCodigoProducto = (KeyEvent event) -> {
             if (event.getCode() == KeyCode.ENTER) {
                 colocarDescripcionDeProductoPorCodigo();
-                
+
             }
         };
 
@@ -317,6 +341,19 @@ public class ControladorVistaVentas implements Initializable {
 
         //-------
         asignarCamposATableColumnsDeDetalleVenta();
+
+        formasPago.add("EFECTIVO");
+        formasPago.add("TARJETA");
+
+        observableListFormasPago = FXCollections.observableList(formasPago);
+
+        cboFormaPago.setItems(observableListFormasPago);
+        cboFormaPago.getSelectionModel().select(0);
+
+        manejadorFormaPago = new ManejadorFormaPago();
+        cboFormaPago.valueProperty().addListener(manejadorFormaPago);
+
+        dpkFechaVenta.setValue(LocalDate.now());
 
     }
 
@@ -381,6 +418,13 @@ public class ControladorVistaVentas implements Initializable {
         txtDescripcionProductoFiltroVenta.clear();
 
         cboMarcaProductoFiltroVenta.getSelectionModel().select(0);
+    }
+
+    private void limpiarCamposTotalVenta() {
+        txtSubtotalVenta.clear();
+        txtIvaVenta.clear();
+
+        txtTotalAPagarVenta.clear();
     }
 
     private void limpiarCamposProductoVistaVenta() {
@@ -585,13 +629,12 @@ public class ControladorVistaVentas implements Initializable {
                 String stock = String.valueOf(tblDatosProductoFiltroVenta.getSelectionModel().getSelectedItem().getStock());
                 String precio = String.valueOf(tblDatosProductoFiltroVenta.getSelectionModel().getSelectedItem().getPrecio());
 
-                objetoProductoAAgregar=new Producto();
+                objetoProductoAAgregar = new Producto();
                 objetoProductoAAgregar.setCodigo(codigoProducto);
                 objetoProductoAAgregar.setDescripcion(descripion);
                 objetoProductoAAgregar.setStock(Integer.parseInt(stock));
                 objetoProductoAAgregar.setPrecio(Double.parseDouble(precio));
-                
-                
+
                 txtCodigoProducto.setText(objetoProductoAAgregar.getCodigo());
                 txaDescripcionProductoVenta.setText(objetoProductoAAgregar.getDescripcion());
                 txtStockProducto.setText(String.valueOf(objetoProductoAAgregar.getStock()));
@@ -628,7 +671,7 @@ public class ControladorVistaVentas implements Initializable {
         String DescripcionEncontrada = "";
         String precioEncontrado = "";
         String stockEncontrado = "";
-        
+
         if (existeProducto(codigoProductoABuscar)) {
             for (int i = 0; i < listaObjetosProductosBucadosPorCodigo.size(); i++) {
                 codigoEncontrado = listaObjetosProductosBucadosPorCodigo.get(i).getCodigo();
@@ -636,28 +679,26 @@ public class ControladorVistaVentas implements Initializable {
                 precioEncontrado = String.valueOf(listaObjetosProductosBucadosPorCodigo.get(i).getPrecio());
                 stockEncontrado = String.valueOf(listaObjetosProductosBucadosPorCodigo.get(i).getStock());
 
-                objetoProductoAAgregar=new Producto();
+                objetoProductoAAgregar = new Producto();
                 objetoProductoAAgregar.setCodigo(codigoEncontrado);
                 objetoProductoAAgregar.setDescripcion(DescripcionEncontrada);
                 objetoProductoAAgregar.setStock(Integer.parseInt(stockEncontrado));
                 objetoProductoAAgregar.setPrecio(Double.parseDouble(precioEncontrado));
-                
-                
+
                 txtCodigoProducto.setText(objetoProductoAAgregar.getCodigo());
                 txaDescripcionProductoVenta.setText(objetoProductoAAgregar.getDescripcion());
                 txtStockProducto.setText(String.valueOf(objetoProductoAAgregar.getStock()));
                 txtPrecioProducto.setText(String.valueOf(objetoProductoAAgregar.getPrecio()));
-                
+
             }
         }
     }
 
     private boolean existeProducto(String codigoProductoABuscar) {
 
-       
         boolean codigoProductoExiste = false;
-        
-        if(txtCodigoProducto.getText().equals("")){
+
+        if (txtCodigoProducto.getText().equals("")) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Advertencia");
             alert.setHeaderText("");
@@ -665,23 +706,21 @@ public class ControladorVistaVentas implements Initializable {
             alert.show();
             return false;
         }
-        
 
         conectaBD_PuntoVenta = new ConectaBD_Punto_de_venta();
         productoBD = new ProductoBD(conectaBD_PuntoVenta.getConnection());
         listaObjetosProductosBucadosPorCodigo = new ArrayList<Producto>(productoBD.getProductosPorCodigo(codigoProductoABuscar));
 
-        
         if (!listaObjetosProductosBucadosPorCodigo.isEmpty()) {//si existe un producto al menos
 
-            codigoProductoExiste= true;
+            codigoProductoExiste = true;
         } else {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Información");
             alert.setHeaderText("Codigo Inexistente");
             alert.setContentText("No existe ningun producto registrado con el codigo " + codigoProductoABuscar);
             alert.show();
-            codigoProductoExiste= false;
+            codigoProductoExiste = false;
             limpiarCamposProductoVistaVenta();
             txtCodigoProducto.setText(codigoProductoABuscar);
         }
@@ -705,6 +744,14 @@ public class ControladorVistaVentas implements Initializable {
         }
     }
 
+    class ManejadorFormaPago implements ChangeListener {
+
+        @Override
+        public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+            quitarEfectivoRecibidoYCambio();
+        }
+    }
+
     class ManejadorFiltroKeyProducto implements ChangeListener {
 
         @Override
@@ -713,12 +760,26 @@ public class ControladorVistaVentas implements Initializable {
         }
     }
 
-    public static boolean isNumeric(String cadena) {
+    private static boolean isNumeric(String cadena) {
 
         boolean resultado;
 
         try {
             Integer.parseInt(cadena);
+            resultado = true;
+        } catch (NumberFormatException excepcion) {
+            resultado = false;
+        }
+
+        return resultado;
+    }
+
+    private static boolean isDouble(String cadena) {
+
+        boolean resultado;
+
+        try {
+            Double.parseDouble(cadena);
             resultado = true;
         } catch (NumberFormatException excepcion) {
             resultado = false;
@@ -802,7 +863,6 @@ public class ControladorVistaVentas implements Initializable {
 
                 if (productoExisteEnLaTablaDetalleVenta(txtCodigoProducto.getText()) == false) {
 
-                    
                     ProductoDetalleVenta productoDetalleVenta = new ProductoDetalleVenta();
                     productoDetalleVenta.setCodigo(objetoProductoAAgregar.getCodigo());
                     productoDetalleVenta.setDescripcion(txaDescripcionProductoVenta.getText());
@@ -813,6 +873,7 @@ public class ControladorVistaVentas implements Initializable {
                     tblDatosDetalleVenta.getItems().add(productoDetalleVenta);
                     calcularTotalDeVenta();
                     limpiarCamposProductoVistaVenta();
+                    quitarEfectivoRecibidoYCambio();
                 } else {
                     Alert alerta = new Alert(Alert.AlertType.INFORMATION);
                     alerta.setTitle("Información");
@@ -921,7 +982,7 @@ public class ControladorVistaVentas implements Initializable {
         String totalVenta = "";
         Double subTotal = 0.0;
 
-        if (!(tblDatosDetalleVenta.getItems().size() == 0)) {
+        if (!(tblDatosDetalleVenta.getItems().isEmpty())) {
             for (int i = 0; i < tblDatosDetalleVenta.getItems().size(); i++) {
                 Double precioTotalPorProducto = tblDatosDetalleVenta.getItems().get(i).getTotalPorProductoDetalleVenta();
                 subTotal += precioTotalPorProducto;
@@ -931,6 +992,8 @@ public class ControladorVistaVentas implements Initializable {
             Double total = subTotal + iva;
 
             DecimalFormat df = new DecimalFormat("#.00");
+
+            iva = Double.valueOf(df.format(iva));
             total = Double.valueOf(df.format(total));
 
             txtSubtotalVenta.setText(String.valueOf(subTotal));
@@ -955,7 +1018,7 @@ public class ControladorVistaVentas implements Initializable {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Confirmación");
             alert.setHeaderText(null);
-            alert.setContentText("¿Realmente deseas eliminar el registro de este Producto?");
+            alert.setContentText("¿Realmente deseas eliminar el producto selecionado de la venta actual?");
             if (alert.showAndWait().get() == ButtonType.OK) {
                 int seleccion = tblDatosDetalleVenta.getSelectionModel().getSelectedIndex();
 
@@ -966,6 +1029,14 @@ public class ControladorVistaVentas implements Initializable {
                 alertaEliminacion.setTitle("Información");
                 alertaEliminacion.setContentText("La operación se ha realizado con éxito");
                 alertaEliminacion.show();
+
+                calcularTotalDeVenta();
+                quitarEfectivoRecibidoYCambio();
+
+                if (tblDatosDetalleVenta.getItems().isEmpty()) {
+                    quitarEfectivoRecibidoYCambio();
+                    limpiarCamposTotalVenta();
+                }
 
             } else {
                 alert = new Alert(Alert.AlertType.INFORMATION);
@@ -984,6 +1055,168 @@ public class ControladorVistaVentas implements Initializable {
             alert.show();
         }
 
+    }
+
+    private void calcularCambio() {
+
+        if (!tblDatosDetalleVenta.getItems().isEmpty()) {
+
+            if (!(cboFormaPago.getSelectionModel().getSelectedItem().toString().equals("EFECTIVO"))) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Informacion");
+                alert.setHeaderText(null);
+                alert.setContentText("Selecciona la forma de pago EFECTIVO para poder calcular el cambio");
+                alert.showAndWait();
+
+                return;
+            }
+
+            if (elEfectivoIngresadoEsCorrecto()) {
+
+                double efectivoRecibido = 0.0;
+                double totalAPagar = 0.0;
+                double cambio = 0.0;
+                efectivoRecibido = Double.parseDouble(importeParaParaPagarActual);
+                totalAPagar = Double.parseDouble(txtTotalAPagarVenta.getText());
+
+                if (efectivoRecibido < totalAPagar) {
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("Informacion");
+                    alert.setHeaderText(null);
+                    alert.setContentText("EL dinero ingresado no es suficiente para pagar la venta actual "
+                            + "\n"
+                            + "El total a pagar hasta el momento es de $" + totalAPagar + ""
+                            + "\n Se requieren mas de $" + efectivoRecibido + " para pagar");
+                    alert.showAndWait();
+                    return;
+                }
+
+                DecimalFormat df = new DecimalFormat("#.00");
+
+                cambio = efectivoRecibido - totalAPagar;
+
+                cambio = Double.valueOf(df.format(cambio));
+                txtImporte.setText(importeParaParaPagarActual);
+                txtCambio.setText(String.valueOf(cambio));
+
+            } else {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Informacion");
+                alert.setHeaderText(null);
+                alert.setContentText("Por favor escriba una cantidad correcta");
+                alert.showAndWait();
+            }
+        } else {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Informacion");
+            alert.setHeaderText(null);
+            alert.setContentText("Aun no se han agregado productos a la venta");
+            alert.showAndWait();
+
+        }
+
+    }
+
+    private boolean elEfectivoIngresadoEsCorrecto() {
+        boolean ingresoCorrecto = false;
+
+        TextInputDialog dialog = new TextInputDialog("100");
+        dialog.setTitle("Importe reibido");
+        dialog.setHeaderText("Ingresar pago");
+        dialog.setContentText("Ingresa el efectivo recibido $");
+
+// Traditional way to get the response value.
+        Optional<String> result = dialog.showAndWait();
+        if (result.isPresent()) {
+
+            if (isNumeric(result.get())) {
+                ingresoCorrecto = true;
+                importeParaParaPagarActual = result.get();
+            } else if (isDouble(result.get())) {
+                ingresoCorrecto = true;
+                importeParaParaPagarActual = result.get();
+            } else {
+                ingresoCorrecto = false;
+                importeParaParaPagarActual = "";
+            }
+        }
+
+        return ingresoCorrecto;
+    }
+
+    private void quitarEfectivoRecibidoYCambio() {
+        txtImporte.clear();
+        txtCambio.clear();
+    }
+
+    private void generarVenta() {
+        if (camposNecesariosParaVentaEstanCompletos()) {
+
+            System.out.println("El usuario con el ID " + loginMeta.idUsuario + " con el nombre " + loginMeta.nombreUsuario + " va a realizar una venta");
+
+        } else {
+            System.out.println("Existen campos por completar");
+        }
+    }
+
+    private boolean camposNecesariosParaVentaEstanCompletos() {
+        boolean camposNecesariosCompletos = false;
+        String fecha = dpkFechaVenta.getValue().format(DateTimeFormatter.ISO_DATE);
+        String subtotal = txtSubtotalVenta.getText();
+        String iva = txtIvaVenta.getText();
+        String total = txtTotalAPagarVenta.getText();
+        String formaPago = cboFormaPago.getSelectionModel().getSelectedItem().toString();
+        String clienteDeVenta = txtIdClienteVenta.getText();
+
+        int idcliente = 0;
+        int idUsuario = 0;//BUSCAR EL ID DEL USUARIO ACTUAL EL QUE INICIO SESION
+
+        if (fecha.equals("")) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Faltan Datos");
+            alert.setHeaderText(null);
+            alert.setContentText("Escriba una fecha correcta para la venta actual");
+            alert.showAndWait();
+
+            camposNecesariosCompletos = false;
+            return camposNecesariosCompletos;
+        }
+
+        if (subtotal.equals("") || iva.equals("") || total.equals("")) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Faltan Datos");
+            alert.setHeaderText(null);
+            alert.setContentText("No hay prodcuctos agregados a la venta actual");
+            alert.showAndWait();
+
+            camposNecesariosCompletos = false;
+            return camposNecesariosCompletos;
+        }
+
+        if (clienteDeVenta.equals("")) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Cliente faltante");
+            alert.setHeaderText(null);
+            alert.setContentText("Es necesario indicar un cliente al cual vender, \n por defecto hay un cliente general");
+            alert.showAndWait();
+
+            camposNecesariosCompletos = false;
+            return camposNecesariosCompletos;
+        }
+
+        if (cboFormaPago.getSelectionModel().getSelectedItem().toString().equals("EFECTIVO")) {
+            calcularCambio();
+
+            if (txtImporte.getText().equals("") || txtCambio.getText().equals("")) {
+                camposNecesariosCompletos = false;
+                return camposNecesariosCompletos;
+            }
+        }
+
+        //si llego hasta aqui entonces todos los campos necesarios estan completos
+        camposNecesariosCompletos = true;
+
+        return camposNecesariosCompletos;
     }
 
     void ManejadorFiltroProducto() {
