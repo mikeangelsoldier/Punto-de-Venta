@@ -119,6 +119,18 @@ public class ProductoBD {
 
         statement.close();
     }
+    
+    public void aumentarExistencia(String codigo, int cantidad) throws SQLException {
+        PreparedStatement statement = connect.prepareCall("CALL aumentarStockProducto(?,?)");
+        
+        statement.setString(1, codigo);
+        statement.setInt(2, cantidad);
+        
+        System.out.println(statement);
+        statement.execute();
+
+        statement.close();
+    }
 
     public void deleteProducto(int ID) throws SQLException {
 

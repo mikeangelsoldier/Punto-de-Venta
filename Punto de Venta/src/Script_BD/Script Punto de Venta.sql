@@ -1098,10 +1098,32 @@ WHERE p.codigo_producto = codigo_producto;
 /*	
 call getProductos();
 
-call getProductosFaltantes();
+call getProductosFaltantes('','','');
 
 call reducirStockProducto('7501000664221',15);
 call reducirStockProducto('000004000004',7);
+
+	
+*/
+
+
+DROP PROCEDURE IF EXISTS aumentarStockProducto;
+CREATE PROCEDURE aumentarStockProducto(
+codigo_producto varchar(13),
+cantidad int)
+UPDATE Producto as p 
+	SET p.stock=(p.stock+cantidad)
+WHERE p.codigo_producto = codigo_producto;
+
+
+/*	
+call getProductos();
+
+call getProductosFaltantes('','','');
+
+call aumentarStockProducto('7501000664221',15);
+call aumentarStockProducto('000004000004',3);
+call aumentarStockProducto('000000000005',12);
 
 	
 */
