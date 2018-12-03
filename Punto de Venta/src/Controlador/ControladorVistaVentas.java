@@ -294,8 +294,22 @@ public class ControladorVistaVentas implements Initializable {
     }
 
     @FXML
+    private void btnNuevaVentaEvento(ActionEvent event) {
+        btnNuevaVenta.setDisable(true);
+
+        btnGenerarVenta.setDisable(false);
+        btnImporteRecibido.setDisable(false);
+        btnCancelarVenta.setDisable(false);
+    }
+
+    @FXML
     private void btnGenerarVentaEvento(ActionEvent event) {
         generarVenta();
+    }
+
+    @FXML
+    private void btnCancelarVentaEvento(ActionEvent event) {
+        botonesVentaPosicionInicial();
     }
 
     @Override
@@ -365,6 +379,17 @@ public class ControladorVistaVentas implements Initializable {
         dpkFechaVenta.setValue(LocalDate.now());
 
         iniciarNuevaVenta();
+
+        botonesVentaPosicionInicial();
+
+    }
+
+    private void botonesVentaPosicionInicial() {
+        btnNuevaVenta.setDisable(false);
+
+        btnGenerarVenta.setDisable(true);
+        btnImporteRecibido.setDisable(true);
+        btnCancelarVenta.setDisable(true);
 
     }
 
@@ -456,7 +481,7 @@ public class ControladorVistaVentas implements Initializable {
         txtTotalProductoAntesDeAgregar.clear();
 
     }
-    
+
     private void limpiarCamposClienteVistaVenta() {
         txtIdClienteVenta.clear();
         txtNombreClienteVenta.clear();
@@ -1293,31 +1318,29 @@ public class ControladorVistaVentas implements Initializable {
         try {
 
             ventaBD.addVenta(fecha_venta, subtotal, iva, total, formaPago, id_usuario, id_cliente);
-            
+
             //despues obtengo el id de esta venta para almacenar los detalles
             int ventaActual = ventaBD.getIdMayorDeUltimaVenta();
             if (!(tblDatosDetalleVenta.getItems().isEmpty())) {
                 for (int i = 0; i < tblDatosDetalleVenta.getItems().size(); i++) {
                     //Double precioTotalPorProducto = tblDatosDetalleVenta.getItems().get(i).getTotalPorProductoDetalleVenta();
-                    String codigoBarrasDelProductoActual =tblDatosDetalleVenta.getItems().get(i).getCodigo();
-                    int idProductoActual=productoBD.getIDDeProductoDelCodigoTal(codigoBarrasDelProductoActual);
-                    System.out.println("El producto con el codigo "+codigoBarrasDelProductoActual+" tiene el id de producto " +idProductoActual);
+                    String codigoBarrasDelProductoActual = tblDatosDetalleVenta.getItems().get(i).getCodigo();
+                    int idProductoActual = productoBD.getIDDeProductoDelCodigoTal(codigoBarrasDelProductoActual);
+                    System.out.println("El producto con el codigo " + codigoBarrasDelProductoActual + " tiene el id de producto " + idProductoActual);
 
-                    int cantidad=tblDatosDetalleVenta.getItems().get(i).getCantidadProductoDetalleVenta();
-                    double importe=tblDatosDetalleVenta.getItems().get(i).getTotalPorProductoDetalleVenta();
-                    
+                    int cantidad = tblDatosDetalleVenta.getItems().get(i).getCantidadProductoDetalleVenta();
+                    double importe = tblDatosDetalleVenta.getItems().get(i).getTotalPorProductoDetalleVenta();
+
                     detalleVentaBD.addDetalleDeVenta(ventaActual, idProductoActual, cantidad, importe);
-                    
+
                     //depues descuento del stock lo vendido
                     productoBD.reducirExistencia(codigoBarrasDelProductoActual, cantidad);
-                    
-                    
+
                 }
 
-                iniciarNuevaVenta();
+                botonesVentaPosicionInicial();
             }
 
-            
             //despues limpio todo
             limpiarVentaCompleta();
         } catch (SQLException ex) {
@@ -1326,8 +1349,7 @@ public class ControladorVistaVentas implements Initializable {
 
     }
 
-    
-    private void limpiarVentaCompleta(){
+    private void limpiarVentaCompleta() {
         quitarEfectivoRecibidoYCambio();
         limpiarCamposProductoVistaVenta();
         limpiarCamposTotalVenta();
@@ -1335,8 +1357,7 @@ public class ControladorVistaVentas implements Initializable {
         tblDatosDetalleVenta.getItems().clear();
         txtNumVenta.clear();
     }
-    
-    
+
     void ManejadorFiltroProducto() {
         String codigoProducto = txtCodigoProductoFiltroVenta.getText();
         String descripcionProducto = txtDescripcionProductoFiltroVenta.getText();
