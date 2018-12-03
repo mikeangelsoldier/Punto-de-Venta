@@ -1017,7 +1017,8 @@ SELECT id_producto FROM Producto as p WHERE p.codigo_producto=codigo_producto ;
 /*	
 
 call getIdProductoCodigo('000000000003');
-	
+call getIdProductoCodigo('7501000664221');
+    
 */
 
 DROP PROCEDURE IF EXISTS addProducto;
@@ -1338,6 +1339,200 @@ call getBusquedaProducto4('','lla','');
 
 	
 */
+
+/***********************************************************Procedimientos de VENTAS Y DETALLE VENTAS*/
+
+/*-------------------------------------------------------------------------DE VENTAs*/
+DROP PROCEDURE IF EXISTS getVentas;
+CREATE PROCEDURE getVentas ()
+	SELECT * FROM ventas WHERE status='activo';
+    
+/*	
+
+call getVentas();
+SELECT * FROM ventas;
+	
+*/
+
+DROP PROCEDURE IF EXISTS getIdMayorDeUltimaVenta;
+CREATE PROCEDURE getIdMayorDeUltimaVenta ()
+	SELECT MAX(id_venta) idUltimaVenta FROM ventas WHERE status='activo';
+    
+/*	
+
+call getIdMayorDeUltimaVenta();
+SELECT * FROM ventas;
+	
+*/
+
+
+
+DROP PROCEDURE IF EXISTS addVenta;
+CREATE PROCEDURE addVenta(
+fecha_venta date,
+subtotal_venta float (15)  ,
+iva_venta float(5)  ,
+total_venta float(15)  ,
+forma_pago varchar(20),
+id_usuario int,
+id_cliente int)
+INSERT INTO ventas (fecha_venta,subtotal_venta,iva_venta,total_venta,forma_pago,id_usuario,id_cliente,status) 
+				VALUES(fecha_venta,subtotal_venta,iva_venta,total_venta,forma_pago,id_usuario,id_cliente,'activo');
+
+/*	
+call getVentas();
+call addVenta('2017-05-24',25.0,2.5,35.16,'EFECTIVO',1,1);
+call addVenta('2018-11-30',31.0,1.5,37.03,'EFECTIVO',2,1);
+call addVenta('2018-12-01',15.0,3.5,21.50,'EFECTIVO',2,1);
+*/
+
+
+DROP PROCEDURE IF EXISTS getBusquedaVenta;
+CREATE PROCEDURE getBusquedaVenta(  
+fecha_ventaInicio date ,
+fecha_ventaFin date ,
+id_usuario varchar(100),
+id_cliente varchar(100)
+)
+	SELECT * from ventas AS v
+	where  (v.fecha_venta between fecha_ventaInicio AND fecha_ventaFin)
+    AND CONVERT(v.id_usuario,CHAR) like (CONCAT('%',id_usuario,'%'))
+    AND CONVERT(v.id_cliente,CHAR) like (CONCAT('%',id_cliente,'%'))
+    AND v.status = 'activo'
+;
+
+/*	
+
+call getBusquedaVenta('2016-05-10','2018-12-12','2','1');
+call getBusquedaVenta('2016-05-10','2018-12-12','','');
+call getBusquedaVenta('2018-10-31','2018-12-22','','');
+call getBusquedaVenta('2018-11-30','2018-12-22','','');
+call getBusquedaVenta('2016-05-10','2018-12-12','2','');
+call getBusquedaVenta('2016-05-10','2018-12-12','1','');
+
+SELECT * FROM ventas;
+	
+*/
+
+DROP PROCEDURE IF EXISTS deleteVentaYSusDetalles;
+CREATE PROCEDURE deleteVentaYSusDetalles(
+id_venta int)
+UPDATE ventas as v JOIN detalle_venta dv ON v.id_venta=dv.id_venta 
+	SET v.status='inactivo', dv.status='inactivo'
+WHERE v.id_venta = id_venta;
+/*	
+call getVentasYSusDetalles();
+SELECT * FROM ventas v JOIN detalle_venta dv ON v.id_venta=dv.id_venta;
+
+call deleteVentaYSusDetalles(1);
+
+*/
+
+
+
+/*-------------------------------------------------------------------DE DETALLE_VENTAS*/
+DROP PROCEDURE IF EXISTS getDetallesVenta;
+CREATE PROCEDURE getDetallesVenta ()
+	SELECT * FROM detalle_venta WHERE status='activo';
+    
+/*	
+
+call getDetallesVenta();
+SELECT * FROM detalle_venta;
+	
+*/
+
+
+
+DROP PROCEDURE IF EXISTS addDetalleVenta;
+CREATE PROCEDURE addDetalleVenta(
+id_venta int,
+id_producto int,
+cantidad int,
+importe float(15))
+INSERT INTO detalle_venta (id_venta,id_producto,cantidad,importe,status) 
+				VALUES(id_venta,id_producto,cantidad,importe,'activo');
+
+/*	
+call getProductos();
+call getVentas();
+call getDetallesVenta();
+call addDetalleVenta(1,1,20,11.00);
+call addDetalleVenta(1,2,2,11.25);
+call addDetalleVenta(1,3,5,5.3);
+call addDetalleVenta(2,4,10,8.9);
+call addDetalleVenta(2,1,11,42.36);
+call addDetalleVenta(2,2,7,22.11);
+call addDetalleVenta(2,1,5,11.99);
+call addDetalleVenta(3,2,6,47.66);
+call addDetalleVenta(3,3,3,66.88);
+
+SELECT * FROM ventas v JOIN detalle_venta dv ON v.id_venta=dv.id_venta;
+
+*/
+
+DROP PROCEDURE IF EXISTS getDetallesDeUnaVenta;
+CREATE PROCEDURE getDetallesDeUnaVenta (
+id_venta int
+)
+	SELECT * FROM detalle_venta dv 
+    WHERE dv.id_venta=id_venta AND dv.status='activo';
+
+/*	
+
+call getDetallesDeUnaVenta(1);
+call getDetallesDeUnaVenta(2);
+call getDetallesDeUnaVenta(3);
+*/
+
+
+
+
+
+/*-------------------------------------------------------------------DE VENTA Y SUS DETALLES_VENTA*/
+DROP PROCEDURE IF EXISTS getVentasYSusDetalles;
+CREATE PROCEDURE getVentasYSusDetalles (
+)
+	SELECT v.id_venta,v.fecha_venta,v.subtotal_venta,v.iva_venta,v.total_venta,v.forma_pago,v.id_usuario,v.id_cliente,
+    dv.id_det_ventas,dv.id_producto,dv.cantidad,  dv.importe
+    FROM ventas v JOIN detalle_venta dv ON v.id_venta=dv.id_venta 
+    WHERE v.status='activo' AND dv.status='activo';
+    
+/*	
+
+call getVentasYSusDetalles();
+SELECT * FROM detalle_venta;
+	
+*/
+
+DROP PROCEDURE IF EXISTS getBusquedaVentaYSusDetallesDeVenta;
+CREATE PROCEDURE getBusquedaVentaYSusDetallesDeVenta(  
+fecha_ventaInicio date ,
+fecha_ventaFin date ,
+id_usuario varchar(100),
+id_cliente varchar(100)
+)
+    SELECT v.id_venta,v.fecha_venta,v.subtotal_venta,v.iva_venta,v.total_venta,v.forma_pago,v.id_usuario,v.id_cliente,
+    dv.id_det_ventas,dv.id_producto,dv.cantidad,  dv.importe
+    FROM ventas v JOIN detalle_venta dv ON v.id_venta=dv.id_venta 
+    WHERE (v.fecha_venta between fecha_ventaInicio AND fecha_ventaFin)
+    AND CONVERT(v.id_usuario,CHAR) like (CONCAT('%',id_usuario,'%'))
+    AND CONVERT(v.id_cliente,CHAR) like (CONCAT('%',id_cliente,'%'))
+    AND v.status='activo' AND dv.status='activo';
+;
+
+/*	
+
+call getBusquedaVentaYSusDetallesDeVenta('2016-05-10','2018-12-12','2','1');
+call getBusquedaVentaYSusDetallesDeVenta('2016-05-10','2018-12-12','','');
+call getBusquedaVentaYSusDetallesDeVenta('2018-10-31','2018-12-22','','');
+call getBusquedaVentaYSusDetallesDeVenta('2018-11-30','2018-12-22','','');
+call getBusquedaVentaYSusDetallesDeVenta('2016-05-10','2018-12-12','2','');
+call getBusquedaVentaYSusDetallesDeVenta('2016-05-10','2018-12-12','1','');
+
+SELECT * FROM ventas v JOIN detalle_venta dv ON v.id_venta=dv.id_venta;
+*/
+
 
 
 
