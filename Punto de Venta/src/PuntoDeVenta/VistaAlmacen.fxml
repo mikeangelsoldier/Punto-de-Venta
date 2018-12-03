@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXTextArea?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controlador.ControladorVistaVentas">
+   <children>
+      <Pane fx:id="panelPrincipalVentas" layoutX="10.0" layoutY="10.0" prefHeight="600.0" prefWidth="1200.0">
+         <children>
+            <Label layoutX="24.0" layoutY="7.0" prefHeight="49.0" prefWidth="171.0" text="Almacén" textFill="#222288">
+               <font>
+                  <Font size="33.0" />
+               </font>
+            </Label>
+            <JFXButton fx:id="btnCancelarVenta" buttonType="RAISED" layoutX="798.0" layoutY="286.0" onAction="#btnCancelarVentaEvento" ripplerFill="#3fb0dd" style="-fx-background-color: #222288;" text="Cancelar" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="13.0" />
+               </font>
+            </JFXButton>
+            <Pane layoutX="93.0" layoutY="238.0" prefHeight="94.0" prefWidth="653.0" style="-fx-border-color: #3fb0dd;">
+               <children>
+                  <JFXTextField fx:id="txtCantidadProductosAAgregar" layoutX="156.0" layoutY="26.0" promptText="cantidad" unFocusColor="#4d4d4d" />
+                  <Label layoutX="14.0" layoutY="2.0" prefHeight="72.0" prefWidth="135.0" text="Cantidad a Agregar" textFill="#222288">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <JFXButton fx:id="btnAgregarProductoAVenta" buttonType="RAISED" layoutX="321.0" layoutY="27.0" onAction="#btnAgregarProductoADetalleVentaEvento" prefHeight="49.0" prefWidth="145.0" ripplerFill="#011245" style="-fx-background-color: #222288;" text="agregar unidades" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="13.0" />
+                     </font>
+                  </JFXButton>
+               </children>
+            </Pane>
+            <Pane layoutX="98.0" layoutY="111.0" prefHeight="114.0" prefWidth="616.0" style="-fx-border-color: #3fb0dd;">
+               <children>
+                  <JFXTextField fx:id="txtCodigoProducto" layoutX="81.0" layoutY="6.0" promptText="Codigo producto" unFocusColor="#4d4d4d" />
+                  <Label layoutX="14.0" layoutY="2.0" prefHeight="29.0" prefWidth="67.0" text="codigo" textFill="#222288">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="6.0" layoutY="42.0" prefHeight="29.0" prefWidth="82.0" text="descripcion" textFill="#222288">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <JFXTextField fx:id="txtStockProducto" editable="false" layoutX="439.0" layoutY="19.0" unFocusColor="#4d4d4d" />
+                  <Label layoutX="372.0" layoutY="20.0" prefHeight="29.0" prefWidth="67.0" text="stock" textFill="#222288">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <JFXTextField fx:id="txtPrecioProducto" editable="false" layoutX="439.0" layoutY="59.0" unFocusColor="#4d4d4d" />
+                  <Label layoutX="372.0" layoutY="63.0" prefHeight="29.0" prefWidth="67.0" text="Costo" textFill="#222288">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <JFXButton fx:id="btnBuscarYElegirProductoParaVender" buttonType="RAISED" layoutX="294.0" layoutY="6.0" onAction="#btnBuscarYElegirProductosEvento" ripplerFill="#3fb0dd" style="-fx-background-color: #222288;" text="Elegir" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="13.0" />
+                     </font>
+                  </JFXButton>
+                  <JFXTextArea fx:id="txaDescripcionProductoVenta" editable="false" layoutX="84.0" layoutY="48.0" prefHeight="59.0" prefWidth="210.0" wrapText="true" />
+                  <JFXButton buttonType="RAISED" layoutX="227.0" layoutY="6.0" onAction="#btnBuscarCodigoPorCodigoEvento" ripplerFill="#3fb0dd" style="-fx-background-color: #222288;" text="Buscar" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="13.0" />
+                     </font>
+                  </JFXButton>
+               </children>
+            </Pane>
+            <Label layoutX="221.0" layoutY="390.0" text="un mensaje debe avisar algo asi &quot;stotck es de tanto, agregaste tanto y el nuevo esto es de  tanto&quot;" />
+         </children>
+      </Pane>
+      <Pane fx:id="panelBuscarProductos" layoutX="20.0" layoutY="70.0" prefHeight="500.0" prefWidth="1157.0" style="-fx-background-color: #b1b1df;" visible="false">
+         <children>
+            <Label layoutX="376.0" layoutY="20.0" prefHeight="30.0" prefWidth="210.0" text="Busqueda Productos">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Label>
+            <JFXButton fx:id="btnProductoRegresarAAVenta" buttonType="RAISED" layoutX="21.0" layoutY="20.0" onAction="#btnProductoRegresarAVentaEvento" ripplerFill="#3fb0dd" style="-fx-background-color: #222288;" text="Regresar a Venta" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="13.0" />
+               </font>
+            </JFXButton>
+            <HBox alignment="CENTER_LEFT" layoutX="57.0" layoutY="123.0" prefHeight="49.0" prefWidth="836.0" spacing="15.0">
+               <children>
+                  <Label prefHeight="33.0" prefWidth="108.0" text="Código" textFill="#222288" wrapText="true">
+                     <font>
+                        <Font size="13.0" />
+                     </font>
+                     <padding>
+                        <Insets left="50.0" />
+                     </padding>
+                  </Label>
+                  <JFXTextField fx:id="txtCodigoProductoFiltroVenta" promptText="Código de producto" unFocusColor="#284d0b" />
+                  <Label prefHeight="19.0" prefWidth="126.0" text="Descripción" textFill="#222288" wrapText="true">
+                     <font>
+                        <Font size="13.0" />
+                     </font>
+                     <padding>
+                        <Insets left="50.0" />
+                     </padding>
+                  </Label>
+                  <JFXTextField fx:id="txtDescripcionProductoFiltroVenta" promptText="Descripcion" unFocusColor="#284d0b" />
+                  <Label prefHeight="38.0" prefWidth="106.0" text="Marca" textFill="#222288" wrapText="true">
+                     <font>
+                        <Font size="13.0" />
+                     </font>
+                     <padding>
+                        <Insets left="50.0" />
+                     </padding>
+                  </Label>
+                  <JFXComboBox fx:id="cboMarcaProductoFiltroVenta" prefHeight="27.0" prefWidth="138.0" />
+               </children>
+            </HBox>
+            <JFXButton fx:id="btnAgregarProductoAAventa" buttonType="RAISED" layoutX="406.0" layoutY="81.0" onAction="#btnAgregarProductoAVentaEvento" prefHeight="19.0" prefWidth="210.0" style="-fx-background-color: #7777ee;" text="Agregar Producto a Venta" textFill="WHITE" />
+            <TableView fx:id="tblDatosProductoFiltroVenta" cache="true" layoutX="21.0" layoutY="193.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="270.0" prefWidth="1130.0">
+               <columns>
+                  <TableColumn fx:id="tbcIDProductoFiltroVenta" minWidth="-1.0" prefWidth="36.0" text="ID" />
+                  <TableColumn fx:id="tbcCodigoProductoFiltroVenta" maxWidth="600.0" minWidth="-1.0" prefWidth="176.0" text="Código" />
+                  <TableColumn fx:id="tbcDescripcionProductoFiltroVenta" maxWidth="600.0" minWidth="-1.0" prefWidth="175.0" text="Descripción" />
+                  <TableColumn fx:id="tbcMarcaProductoFiltroVenta" maxWidth="600.0" minWidth="-1.0" prefWidth="146.0" text="Marca" />
+                  <TableColumn fx:id="tbcPrecioProductoFiltroVenta" maxWidth="600.0" minWidth="-1.0" prefWidth="54.0" text="Precio" />
+                  <TableColumn fx:id="tbcCostoProductoFiltroVenta" maxWidth="600.0" minWidth="-1.0" prefWidth="64.0" text="Costo" />
+                  <TableColumn fx:id="tbcUnidadProductoFiltroVenta" maxWidth="600.0" minWidth="-1.0" prefWidth="91.0" text="Unidad" />
+                  <TableColumn fx:id="tbcStockProductoFiltroVenta" maxWidth="600.0" minWidth="-1.0" prefWidth="48.0" text="Stock" />
+                  <TableColumn fx:id="tbcStockMinimoProductoFiltroVenta" minWidth="-1.0" prefWidth="91.0" text="Stock Minimo" />
+                  <TableColumn fx:id="tbcCategoriaProductoFiltroVenta" maxWidth="600.0" minWidth="-1.0" prefWidth="155.0" text="Categoria" />
+                  <TableColumn fx:id="tbcProveedorProductoFiltroVenta" maxWidth="600.0" minWidth="-1.0" prefWidth="113.0" text="Proveedor" />
+               </columns>
+            </TableView>
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>
