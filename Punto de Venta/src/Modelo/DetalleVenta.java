@@ -12,6 +12,11 @@ public class DetalleVenta {
     private int cantidadProducto;
     private double importeProducto;
 
+    public DetalleVenta() {
+    }
+
+    
+    
     public DetalleVenta(int idDetalleVenta, int idDVenta, int idProducto, int cantidadProducto, double importeProducto) {
         this.idDetalleVenta = idDetalleVenta;
         this.idDVenta = idDVenta;
