@@ -44,6 +44,11 @@
                   <MenuItem mnemonicParsing="false" onAction="#cambiarAVistaPedidos" text="Pedidos" />
                </items>
             </Menu>
+            <Menu mnemonicParsing="false" text="Almacen">
+              <items>
+                <MenuItem mnemonicParsing="false" onAction="#cambiarAVistaAlmacen" text="Almacen" />
+              </items>
+            </Menu>
         </menus>
       </MenuBar>
    </children>
