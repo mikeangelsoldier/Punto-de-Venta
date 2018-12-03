@@ -9,11 +9,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import Modelo.DetalleVenta;
 
-public class DetallleVentaBD {
+public class DetalleVentaBD {
 
     Connection connect;
 
-    public DetallleVentaBD(Connection connect) {
+    public DetalleVentaBD(Connection connect) {
         this.connect = connect;
     }
 
@@ -28,14 +28,14 @@ public class DetallleVentaBD {
 
             rs.close();
         } catch (SQLException ex) {
-            Logger.getLogger(DetallleVentaBD.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DetalleVentaBD.class.getName()).log(Level.SEVERE, null, ex);
         }
         return listaDetallesDeVenta;
     }
     
     
 
-    public void addDetalleDeVenta(int id_venta , int id_producto, int cantidad, int importe) throws SQLException {
+    public void addDetalleDeVenta(int id_venta , int id_producto, int cantidad, double importe) throws SQLException {
 
         PreparedStatement statement = connect.prepareCall("CALL addDetalleVenta(?,?,?,?)");
    

@@ -53,20 +53,18 @@ public class VentaBD {
     public void addVenta(String fecha_venta,double subtotal_venta, double iva_venta,double total_venta,
             String forma_pago,int id_usuario, int id_cliente) throws SQLException {
 
-        PreparedStatement statement = connect.prepareCall("CALL addVenta(?,?,?,?,?,?,?)");
-   
-        statement.setString(1, fecha_venta);
-        statement.setDouble(2, subtotal_venta);
-        statement.setDouble(3, iva_venta);
-        statement.setDouble(4, total_venta);
-        statement.setString(5, forma_pago);
-        statement.setInt(6, id_usuario);
-        statement.setInt(7, id_cliente);
-        
-        System.out.println(statement.toString());
-        statement.execute();
-
-        statement.close();
+        try (PreparedStatement statement = connect.prepareCall("CALL addVenta(?,?,?,?,?,?,?)")) {
+            statement.setString(1, fecha_venta);
+            statement.setDouble(2, subtotal_venta);
+            statement.setDouble(3, iva_venta);
+            statement.setDouble(4, total_venta);
+            statement.setString(5, forma_pago);
+            statement.setInt(6, id_usuario);
+            statement.setInt(7, id_cliente);
+            
+            System.out.println(statement.toString());
+            statement.execute();
+        }
     }
 
     

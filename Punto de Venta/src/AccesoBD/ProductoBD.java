@@ -35,6 +35,34 @@ public class ProductoBD {
         return listaProductos;
     }
 
+    
+    public int getIDDeProductoDelCodigoTal(String codigo) {
+        int idDeProducto=0;
+
+        try {
+            //ResultSet rs = connect.prepareCall("EXEC getBusquedaUsuario").executeQuery(); //Para SQL Server
+            PreparedStatement ps = connect.prepareStatement("CALL  getIdProductoCodigo(?)"); //Para MySql
+            
+            ps.setString(1, codigo);
+
+            System.out.println(ps);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+               idDeProducto=rs.getInt(1);
+            }
+
+            rs.close();
+            ps.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductoBD.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return idDeProducto;
+    }
+    
+            
+            
     public void addProducto(String codigo, String descripcion, String marca, double costo, double precio,
             String presentacion, int stock, int stock_minimo,
             int categoria, int proveedor) throws SQLException {
@@ -73,6 +101,18 @@ public class ProductoBD {
         statement.setInt(9, stock_minimo);
         statement.setInt(10, categoria);
         statement.setInt(11, proveedor);
+        
+        System.out.println(statement);
+        statement.execute();
+
+        statement.close();
+    }
+    
+    public void reducirExistencia(String codigo, int cantidad) throws SQLException {
+        PreparedStatement statement = connect.prepareCall("CALL reducirStockProducto(?,?)");
+        
+        statement.setString(1, codigo);
+        statement.setInt(2, cantidad);
         
         System.out.println(statement);
         statement.execute();

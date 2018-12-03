@@ -10,8 +10,11 @@ import AccesoBD.ClienteBD;
 import AccesoBD.ConectaBD_Punto_de_venta;
 import AccesoBD.MarcaBD;
 import AccesoBD.ProductoBD;
+import AccesoBD.VentaBD;
+import AccesoBD.DetalleVentaBD;
 import Modelo.Categoria;
 import Modelo.Cliente;
+import Modelo.DetalleVenta;
 import Modelo.Marca;
 import Modelo.Producto;
 import Modelo.ProductoDetalleVenta;
@@ -30,6 +33,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -64,7 +69,8 @@ public class ControladorVistaVentas implements Initializable {
     ProductoBD productoBD;
     CategoriaBD categoriaBD;
     MarcaBD marcaBD;
-    Proveedor proveedorBD;
+    VentaBD ventaBD;
+    DetalleVentaBD detalleVentaBD;
 
     private boolean busquedaClienteActivado, busquedaProductoActivado;
 
@@ -310,6 +316,9 @@ public class ControladorVistaVentas implements Initializable {
         marcaBD = new MarcaBD(conectaBD_PuntoVenta.getConnection());
         productoBD = new ProductoBD(conectaBD_PuntoVenta.getConnection());
 
+        ventaBD = new VentaBD(conectaBD_PuntoVenta.getConnection());
+        detalleVentaBD = new DetalleVentaBD(conectaBD_PuntoVenta.getConnection());
+
         listaObjetosProveedores = new ArrayList<Proveedor>();
         listaObjetosMarcas = new ArrayList<Marca>();
         listaObjetosCategorias = new ArrayList<Categoria>();
@@ -354,6 +363,17 @@ public class ControladorVistaVentas implements Initializable {
         cboFormaPago.valueProperty().addListener(manejadorFormaPago);
 
         dpkFechaVenta.setValue(LocalDate.now());
+
+        iniciarNuevaVenta();
+
+    }
+
+    private void iniciarNuevaVenta() {
+        //primero asignar el nuevo id a la venta
+        int idVentaAnterior = ventaBD.getIdMayorDeUltimaVenta();
+        int idCalculadoVentaActual = idVentaAnterior + 1;
+
+        txtNumVenta.setText(String.valueOf(idCalculadoVentaActual));
 
     }
 
@@ -434,6 +454,13 @@ public class ControladorVistaVentas implements Initializable {
         txtPrecioProducto.clear();
         txtCantidadProductosAAgregar.clear();
         txtTotalProductoAntesDeAgregar.clear();
+
+    }
+    
+    private void limpiarCamposClienteVistaVenta() {
+        txtIdClienteVenta.clear();
+        txtNombreClienteVenta.clear();
+        txtRfcClienteVenta.clear();
 
     }
 
@@ -1152,7 +1179,36 @@ public class ControladorVistaVentas implements Initializable {
     private void generarVenta() {
         if (camposNecesariosParaVentaEstanCompletos()) {
 
-            System.out.println("El usuario con el ID " + loginMeta.idUsuario + " con el nombre " + loginMeta.nombreUsuario + " va a realizar una venta");
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Confirmación");
+            alert.setHeaderText(null);
+            alert.setContentText("¿Realmente deseas Finalzar y registrar la actual venta?");
+            if (alert.showAndWait().get() == ButtonType.OK) {
+
+                if (cboFormaPago.getSelectionModel().getSelectedItem().toString().equals("EFECTIVO")) {
+                    Alert alertPago = new Alert(Alert.AlertType.INFORMATION);
+                    alertPago.setTitle("Información");
+                    alertPago.setHeaderText("Cambio de la venta");
+                    alertPago.setContentText("Se recibio $" + txtImporte.getText() + "\nEl cambio es de $" + txtCambio.getText());
+                    alertPago.showAndWait();
+                }
+
+                guardarVenta();
+                System.out.println("El usuario con el ID " + loginMeta.idUsuario + " con el nombre " + loginMeta.nombreUsuario + " va a realizar una venta");
+
+                alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setHeaderText(null);
+                alert.setTitle("Información");
+                alert.setContentText("La venta se ha realizado con éxito");
+                alert.showAndWait();
+
+            } else {
+                alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Información");
+                alert.setHeaderText(null);
+                alert.setContentText("Se ha cancelado la operación");
+                alert.show();
+            }
 
         } else {
             System.out.println("Existen campos por completar");
@@ -1205,11 +1261,16 @@ public class ControladorVistaVentas implements Initializable {
         }
 
         if (cboFormaPago.getSelectionModel().getSelectedItem().toString().equals("EFECTIVO")) {
-            calcularCambio();
+            //calcularCambio();
 
             if (txtImporte.getText().equals("") || txtCambio.getText().equals("")) {
-                camposNecesariosCompletos = false;
-                return camposNecesariosCompletos;
+                calcularCambio();
+
+                if (txtImporte.getText().equals("") || txtCambio.getText().equals("")) {
+
+                    camposNecesariosCompletos = false;
+                    return camposNecesariosCompletos;
+                }
             }
         }
 
@@ -1219,6 +1280,63 @@ public class ControladorVistaVentas implements Initializable {
         return camposNecesariosCompletos;
     }
 
+    private void guardarVenta() {
+        //primero almaceno la venta
+        String fecha_venta = dpkFechaVenta.getValue().format(DateTimeFormatter.ISO_DATE);
+        double subtotal = Double.parseDouble(txtSubtotalVenta.getText());
+        double iva = Double.parseDouble(txtIvaVenta.getText());
+        double total = Double.parseDouble(txtTotalAPagarVenta.getText());
+        String formaPago = cboFormaPago.getSelectionModel().getSelectedItem().toString();
+        int id_usuario = Integer.parseInt(loginMeta.idUsuario);
+        int id_cliente = Integer.parseInt(txtIdClienteVenta.getText());
+
+        try {
+
+            ventaBD.addVenta(fecha_venta, subtotal, iva, total, formaPago, id_usuario, id_cliente);
+            
+            //despues obtengo el id de esta venta para almacenar los detalles
+            int ventaActual = ventaBD.getIdMayorDeUltimaVenta();
+            if (!(tblDatosDetalleVenta.getItems().isEmpty())) {
+                for (int i = 0; i < tblDatosDetalleVenta.getItems().size(); i++) {
+                    //Double precioTotalPorProducto = tblDatosDetalleVenta.getItems().get(i).getTotalPorProductoDetalleVenta();
+                    String codigoBarrasDelProductoActual =tblDatosDetalleVenta.getItems().get(i).getCodigo();
+                    int idProductoActual=productoBD.getIDDeProductoDelCodigoTal(codigoBarrasDelProductoActual);
+                    System.out.println("El producto con el codigo "+codigoBarrasDelProductoActual+" tiene el id de producto " +idProductoActual);
+
+                    int cantidad=tblDatosDetalleVenta.getItems().get(i).getCantidadProductoDetalleVenta();
+                    double importe=tblDatosDetalleVenta.getItems().get(i).getTotalPorProductoDetalleVenta();
+                    
+                    detalleVentaBD.addDetalleDeVenta(ventaActual, idProductoActual, cantidad, importe);
+                    
+                    //depues descuento del stock lo vendido
+                    productoBD.reducirExistencia(codigoBarrasDelProductoActual, cantidad);
+                    
+                    
+                }
+
+                iniciarNuevaVenta();
+            }
+
+            
+            //despues limpio todo
+            limpiarVentaCompleta();
+        } catch (SQLException ex) {
+            Logger.getLogger(ControladorVistaVentas.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    
+    private void limpiarVentaCompleta(){
+        quitarEfectivoRecibidoYCambio();
+        limpiarCamposProductoVistaVenta();
+        limpiarCamposTotalVenta();
+        limpiarCamposClienteVistaVenta();
+        tblDatosDetalleVenta.getItems().clear();
+        txtNumVenta.clear();
+    }
+    
+    
     void ManejadorFiltroProducto() {
         String codigoProducto = txtCodigoProductoFiltroVenta.getText();
         String descripcionProducto = txtDescripcionProductoFiltroVenta.getText();
