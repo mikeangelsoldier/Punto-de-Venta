@@ -147,7 +147,9 @@ public class ControladorVistaVentas implements Initializable {
             tbcDescripcionProductoDetalleVenta;
 
     @FXML
-    private Pane panelPrincipalVentas;
+    private Pane panelPrincipalVentas, panelBotonesVentas, panelDatosProductoVenta,
+            panelCantidadProductoVenta, panelNumVenta, panelTotalVenta, panelDatosCliente;
+
     //-----------------------------------------------busqueda cliente
     @FXML
     private JFXTextField txtIdClienteFiltroVenta,
@@ -300,6 +302,9 @@ public class ControladorVistaVentas implements Initializable {
         btnGenerarVenta.setDisable(false);
         btnImporteRecibido.setDisable(false);
         btnCancelarVenta.setDisable(false);
+
+        deshabilitarComponentesVistaVentas(false);
+        iniciarNuevaVenta();
     }
 
     @FXML
@@ -309,7 +314,22 @@ public class ControladorVistaVentas implements Initializable {
 
     @FXML
     private void btnCancelarVentaEvento(ActionEvent event) {
-        botonesVentaPosicionInicial();
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmación");
+        alert.setHeaderText(null);
+        alert.setContentText("¿Realmente deseas Cancelar la actual venta?");
+        if (alert.showAndWait().get() == ButtonType.OK) {
+            botonesVentaPosicionInicial();
+            limpiarVentaCompleta();
+            deshabilitarComponentesVistaVentas(true);
+
+        } else {
+            alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Información");
+            alert.setHeaderText(null);
+            alert.setContentText("Se ha cancelado la operación");
+            alert.show();
+        }
     }
 
     @Override
@@ -378,10 +398,29 @@ public class ControladorVistaVentas implements Initializable {
 
         dpkFechaVenta.setValue(LocalDate.now());
 
-        iniciarNuevaVenta();
+        deshabilitarComponentesVistaVentas(true);
 
         botonesVentaPosicionInicial();
 
+    }
+
+    private void deshabilitarComponentesVistaVentas(boolean deshabilitar) {
+        if (deshabilitar) {
+            panelDatosProductoVenta.setDisable(true);
+            panelCantidadProductoVenta.setDisable(true);
+            tblDatosDetalleVenta.setDisable(true);
+            panelNumVenta.setDisable(true);
+            panelTotalVenta.setDisable(true);
+            panelDatosCliente.setDisable(true);
+
+        } else {
+            panelDatosProductoVenta.setDisable(false);
+            panelCantidadProductoVenta.setDisable(false);
+            tblDatosDetalleVenta.setDisable(false);
+            panelNumVenta.setDisable(false);
+            panelTotalVenta.setDisable(false);
+            panelDatosCliente.setDisable(false);
+        }
     }
 
     private void botonesVentaPosicionInicial() {
@@ -1339,6 +1378,8 @@ public class ControladorVistaVentas implements Initializable {
                 }
 
                 botonesVentaPosicionInicial();
+                limpiarVentaCompleta();
+                deshabilitarComponentesVistaVentas(true);
             }
 
             //despues limpio todo
