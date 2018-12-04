@@ -12,6 +12,7 @@ import AccesoBD.MarcaBD;
 import AccesoBD.ProductoBD;
 import AccesoBD.VentaBD;
 import AccesoBD.DetalleVentaBD;
+import AccesoBD.ProveedorBD;
 import Modelo.Categoria;
 import Modelo.Cliente;
 import Modelo.DetalleVenta;
@@ -68,6 +69,7 @@ public class ControladorVistaAlmacen implements Initializable {
     ProductoBD productoBD;
     CategoriaBD categoriaBD;
     MarcaBD marcaBD;
+    ProveedorBD proveedorDB;
 
     private boolean busquedaProductoActivado;
 
@@ -196,6 +198,7 @@ public class ControladorVistaAlmacen implements Initializable {
 
         categoriaBD = new CategoriaBD(conectaBD_PuntoVenta.getConnection());
         marcaBD = new MarcaBD(conectaBD_PuntoVenta.getConnection());
+        proveedorDB=new ProveedorBD(conectaBD_PuntoVenta.getConnection());
 
         listaObjetosProveedores = new ArrayList<Proveedor>();
         listaObjetosMarcas = new ArrayList<Marca>();
@@ -229,11 +232,13 @@ public class ControladorVistaAlmacen implements Initializable {
         panelPrincipalAlmacen.setDisable(true);
         panelBuscarProductos.setVisible(true);
 
-        listaObjetosProveedores = new ArrayList<Proveedor>();
+        //listaObjetosProveedores = new ArrayList<Proveedor>();
         //listaObjetosMarcas = new ArrayList<Marca>();
-        listaObjetosCategorias = new ArrayList<Categoria>();
+        //listaObjetosCategorias = new ArrayList<Categoria>();
 
         llenarCboMarcas();
+        llenarListaCategorias();
+        llenarListaProveedores();
 
         llenarTablaBusquedaProducto(productoBD.getProductos());
         regresarBotonesVistaBusquedaProductoAFormaOriginal();
@@ -275,6 +280,14 @@ public class ControladorVistaAlmacen implements Initializable {
             cboMarcaProductoFiltro.setValue(listaObjetosMarcas.get(0).getMarca());
             existenMarcas = true;
         }
+    }
+
+    private void llenarListaCategorias() {
+        this.listaObjetosCategorias = new ArrayList<Categoria>(categoriaBD.getCategorias());
+    }
+
+    private void llenarListaProveedores() {
+        this.listaObjetosProveedores = new ArrayList<Proveedor>(proveedorDB.getProveedores());
     }
 
     private void llenarTablaBusquedaProducto(ArrayList<Producto> listaProductos) {
