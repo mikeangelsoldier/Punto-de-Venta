@@ -1496,6 +1496,7 @@ call getBusquedaVentaMesAño('2018','12','30','');
 call getBusquedaVentaMesAño('2018','11','30','2');
 call getBusquedaVentaMesAño('2018','12','','');
 call getBusquedaVentaMesAño('2018','','','');
+call getBusquedaVentaMesAño('','','','');
 
 SELECT * FROM ventas;
 	
@@ -1573,7 +1574,29 @@ call getDetallesDeUnaVenta(3);
 */
 
 
+DROP PROCEDURE IF EXISTS getDetallesDeProductoDeUnaVenta;
+CREATE PROCEDURE getDetallesDeProductoDeUnaVenta (
+id_venta int
+)
+	SELECT dv.id_det_ventas,p.codigo_producto,p.descripcion, p.precio, dv.cantidad,dv.importe 
+    FROM detalle_venta dv JOIN producto p 
+    ON dv.id_producto=p.id_producto
+    WHERE dv.id_venta=id_venta AND dv.status='activo';
 
+/*	
+call getVentas();
+call getDetallesVenta();
+
+call getDetallesDeProductoDeUnaVenta(1);
+call getDetallesDeProductoDeUnaVenta(2);
+call getDetallesDeProductoDeUnaVenta(3);
+call getDetallesDeProductoDeUnaVenta(4);
+call getDetallesDeProductoDeUnaVenta(5);
+call getDetallesDeProductoDeUnaVenta(6);
+call getDetallesDeProductoDeUnaVenta(7);
+call getDetallesDeProductoDeUnaVenta(8);
+
+*/
 
 
 /*-------------------------------------------------------------------DE VENTA Y SUS DETALLES_VENTA*/
