@@ -122,6 +122,17 @@ public class ControladorVistaPrincipal implements Initializable {
     }
     
     @FXML
+    public void cambiarAVistaHistorialVentas (ActionEvent e) throws Exception {
+        try {
+            panel_principal.getChildren().clear();
+            panel_principal.getChildren().add(FXMLLoader.load(getClass().getResource("/PuntoDeVenta/VistaHistorialVentas.fxml")));
+        } catch (IOException ex) {
+            Logger.getLogger(ControladorVistaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+            
+    @FXML
     public void cambiarAVistaAlmacen (ActionEvent e) throws Exception {
         try {
             panel_principal.getChildren().clear();

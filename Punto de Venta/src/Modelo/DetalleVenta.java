@@ -9,6 +9,8 @@ public class DetalleVenta {
     private String codigoProducto;
     private String descripcionProducto;
     
+    
+    private double precioProducto;
     private int cantidadProducto;
     private double importeProducto;
 
@@ -32,6 +34,17 @@ public class DetalleVenta {
         this.cantidadProducto = cantidadProducto;
         this.importeProducto = importeProducto;
     }
+
+    public DetalleVenta(int idDetalleVenta, String codigoProducto, String descripcionProducto, double precioProducto, int cantidadProducto, double importeProducto) {
+        this.idDetalleVenta = idDetalleVenta;
+        this.codigoProducto = codigoProducto;
+        this.descripcionProducto = descripcionProducto;
+        this.precioProducto = precioProducto;
+        this.cantidadProducto = cantidadProducto;
+        this.importeProducto = importeProducto;
+    }
+    
+    
 
     public int getIdDetalleVenta() {
         return idDetalleVenta;
@@ -87,6 +100,14 @@ public class DetalleVenta {
 
     public void setImporteProducto(double importeProducto) {
         this.importeProducto = importeProducto;
+    }
+
+    public double getPrecioProducto() {
+        return precioProducto;
+    }
+
+    public void setPrecioProducto(double precioProducto) {
+        this.precioProducto = precioProducto;
     }
 
     

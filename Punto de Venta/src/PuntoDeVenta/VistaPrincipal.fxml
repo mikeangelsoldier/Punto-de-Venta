@@ -22,6 +22,7 @@
             <items>
               <MenuItem mnemonicParsing="false" onAction="#cambiarAVistaVentas" text="Ventas" />
                   <MenuItem mnemonicParsing="false" onAction="#cambiarAVistaVerificarProducto" text="Verificar Producto" />
+                  <MenuItem mnemonicParsing="false" onAction="#cambiarAVistaHistorialVentas" text="Historial Ventas" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Reportes">

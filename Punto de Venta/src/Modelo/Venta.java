@@ -42,6 +42,20 @@ public class Venta {
         this.nombreCliente = nombreCliente;
     }
 
+    public Venta(int idVenta, String fechaVenta, Double subtotalVenta, Double ivaVenta, Double totalVenta, String formaPagoVenta, int idUsuario, int idCliente, String nombreCliente) {
+        this.idVenta = idVenta;
+        this.fechaVenta = fechaVenta;
+        this.subtotalVenta = subtotalVenta;
+        this.ivaVenta = ivaVenta;
+        this.totalVenta = totalVenta;
+        this.formaPagoVenta = formaPagoVenta;
+        this.idUsuario = idUsuario;
+        this.idCliente = idCliente;
+        this.nombreCliente = nombreCliente;
+    }
+
+    
+    
     public int getIdVenta() {
         return idVenta;
     }

@@ -73,4 +73,29 @@ public class DetalleVentaBD {
 
         return listaDetallesVentaDeUnaSolaVenta;
     }
+    
+    public ArrayList<DetalleVenta> getDetallesConProductosDeUnaSolaVenta(int idVenta) {
+        ArrayList<DetalleVenta> listaDetallesVentaDeUnaSolaVenta = new ArrayList<>();
+
+        try {
+            PreparedStatement ps = connect.prepareStatement("CALL  getDetallesDeProductoDeUnaVenta(?)"); //Para MySql
+
+            ps.setInt(1, idVenta);
+
+            System.out.println(ps);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                listaDetallesVentaDeUnaSolaVenta.add(new DetalleVenta(rs.getInt(1), rs.getString(2), rs.getString(3),
+                        rs.getDouble(4), rs.getInt(5), rs.getDouble(6)));
+            }
+
+            rs.close();
+            ps.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(VentaBD.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return listaDetallesVentaDeUnaSolaVenta;
+    }
 }

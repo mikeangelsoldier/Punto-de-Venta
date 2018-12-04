@@ -50,13 +50,13 @@ public class VentaBD {
         return idDeUltimaVenta;
     }
     
-    public ArrayList<Integer> getAñosDeVentas() {
-        ArrayList<Integer> años = new ArrayList<Integer>();
+    public ArrayList<String> getAñosDeVentas() {
+        ArrayList<String> años = new ArrayList<String>();
 
         try {
             ResultSet rs = connect.prepareCall("CALL getAñosVenta").executeQuery(); //Para MySql
             while (rs.next()) {
-              años.add(rs.getInt(1));
+              años.add(rs.getString(1));
             }
 
             rs.close();
@@ -66,13 +66,13 @@ public class VentaBD {
         return años;
     }
     
-    public ArrayList<Integer> getMesesDeVentas() {
-        ArrayList<Integer> años = new ArrayList<Integer>();
+    public ArrayList<String> getMesesDeVentas() {
+        ArrayList<String> años = new ArrayList<String>();
 
         try {
             ResultSet rs = connect.prepareCall("CALL getMesesVenta").executeQuery(); //Para MySql
             while (rs.next()) {
-              años.add(rs.getInt(1));
+              años.add(rs.getString(1));
             }
 
             rs.close();
@@ -82,13 +82,13 @@ public class VentaBD {
         return años;
     }
     
-    public ArrayList<Integer> getDiasDeVentas() {
-        ArrayList<Integer> años = new ArrayList<Integer>();
+    public ArrayList<String> getDiasDeVentas() {
+        ArrayList<String> años = new ArrayList<String>();
 
         try {
             ResultSet rs = connect.prepareCall("CALL getDiasVenta").executeQuery(); //Para MySql
             while (rs.next()) {
-              años.add(rs.getInt(1));
+              años.add(rs.getString(1));
             }
 
             rs.close();
@@ -172,7 +172,7 @@ public class VentaBD {
 
             while (rs.next()) {
                 listaVentas.add(new Venta(rs.getInt(1), rs.getString(2), rs.getDouble(3), rs.getDouble(4), rs.getDouble(5),
-                        rs.getString(6), rs.getInt(7), rs.getInt(8)));
+                        rs.getString(6), rs.getInt(7), rs.getInt(8),rs.getString(9)));
             }
 
             rs.close();
