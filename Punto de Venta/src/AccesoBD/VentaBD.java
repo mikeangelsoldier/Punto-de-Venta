@@ -49,6 +49,54 @@ public class VentaBD {
         }
         return idDeUltimaVenta;
     }
+    
+    public ArrayList<Integer> getAñosDeVentas() {
+        ArrayList<Integer> años = new ArrayList<Integer>();
+
+        try {
+            ResultSet rs = connect.prepareCall("CALL getAñosVenta").executeQuery(); //Para MySql
+            while (rs.next()) {
+              años.add(rs.getInt(1));
+            }
+
+            rs.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(VentaBD.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return años;
+    }
+    
+    public ArrayList<Integer> getMesesDeVentas() {
+        ArrayList<Integer> años = new ArrayList<Integer>();
+
+        try {
+            ResultSet rs = connect.prepareCall("CALL getMesesVenta").executeQuery(); //Para MySql
+            while (rs.next()) {
+              años.add(rs.getInt(1));
+            }
+
+            rs.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(VentaBD.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return años;
+    }
+    
+    public ArrayList<Integer> getDiasDeVentas() {
+        ArrayList<Integer> años = new ArrayList<Integer>();
+
+        try {
+            ResultSet rs = connect.prepareCall("CALL getDiasVenta").executeQuery(); //Para MySql
+            while (rs.next()) {
+              años.add(rs.getInt(1));
+            }
+
+            rs.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(VentaBD.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return años;
+    }
 
     public void addVenta(String fecha_venta,double subtotal_venta, double iva_venta,double total_venta,
             String forma_pago,int id_usuario, int id_cliente) throws SQLException {
@@ -108,6 +156,32 @@ public class VentaBD {
         return listaVentas;
     }
     
-    
+    public ArrayList<Venta> getVentasAñoMesDiaFiltro(String año,String mes,String dia, String id_usuario) {
+        ArrayList<Venta> listaVentas = new ArrayList<>();
+
+        try {
+            PreparedStatement ps = connect.prepareStatement("CALL  getBusquedaVentaMesAño(?,?,?,?)"); //Para MySql
+
+            ps.setString(1, año);
+            ps.setString(2, mes);
+            ps.setString(3, dia);
+            ps.setString(4, id_usuario);
+
+            System.out.println(ps);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                listaVentas.add(new Venta(rs.getInt(1), rs.getString(2), rs.getDouble(3), rs.getDouble(4), rs.getDouble(5),
+                        rs.getString(6), rs.getInt(7), rs.getInt(8)));
+            }
+
+            rs.close();
+            ps.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(VentaBD.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return listaVentas;
+    }
     
 }
