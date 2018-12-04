@@ -1387,6 +1387,42 @@ SELECT * FROM ventas;
 	
 */
 
+DROP PROCEDURE IF EXISTS getAñosVenta;
+CREATE PROCEDURE getAñosVenta ()
+	SELECT  year(v.fecha_venta) años_ventas FROM ventas v WHERE status='activo'
+    group by años_ventas;
+    
+/*	
+
+call getAñosVenta();
+SELECT * FROM ventas;
+	
+*/
+
+DROP PROCEDURE IF EXISTS getMesesVenta;
+CREATE PROCEDURE getMesesVenta ()
+	SELECT  month(v.fecha_venta) meses_ventas FROM ventas v WHERE status='activo'
+    group by meses_ventas;
+    
+/*	
+
+call getMesesVenta();
+SELECT * FROM ventas;
+	
+*/
+
+DROP PROCEDURE IF EXISTS getDiasVenta;
+CREATE PROCEDURE getDiasVenta ()
+	SELECT  day(v.fecha_venta) dias_ventas FROM ventas v WHERE status='activo'
+    group by dias_ventas;
+    
+/*	
+
+call getDiasVenta();
+SELECT * FROM ventas;
+	
+*/
+
 
 
 DROP PROCEDURE IF EXISTS addVenta;
@@ -1431,6 +1467,35 @@ call getBusquedaVenta('2018-10-31','2018-12-22','','');
 call getBusquedaVenta('2018-11-30','2018-12-22','','');
 call getBusquedaVenta('2016-05-10','2018-12-12','2','');
 call getBusquedaVenta('2016-05-10','2018-12-12','1','');
+
+SELECT * FROM ventas;
+	
+*/
+
+DROP PROCEDURE IF EXISTS getBusquedaVentaMesAño;
+CREATE PROCEDURE getBusquedaVentaMesAño(
+año varchar(100),
+mes varchar(100),  
+dia varchar(100),
+id_usuario varchar(100)
+)
+	SELECT v.id_venta,v.fecha_venta,v.subtotal_venta,v.iva_venta,v.total_venta,v.forma_pago,v.id_usuario,v.id_cliente,c.nombre 
+    from ventas AS v JOIN cliente c on v.id_cliente=c.id_cliente
+	where  CONVERT(v.id_usuario,CHAR) like (CONCAT('%',id_usuario,'%'))
+    AND CONVERT((year(v.fecha_venta)),CHAR)  like (CONCAT('%',año,'%'))  
+    and CONVERT((month(v.fecha_venta)),CHAR)  like (CONCAT('%',mes,'%')) 
+    and CONVERT((day(v.fecha_venta)),CHAR)  like (CONCAT('%',dia,'%'))
+    AND v.status = 'activo'
+;
+
+/*	
+
+call getBusquedaVentaMesAño('2018','11','','');
+call getBusquedaVentaMesAño('2018','11','30','');
+call getBusquedaVentaMesAño('2018','12','30','');
+call getBusquedaVentaMesAño('2018','11','30','2');
+call getBusquedaVentaMesAño('2018','12','','');
+call getBusquedaVentaMesAño('2018','','','');
 
 SELECT * FROM ventas;
 	
