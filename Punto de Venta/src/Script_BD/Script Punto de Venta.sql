@@ -183,7 +183,7 @@ INSERT INTO USUARIO VALUES (null,'Programadores del sistema','admin','123', 'Pro
 INSERT INTO USUARIO VALUES (null,'miguel Angel','mike','mike123', 'Programador','activo');
 INSERT INTO USUARIO VALUES (null,'hernan','hernan','h123', 'Programador','activo');
 INSERT INTO USUARIO VALUES (null,'Encargado de almacen','useralmacen','alm123', 'Encargado de Almacen','activo');
-INSERT INTO USUARIO VALUES (null,'Vendedores generales','vendedor','v123', 'Empleado','activo');
+INSERT INTO USUARIO VALUES (null,'Vendedor general','vendedor','v123', 'Empleado','activo');
 
 
 
@@ -351,9 +351,12 @@ estado varchar(200))
 INSERT INTO Cliente VALUES(null, nombre, rfc, 
 telefono, correo, direccion, colonia, municipio, cp, estado, 'activo');
 
-call addCliente('paul','2728282','4771223363','hdjdjd','sjsjs','jjdddjd','sjsjs','27272','gto');
- 
- 
+
+call addCliente ('Venta Publico General','XXXXXXXXXX', '4772129324','ferreteriaaraujo@hotmail.com', 'Blvd. Antonio Madrazo #6703','Los Murales', 'León', '37219','Guanajuto');
+call addCliente ('Emmanuel Rodriguez Liñan', 'ROLE21215LIT','4772151254', 'intelecto@hotmail.com' , 'Mision Catolica #8723', 'Caja Popular' , 'León', '37207', 'Guanajuato');
+call addCliente ('FHINO Construcciones SA DE CV','FIN8817363L12', '47754578', 'fernandofhino@hotmail.com', 'Panorama #1983', 'Buenos Aires','León' ,'37644', 'Guanajuato');
+call addCliente ('Inmobiliaria Linaza','LIN9818733LZ1','4737377322','robertogarcia@hotmail.com', 'San Juan de Arriba #8722', '10 de Mayo', 'León', '37732','Guanajuato');
+call addCliente ('Tomas Humberto Bustos Solis','BUST19751LM', '4737636421', 'tomashumberto123@hotmail.com', 'Industrial #8712', 'La Hermita',  'Guanajuato', '36111','Guanajuato');
  
  DROP PROCEDURE IF EXISTS updateCliente;
 CREATE PROCEDURE updateCliente(
@@ -479,15 +482,11 @@ rfc varchar(15))
  
  /***********************************************************Procedimientos de CATEGORIA*/
 SELECT * FROM Categoria;
-INSERT INTO Categoria VALUES (null,'Fontaneria','','activo');
-INSERT INTO Categoria VALUES (null,'Electricidad','','activo');
-INSERT INTO Categoria VALUES (null,'Otros','Categoria estándar','activo');
 /*
 id_categoria int not null primary key auto_increment,
 nombre varchar(200) not null,
 descripcion varchar(300) null
 */
-
 
 DROP PROCEDURE IF EXISTS getCategorias;
 CREATE PROCEDURE getCategorias ()
@@ -510,7 +509,17 @@ call addCategoria('otros 2','Otra categoria estándar');
 call addCategoria('Escaleras','Escalera de distintos materiales');	
 
 */
-call addCategoria('Escaleras','Escalera de distintos materiales');	
+
+call addCategoria('Tuberia'               , 'Tubos de pvc,cpvc,cobre,hidraulica');
+call addCategoria('Conexiones para tuberia', 'Tee , codos, coples etc.');
+call addCategoria('Jardineria'               , 'Tijeras para podar, palas jardineria' );
+call addCategoria('Accesorios electricos'    , 'Accesorios electricos y conexiones de luz');
+call addCategoria('Tornilleria'              , 'Tornillos, pijas, taquetes etc');
+call addCategoria('Fontaneria General'       , 'Mezcladoras, tinacos, Accesorios para baño ');
+call addCategoria('Iluminacion'              , 'Focos, lamparas, Portalamparas, etc');
+call addCategoria('Ferreteria en general'  , 'Herramientas de ferreteria en general'   ) ;
+call addCategoria('Electricidad'             , 'Material para electricidad en general');
+call addCategoria('Albañileria'             , 'Material para albañileria en general');
 
 DROP PROCEDURE IF EXISTS updateCategoria;
 CREATE PROCEDURE updateCategoria(
@@ -620,11 +629,6 @@ marca  varchar(200)
 */
 
 SELECT * FROM marca;
-INSERT INTO marca VALUES (null,'Trupper','activo');
-INSERT INTO marca VALUES (null,'Urea','activo');
-INSERT INTO marca VALUES (null,'Dica','activo');
-INSERT INTO marca VALUES (null,'Genérico','activo');
-
 DROP PROCEDURE IF EXISTS getMarcas;
 CREATE PROCEDURE getMarcas ()
 	SELECT * FROM Marca WHERE status='activo';
@@ -645,10 +649,26 @@ call addMarca('Stanley');
 call addMarca('DeWALT');
 call addMarca('Escalumex');
 */
-call addMarca('Stanley');	
-call addMarca('DeWALT');
-call addMarca('Escalumex');
-
+call addMarca ('Truper');
+call addMarca ('Dica');
+call addMarca ('Urrea');
+call addMarca ('Lion Tools');
+call addMarca ('Pretul');
+call addMarca ('Iusa');
+call addMarca ('Cato');
+call addMarca ('Fiero');
+call addMarca ('Squarde');
+call addMarca ('Bticino');
+call addMarca ('Fleximatic');
+call addMarca ('Escalumex');
+call addMarca ('Flowguard Gold');
+call addMarca ('Hecort');
+call addMarca ('Nacobre');
+call addMarca ('Volteck');
+call addMarca ('Pintucom');
+call addMarca ('Foset');
+call addMarca ('PepeSilicon');
+call addMarca ('Perfect');
 
 DROP PROCEDURE IF EXISTS updateMarca;
 CREATE PROCEDURE updateMarca(
@@ -750,9 +770,6 @@ cp varchar(5) null,
 estado varchar(200) null
 
 */
-INSERT INTO Proveedor (id_proveedor,nombre_proveedor,telefono,status) 
-		VALUES (null,'Proveedor de prueba','4774265833','activo'); 
-
 
 
 DROP PROCEDURE IF EXISTS getProveedores;
@@ -798,9 +815,11 @@ call addProveedor('Proveedor 2 de prueba','4728563241','','','','','','');
 call addProveedor('Proveedor 2 de prueba','4728563241','','','','','','');
 */
 
-call addProveedor('Proveedor 2 de prueba','4728563241','','','','','','');
-call addProveedor('Proveedor 2 de prueba','4728563241','','','','','','');
-
+call addProveedor('RS Distribuciones SA DE CV', '4771518298', 'fidel982@rsdist.com', 'Blvd. Aldama #8575','Insurgentes','Salamanca','36214','Guanajuato');
+call addProveedor('Selecto TEC SA DE CV', '4779277323', 'selectrotec@hotmail.com', ' Tepic #342','San Miguel','Leon','37084','Guanajuato');
+call addProveedor('May Distribuciones SA DE CV','', 'contactomay@hotmail.com', 'Oro', 'Valle de señora','Leon','37203','Guanajuato');
+call addProveedor('Marcasi SA DE CV' ,'', 'marcasi@outlookmail.com','Blvd. Hidalgo', 'Valle de señora','Leon','37203', 'Guanajuato');
+call addProveedor('Vilches Ferreteros','', 'rockstarvilches@contacto','Blvd. Jose Maria Morelos # 10022','Industrial','Leon','37288','Guanajuato');
 
 DROP PROCEDURE IF EXISTS updateProveedor;
 CREATE PROCEDURE updateProveedor(
@@ -833,7 +852,6 @@ call updateProveedor(3,'Proveedor de prueba 3','4587654123','prov3@hotmail.com',
 	
 */
 
-call updateProveedor(1,'Proveedor de prueba','4774265833','','','','','','');
 
 
 /*
@@ -940,19 +958,6 @@ id_proveedor int not null
 
 */
 
-INSERT INTO Producto (id_producto,codigo_producto,descripcion,marca,costo,precio,presentacion,stock,stock_minimo,id_categoria,id_proveedor,status) 
-				VALUES (null,'7501000664221','Llave Nariz 1/2','Dica',33,56,'pieza',25,8,1,1,'activo'),
-                (null,'000000015425','Mezcladora para Lavavo 4048','Dica',268,342,'pieza',4,1,1,1,'activo'),
-				(null,'000000000003','Llave Nariz 1/2','Trupper',112,183,'pieza',10,3,1,1,'activo'); 
-/*
-UPDATE Producto SET producto.codigo_producto = '7501000664221'
-WHERE producto.codigo_producto = '1111111111111';
-*/
-
-
-
-
-
 DROP PROCEDURE IF EXISTS getProductos;
 CREATE PROCEDURE getProductos ()
 	SELECT * FROM Producto WHERE status='activo';
@@ -1043,9 +1048,19 @@ call getCategorias();
 call addProducto('000000000004','Escalera de Tijera C/Plataforma Escalumex 3 Exc Sta-4',7,607,800,'pieza',3,1,4,1);
 	
 */
-call addProducto('000000000004','Escalera de Tijera C/Plataforma Escalumex 3 Exc Sta-4','Escalumex',607,800,'pieza',3,1,4,1);
-call addProducto('000000000005','Escalera de Tijera C/Plataforma Escalumex 3 Exc Sta-4','Escalumex',607,800,'pieza',3,1,4,1);
 
+call addProducto('8844722171443','Tubo cpvc 1/2" 6mts', 'Flowguard Gold', 53, 68, 'pieza',50,10,1,4);
+call addProducto('4220725327682','Codo cpvc 1/2"' , 'Flowguard Gold', 2.20, 4, 'pieza',200,25,2,4);
+call addProducto('2087037288201','Tee  cpvc 1/2"' , 'Flowguard Gold', 2.8, 5, 'pieza',180,25,2,4);
+call addProducto('1783173372220','Cople cpvc 1/2"', 'Flowguard Gold', 2.20, 4, 'pieza',120,25,2,4);
+call addProducto('2128350340627','Pinza de corte 8"', 'Pretul', 49.50, 68,'pieza', 5,2,8,1);
+call addProducto('6205614301155','Pinza de electricista 10"', 'Truper',163, 195,'pieza', 5,2,8,1);
+call addProducto('8132124528162','Tinaco 1100 lts', 'Iusa' , 1589, 1800,'pieza',2 ,1,6,5);
+call addProducto('8523045783116','Manguera Truper 1/2"', 'Truper',5.20,8,'metro', 100,10,3,1);
+call addProducto('5310775522386','Brocha 2"','Perfect',12.5,16,'pieza', 15,4,8,3);
+call addProducto('5630023013280','Pastilla Termomagnetica 20Amp', 'Squarde', 113.50,145,'pieza',8,2,9,2);
+call addProducto('2234572884481','Tubo cobre 1/2" 6mts M', 'Nacobre', 348.6, 468, 'pieza',10,3,1,4);
+call addProducto('2014347848762','Mezcladora 4048', 'Dica' ,234.5, 325,'pieza',5,2,6,4) ;
 
 
 DROP PROCEDURE IF EXISTS updateProducto;
@@ -1545,15 +1560,6 @@ INSERT INTO detalle_venta (id_venta,id_producto,cantidad,importe,status)
 call getProductos();
 call getVentas();
 call getDetallesVenta();
-call addDetalleVenta(1,1,20,11.00);
-call addDetalleVenta(1,2,2,11.25);
-call addDetalleVenta(1,3,5,5.3);
-call addDetalleVenta(2,4,10,8.9);
-call addDetalleVenta(2,1,11,42.36);
-call addDetalleVenta(2,2,7,22.11);
-call addDetalleVenta(2,1,5,11.99);
-call addDetalleVenta(3,2,6,47.66);
-call addDetalleVenta(3,3,3,66.88);
 
 SELECT * FROM ventas v JOIN detalle_venta dv ON v.id_venta=dv.id_venta;
 
@@ -1645,6 +1651,85 @@ SELECT * FROM ventas v JOIN detalle_venta dv ON v.id_venta=dv.id_venta;
 
 
 
+call addVenta('2017/06/01',18112,2897.92,21009.92,'EFECTIVO',4,3);
+call addVenta('2018/03/21',2945,471.2,3416.2,'EFECTIVO',5,3);
+call addVenta('2018/09/26',56,8.96,64.96,'EFECTIVO',5,4);
+call addVenta('2017/08/01',10800,1728,12528,'EFECTIVO',4,5);
+call addVenta('2018/02/11',68,10.88,78.88,'EFECTIVO',4,5);
+call addVenta('2018/12/08',696,111.36,807.36,'EFECTIVO',4,1);
+call addVenta('2018/03/12',640,102.4,742.4,'EFECTIVO',5,2);
+call addVenta('2018/03/18',3421,547.36,3968.36,'EFECTIVO',4,2);
+call addVenta('2018/01/07',3390,542.4,3932.4,'EFECTIVO',5,1);
+call addVenta('2018/11/16',145,23.2,168.2,'EFECTIVO',4,1);
+call addVenta('2017/07/13',18000,2880,20880,'EFECTIVO',5,4);
+call addVenta('2017/05/25',975,156,1131,'EFECTIVO',4,1);
+call addVenta('2017/01/29',80,12.8,92.8,'EFECTIVO',4,5);
+call addVenta('2018/01/17',408,65.28,473.28,'EFECTIVO',4,3);
+call addVenta('2017/08/28',14492,2318.72,16810.72,'EFECTIVO',5,5);
+call addVenta('2017/03/26',20,3.2,23.2,'EFECTIVO',5,1);
+call addVenta('2018/05/11',96,15.36,111.36,'EFECTIVO',5,3);
+call addVenta('2018/01/15',2600,416,3016,'EFECTIVO',4,5);
+call addVenta('2017/03/06',48,7.68,55.68,'EFECTIVO',4,3);
+call addVenta('2017/09/13',1715,274.4,1989.4,'EFECTIVO',5,5);
+call addVenta('2017/12/20',530,84.8,614.8,'EFECTIVO',4,2);
+call addVenta('2018/12/19',114,18.24,132.24,'EFECTIVO',5,4);
+call addVenta('2018/01/05',4,0.64,4.64,'EFECTIVO',4,1);
+call addVenta('2017/05/13',8,1.28,9.28,'EFECTIVO',5,2);
+call addVenta('2018/02/19',1170,187.2,1357.2,'EFECTIVO',4,3);
+call addVenta('2018/11/12',40,6.4,46.4,'EFECTIVO',5,2);
+
+
+
+
+
+
+call addDetalleVenta(1,9,7,112);
+call addDetalleVenta(1,7,10,18000);
+call addDetalleVenta(2,6,1,195);
+call addDetalleVenta(2,10,6,870);
+call addDetalleVenta(2,7,1,1800);
+call addDetalleVenta(2,8,10,80);
+call addDetalleVenta(3,8,7,56);
+call addDetalleVenta(4,7,6,10800);
+call addDetalleVenta(5,1,1,68);
+call addDetalleVenta(6,9,1,16);
+call addDetalleVenta(6,5,10,680);
+call addDetalleVenta(7,11,1,468);
+call addDetalleVenta(7,4,9,36);
+call addDetalleVenta(7,1,2,136);
+call addDetalleVenta(8,9,6,96);
+call addDetalleVenta(8,12,8,2600);
+call addDetalleVenta(8,10,5,725);
+call addDetalleVenta(9,12,2,650);
+call addDetalleVenta(9,5,2,136);
+call addDetalleVenta(9,12,8,2600);
+call addDetalleVenta(9,4,1,4);
+call addDetalleVenta(10,10,1,145);
+call addDetalleVenta(11,7,10,18000);
+call addDetalleVenta(12,6,5,975);
+call addDetalleVenta(13,8,10,80);
+call addDetalleVenta(14,1,6,408);
+call addDetalleVenta(15,7,7,12600);
+call addDetalleVenta(15,2,5,20);
+call addDetalleVenta(15,11,4,1872);
+call addDetalleVenta(16,8,2,16);
+call addDetalleVenta(16,2,5,20);
+call addDetalleVenta(17,9,6,96);
+call addDetalleVenta(18,12,8,2600);
+call addDetalleVenta(19,8,6,48);
+call addDetalleVenta(20,12,2,650);
+call addDetalleVenta(20,1,5,340);
+call addDetalleVenta(20,10,5,725);
+call addDetalleVenta(21,10,2,290);
+call addDetalleVenta(21,9,5,80);
+call addDetalleVenta(21,9,10,160);
+call addDetalleVenta(22,3,9,45);
+call addDetalleVenta(22,2,6,24);
+call addDetalleVenta(22,3,9,45);
+call addDetalleVenta(23,4,1,4);
+call addDetalleVenta(24,2,2,8);
+call addDetalleVenta(25,6,6,1170);
+call addDetalleVenta(26,3,8,40);
 
 
 /***********************************************************Procedimientos de Sucursal*/
@@ -1669,7 +1754,7 @@ estado varchar(200))
 INSERT INTO Sucursal (nombre,sucursal,telefono,correo,direccion,colonia,municipio,cp,estado,status) 
 				VALUES(nombre,sucursal,telefono,correo,direccion,colonia,municipio,cp,estado,'activo');
                 
-call addSucursal('FERRETERIA ARAUJO','Sucursal 1','4772129324','ferreteriaaraujo@hotmail.com','BLVD. ANTONIO MADRAZO GUTIERREZ N° 6703','COL. LOS MURALES','León','37219','Guanajuato');
+call addSucursal('FERRETERIA ARAUJO','Sucursal 1','4772129324','ferreteriaaraujo@hotmail.com','BLVD. ANTONIO MADRAZO N° 6703','LOS MURALES','León','37219','Guanajuato');
                 
 DROP PROCEDURE IF EXISTS updateSucursal;
 CREATE PROCEDURE updateSucursal(
