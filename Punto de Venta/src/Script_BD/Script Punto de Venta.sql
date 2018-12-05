@@ -1669,6 +1669,8 @@ estado varchar(200))
 INSERT INTO Sucursal (nombre,sucursal,telefono,correo,direccion,colonia,municipio,cp,estado,status) 
 				VALUES(nombre,sucursal,telefono,correo,direccion,colonia,municipio,cp,estado,'activo');
                 
+call addSucursal('FERRETERIA ARAUJO','Sucursal 1','4772129324','ferreteriaaraujo@hotmail.com','BLVD. ANTONIO MADRAZO GUTIERREZ N° 6703','COL. LOS MURALES','León','37219','Guanajuato');
+                
 DROP PROCEDURE IF EXISTS updateSucursal;
 CREATE PROCEDURE updateSucursal(
 id_sucursal int,
