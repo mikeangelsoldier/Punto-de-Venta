@@ -137,7 +137,7 @@ public class ControladorVistaHistorialVentas implements Initializable {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText("Un error ha ocurrido");
-            alert.setContentText("Por favor selecciona un grupo");
+            alert.setContentText("Por favor selecciona una venta");
             alert.show();
             return;
         }
