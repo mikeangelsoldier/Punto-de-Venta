@@ -13,6 +13,8 @@ import AccesoBD.ProductoBD;
 import AccesoBD.VentaBD;
 import AccesoBD.DetalleVentaBD;
 import AccesoBD.ProveedorBD;
+import AccesoBD.SucursalBD;
+import GeneradorReportes.GeneradorPDF;
 import Modelo.Categoria;
 import Modelo.Cliente;
 import Modelo.DetalleVenta;
@@ -20,18 +22,24 @@ import Modelo.Marca;
 import Modelo.Producto;
 import Modelo.ProductoDetalleVenta;
 import Modelo.Proveedor;
+import Modelo.Sucursal;
 import PuntoDeVenta.*;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
+import java.awt.Desktop;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -46,6 +54,7 @@ import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.SelectionMode;
@@ -57,6 +66,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.stage.FileChooser;
 import javax.swing.JTextArea;
 
 /**
@@ -73,6 +83,7 @@ public class ControladorVistaVentas implements Initializable {
     VentaBD ventaBD;
     DetalleVentaBD detalleVentaBD;
     ProveedorBD proveedorDB;
+    SucursalBD sucursalBD;
 
     private boolean busquedaClienteActivado, busquedaProductoActivado;
 
@@ -82,6 +93,7 @@ public class ControladorVistaVentas implements Initializable {
     private ArrayList<Marca> listaObjetosMarcas;
     private ArrayList<Categoria> listaObjetosCategorias;
     private ArrayList<Producto> listaObjetosProductosBucadosPorCodigo;
+    private ArrayList<Sucursal> listaSucursales;
 
     private ArrayList<String> formasPago = new ArrayList<String>();
 
@@ -351,7 +363,8 @@ public class ControladorVistaVentas implements Initializable {
         categoriaBD = new CategoriaBD(conectaBD_PuntoVenta.getConnection());
         marcaBD = new MarcaBD(conectaBD_PuntoVenta.getConnection());
         productoBD = new ProductoBD(conectaBD_PuntoVenta.getConnection());
-        proveedorDB=new ProveedorBD(conectaBD_PuntoVenta.getConnection());
+        proveedorDB = new ProveedorBD(conectaBD_PuntoVenta.getConnection());
+        sucursalBD = new SucursalBD(conectaBD_PuntoVenta.getConnection());
 
         ventaBD = new VentaBD(conectaBD_PuntoVenta.getConnection());
         detalleVentaBD = new DetalleVentaBD(conectaBD_PuntoVenta.getConnection());
@@ -476,10 +489,10 @@ public class ControladorVistaVentas implements Initializable {
         //listaObjetosProveedores = new ArrayList<Proveedor>();
         //listaObjetosMarcas = new ArrayList<Marca>();
         //listaObjetosCategorias = new ArrayList<Categoria>();
-
         llenarCboMarcas();
         llenarListaCategorias();
         llenarListaProveedores();
+        llenarListaSucursales();
 
         llenarTablaBusquedaProducto(productoBD.getProductos());
         regresarBotonesVistaBusquedaProductoAFormaOriginal();
@@ -553,13 +566,17 @@ public class ControladorVistaVentas implements Initializable {
             existenMarcas = true;
         }
     }
-    
+
     private void llenarListaCategorias() {
         this.listaObjetosCategorias = new ArrayList<Categoria>(categoriaBD.getCategorias());
     }
 
     private void llenarListaProveedores() {
         this.listaObjetosProveedores = new ArrayList<Proveedor>(proveedorDB.getProveedores());
+    }
+
+    private void llenarListaSucursales() {
+        this.listaSucursales = new ArrayList<Sucursal>(sucursalBD.getSucursales());
     }
 
     private void llenarTablaBusquedaProducto(ArrayList<Producto> listaProductos) {
@@ -1265,7 +1282,6 @@ public class ControladorVistaVentas implements Initializable {
                 }
 
                 guardarVenta();
-                System.out.println("El usuario con el ID " + loginMeta.idUsuario + " con el nombre " + loginMeta.nombreUsuario + " va a realizar una venta");
 
                 alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setHeaderText(null);
@@ -1384,6 +1400,7 @@ public class ControladorVistaVentas implements Initializable {
 
                 }
 
+                crearTicket();
                 botonesVentaPosicionInicial();
                 limpiarVentaCompleta();
                 deshabilitarComponentesVistaVentas(true);
@@ -1395,6 +1412,172 @@ public class ControladorVistaVentas implements Initializable {
             Logger.getLogger(ControladorVistaVentas.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+    }
+
+    public void crearTicket() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmación");
+        alert.setHeaderText(null);
+        alert.setContentText("¿Desea generar el ticket de la venta actual?");
+        if (alert.showAndWait().get() == ButtonType.OK) {
+
+            Alert alertEleccion = new Alert(Alert.AlertType.CONFIRMATION);
+            alertEleccion.setTitle("Eleccion de forma de guardado");
+            alertEleccion.setHeaderText("Elige una ruta para almacenar el ticket");
+            alertEleccion.setContentText("Deseas guardar el ticket en la ruta por defecto\no deseas elegirla tu mismo");
+
+            ButtonType buttonTypeOne = new ButtonType("Guardar en ruta por defecto");
+            ButtonType buttonTypeTwo = new ButtonType("Elegir ruta de guardado");
+            ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonData.CANCEL_CLOSE);
+
+            alertEleccion.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo, buttonTypeCancel);
+
+            Optional<ButtonType> result = alertEleccion.showAndWait();
+            if (result.get() == buttonTypeOne) {
+                guardarTicket("src/PDF/Folio #" + txtNumVenta.getText() + ".pdf");
+                alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setHeaderText(null);
+                alert.setTitle("Información");
+                alert.setContentText("Se ha generado el ticket de la venta " + txtNumVenta.getText());
+                alert.showAndWait();
+
+            } else if (result.get() == buttonTypeTwo) {
+                try {
+                    FileChooser fileChooser = new FileChooser();
+                    fileChooser.setTitle("Elije donde guardar el archivo");
+                    String ruta;
+                    try {
+                        ruta = fileChooser.showSaveDialog(null).getPath();
+                    } catch (Exception e) {
+                        ruta = "";
+                    }
+
+                    if (!ruta.equals("")) {
+                        guardarTicket(ruta + ".pdf");
+
+                        alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setHeaderText(null);
+                        alert.setTitle("Información");
+                        alert.setContentText("Se ha generado el ticket de la venta " + txtNumVenta.getText());
+                        alert.showAndWait();
+                    }
+
+                } catch (Exception ex) {
+                }
+            } else {
+                alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Información");
+                alert.setHeaderText(null);
+                alert.setContentText("Se ha cancelado la operación");
+                alert.show();
+            }
+
+        } else {
+            alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Información");
+            alert.setHeaderText(null);
+            alert.setContentText("Se ha cancelado la operación");
+            alert.show();
+        }
+
+    }
+
+    private void guardarTicket(String ruta) {
+
+        String fecha_venta = dpkFechaVenta.getValue().format(DateTimeFormatter.ISO_DATE);
+        double subtotal = Double.parseDouble(txtSubtotalVenta.getText());
+        double iva = Double.parseDouble(txtIvaVenta.getText());
+        double total = Double.parseDouble(txtTotalAPagarVenta.getText());
+        String formaPago = cboFormaPago.getSelectionModel().getSelectedItem().toString();
+        int id_usuario = Integer.parseInt(loginMeta.idUsuario);
+        int id_cliente = Integer.parseInt(txtIdClienteVenta.getText());
+
+        Calendar calendario = Calendar.getInstance();
+        String hora = calendario.get(Calendar.HOUR_OF_DAY) + ":" + calendario.get(Calendar.MINUTE) + " hrs.";
+
+        String nombreSucursal = "";
+        String sucursal = "";
+        String telefono = "";
+        String correo = "";
+        String direccion = "";
+        String colonia = "";
+        String municipio = "";
+        String cp = "";
+        String estado = "";
+
+        if (listaSucursales.size() > 0) {
+            nombreSucursal = listaSucursales.get(0).getNombre_sucursal();
+            sucursal = listaSucursales.get(0).getSucursal();
+            telefono = listaSucursales.get(0).getTelefono();
+            correo = listaSucursales.get(0).getCorreo();
+            direccion = listaSucursales.get(0).getDireccion();
+            colonia = listaSucursales.get(0).getColonia();
+            municipio = listaSucursales.get(0).getMunicipio();
+            cp = listaSucursales.get(0).getCp();
+            estado = listaSucursales.get(0).getEstado();
+        }
+
+        String encabezado = "\t   * " + nombreSucursal + " *\n\n"
+                + "Plomeria y ferreteria\n"
+                + "Arturo Gonzáles Araujo\n"
+                + direccion + " "
+                + "Col. "+colonia + "\n"
+                + "Código Postal " + cp + ", " + municipio + ", " + estado + "\n"
+                + " Quejas y sugerencias " + telefono + "\n";
+
+        String cliente = "----------------------" + "\nID Cliente: " + id_cliente + "\nNombre: "
+                + txtNombreClienteVenta.getText() + " "
+                + "\nAtendio \nID Usuario: " + id_usuario
+                + "\nNombre: " + loginMeta.nombreUsuario
+                + "\n----------------------\n";
+        String productos = "";
+
+        if (!(tblDatosDetalleVenta.getItems().isEmpty())) {
+            for (int i = 0; i < tblDatosDetalleVenta.getItems().size(); i++) {
+                Double precioTotalPorProducto = tblDatosDetalleVenta.getItems().get(i).getTotalPorProductoDetalleVenta();
+                productos += tblDatosDetalleVenta.getItems().get(i).getCodigo() + "     ";
+                productos += tblDatosDetalleVenta.getItems().get(i).getDescripcion() + "     ";
+                productos += tblDatosDetalleVenta.getItems().get(i).getPrecioUnitarioProductoDetalleVenta()+ "     ";
+                productos += tblDatosDetalleVenta.getItems().get(i).getCantidadProductoDetalleVenta() + "     ";
+                productos += tblDatosDetalleVenta.getItems().get(i).getTotalPorProductoDetalleVenta() + "     ";
+                productos += "\n";
+            }
+        }
+
+        String pBaja1 = "\n\t  Subtotal ** $" + subtotal + "\n"
+                + "\n\t  IVA ** $" + iva + "\n"
+                + "\n\t  Total ** $" + total + "\n\n"
+                + "     " + tblDatosDetalleVenta.getItems().size() + " artículo(s) vendido(s) ";
+        String pBaja2 = "\n\n ||| ||||||| ||| ||| |||||| |||| ||"
+                + "\n\nForma de pago: " + formaPago + "\n"
+                + "  " + fecha_venta + " " + hora + "\n"
+                + "\n      *** Copia del cliente ***"
+                + "\n ************ Más por menos *********";
+        //System.out.println(encabezado);
+        //System.out.println(cliente);
+        //System.out.println(productos);
+        //System.out.println(pBaja1);
+        //System.out.println(pBaja2);
+        GeneradorPDF b = new GeneradorPDF();
+
+        b.crearTicket(encabezado, cliente, productos, pBaja1, pBaja2,
+                ruta);
+        String fileLocal = ruta;
+
+        try {
+            File path = new File(fileLocal);
+            Desktop.getDesktop().open(path);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (IllegalArgumentException e) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText(null);
+            alert.setTitle("error");
+            alert.setContentText("No se pudo encontrar el archivo");
+            alert.showAndWait();
+
+            e.printStackTrace();
+        }
     }
 
     private void limpiarVentaCompleta() {
