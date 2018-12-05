@@ -24,7 +24,9 @@ import java.sql.SQLIntegrityConstraintViolationException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -44,6 +46,12 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.view.JasperViewer;
 
 /**
  * FXML Controller class
@@ -142,6 +150,7 @@ public class ControladorVistaHistorialVentas implements Initializable {
             return;
         }
        
+       generarReporte();
         iniciarVistaDetallesVentas();
         panelPrincipal.setDisable(true);
         panelDetallesDeVenta.setVisible(true);
@@ -423,5 +432,34 @@ public class ControladorVistaHistorialVentas implements Initializable {
             ManejadorFiltro();
         }
 
+    }
+    
+    private void generarReporte() {
+        String path=
+                "src\\reportes\\ReporteVentaAñoMes.jasper";
+        JasperReport jr=null;
+        try {
+            jr=(JasperReport) JRLoader.loadObjectFromFile(path);
+            
+             Map parametro = new HashMap();
+            
+            parametro.put("año","");
+            parametro.put("mes", "");
+            parametro.put("dia", "");
+            parametro.put("id_usuario", "");
+            
+            JasperPrint jp=JasperFillManager.fillReport(jr,parametro,conectaBD_punto_de_venta.getConnection());
+            
+            JasperViewer jv=new JasperViewer(jp);
+            jv.setTitle("Reporte parcial");
+            jv.setVisible(true);
+            
+            
+           // conectaBD_punto_de_venta.cerrarConexion();
+        } catch (JRException ex) {
+           
+        }
+        
+        
     }
 }
