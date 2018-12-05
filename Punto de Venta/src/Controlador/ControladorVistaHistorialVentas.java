@@ -46,6 +46,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javax.swing.WindowConstants;
+import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -450,7 +452,8 @@ public class ControladorVistaHistorialVentas implements Initializable {
             
             JasperPrint jp=JasperFillManager.fillReport(jr,parametro,conectaBD_punto_de_venta.getConnection());
             
-            JasperViewer jv=new JasperViewer(jp);
+            JasperViewer jv=new JasperViewer(jp,false);
+            jv.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
             jv.setTitle("Reporte parcial");
             jv.setVisible(true);
             
