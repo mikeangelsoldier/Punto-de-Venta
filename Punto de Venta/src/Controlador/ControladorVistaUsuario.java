@@ -333,6 +333,16 @@ public class ControladorVistaUsuario implements Initializable {
                 alert.show();
                 return;
             }
+            
+            if(tblDatosUsuario.getSelectionModel().getSelectedItems().get(0).getId()==1){
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Advertencia");
+                alert.setHeaderText("Contacte con el programador del sistema");
+                alert.setContentText("Este usuario no puede eliminarse");
+                alert.show();
+                return;
+            }
+            
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Confirmación");
             alert.setHeaderText(null);
