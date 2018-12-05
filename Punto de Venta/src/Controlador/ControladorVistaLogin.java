@@ -24,6 +24,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
@@ -70,6 +71,12 @@ public class ControladorVistaLogin implements Initializable {
         validarLogin();
         imprimirResultadoBusquedaLogin();
         if (loginExiste) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText("Bienvenido");
+            alert.setTitle("Acceso correcto");
+            alert.setContentText("Bienvenido "+loginMeta.nombreUsuario);
+            alert.showAndWait();
+            
             Parent panelTabla = FXMLLoader.load(getClass().getResource("/PuntoDeVenta/VistaPrincipal.fxml"));
             Scene panelTablaScene = new Scene(panelTabla);
 
