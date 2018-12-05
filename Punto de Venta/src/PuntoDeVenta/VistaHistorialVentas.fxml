@@ -154,7 +154,7 @@
                         <JFXDatePicker fx:id="dpkFechaVenta" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                      </children>
                   </GridPane>
-                  <Label layoutX="324.0" layoutY="1.0" prefHeight="27.0" prefWidth="264.0" text="Ventas que coinciden">
+                  <Label layoutX="324.0" layoutY="1.0" prefHeight="27.0" prefWidth="264.0" text="Registro de Ventas">
                      <font>
                         <Font name="System Bold" size="18.0" />
                      </font>

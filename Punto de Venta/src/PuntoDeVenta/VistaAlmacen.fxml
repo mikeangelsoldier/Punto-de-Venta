@@ -30,7 +30,7 @@
             <Pane layoutX="93.0" layoutY="238.0" prefHeight="94.0" prefWidth="653.0" style="-fx-border-color: #3fb0dd;">
                <children>
                   <JFXTextField fx:id="txtCantidad" layoutX="156.0" layoutY="26.0" promptText="cantidad" unFocusColor="#4d4d4d" />
-                  <Label layoutX="14.0" layoutY="2.0" prefHeight="72.0" prefWidth="135.0" text="Cantidad a Agregar" textFill="#222288">
+                  <Label layoutX="14.0" layoutY="2.0" prefHeight="72.0" prefWidth="146.0" text="Cantidad (Aumentar/disminuir)" textFill="#222288" wrapText="true">
                      <font>
                         <Font size="14.0" />
                      </font>
@@ -60,8 +60,8 @@
                         <Font size="14.0" />
                      </font>
                   </Label>
-                  <JFXTextField fx:id="txtStockProducto" editable="false" layoutX="439.0" layoutY="19.0" unFocusColor="#4d4d4d" />
-                  <Label layoutX="372.0" layoutY="20.0" prefHeight="29.0" prefWidth="67.0" text="stock" textFill="#222288">
+                  <JFXTextField fx:id="txtStockProducto" editable="false" layoutX="466.0" layoutY="19.0" prefHeight="25.0" prefWidth="108.0" unFocusColor="#4d4d4d" />
+                  <Label layoutX="372.0" layoutY="20.0" prefHeight="29.0" prefWidth="89.0" text="stock actual" textFill="#222288">
                      <font>
                         <Font size="14.0" />
                      </font>
@@ -85,7 +85,6 @@
                   </JFXButton>
                </children>
             </Pane>
-            <Label layoutX="221.0" layoutY="390.0" text="un mensaje debe avisar algo asi &quot;stotck es de tanto, agregaste tanto y el nuevo esto es de  tanto&quot;" />
          </children>
       </Pane>
       <Pane fx:id="panelBuscarProductos" layoutX="20.0" layoutY="70.0" prefHeight="500.0" prefWidth="1157.0" style="-fx-background-color: #b1b1df;" visible="false">
@@ -95,7 +94,7 @@
                   <Font name="System Bold" size="20.0" />
                </font>
             </Label>
-            <JFXButton fx:id="btnRegresarAVistaPrincipal" buttonType="RAISED" layoutX="21.0" layoutY="20.0" onAction="#btnRegresarAVistaPrincipalEvento" ripplerFill="#3fb0dd" style="-fx-background-color: #222288;" text="Regresar a Venta" textFill="WHITE">
+            <JFXButton fx:id="btnRegresarAVistaPrincipal" buttonType="RAISED" layoutX="21.0" layoutY="20.0" onAction="#btnRegresarAVistaPrincipalEvento" ripplerFill="#3fb0dd" style="-fx-background-color: #222288;" text="Regresar a vista principal" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="13.0" />
                </font>
@@ -131,7 +130,7 @@
                   <JFXComboBox fx:id="cboMarcaProductoFiltro" prefHeight="27.0" prefWidth="138.0" />
                </children>
             </HBox>
-            <JFXButton fx:id="btnSeleccionarProducto" buttonType="RAISED" layoutX="406.0" layoutY="81.0" onAction="#btnSeleccionarProductoEvento" prefHeight="19.0" prefWidth="210.0" style="-fx-background-color: #7777ee;" text="Agregar Producto a Venta" textFill="WHITE" />
+            <JFXButton fx:id="btnSeleccionarProducto" buttonType="RAISED" layoutX="406.0" layoutY="81.0" onAction="#btnSeleccionarProductoEvento" prefHeight="19.0" prefWidth="210.0" style="-fx-background-color: #7777ee;" text="Elegir Producto" textFill="WHITE" />
             <TableView fx:id="tblDatosProductoFiltro" cache="true" layoutX="21.0" layoutY="193.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="270.0" prefWidth="1130.0">
                <columns>
                   <TableColumn fx:id="tbcIDProductoFiltro" minWidth="-1.0" prefWidth="36.0" text="ID" />

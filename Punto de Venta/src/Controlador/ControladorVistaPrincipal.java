@@ -19,6 +19,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
@@ -30,6 +31,21 @@ public class ControladorVistaPrincipal implements Initializable {
 
     @FXML
     Pane panel_principal;
+    
+    @FXML
+    MenuItem menuItemVentas,
+            menuItemVerificarProductos,
+            menuItemHistorialVentas,
+            menuItemReporteAlmacen,
+            menuItemReporteVentas,
+            menuItemCatalogoUsuarios,
+            menuItemCatalogoProveedores,
+            menuItemCatalogoProductos,
+            menuItemCatalogoClientes,
+            menuItemCatalogoCategorias,
+            menuItemCatalogoSucursales,
+            menuItemPedidos,
+            menuItemAlmacen;
 
     @FXML
     private void handleButtonAction(ActionEvent event) {
@@ -38,7 +54,67 @@ public class ControladorVistaPrincipal implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        habilitarOpciones();
+    }
+    
+    private void habilitarOpciones() {
+        if (loginMeta.rolUsuario.equals("Empleado")) {
+            menuItemVentas.setVisible(true);
+            menuItemVerificarProductos.setVisible(true);
+            menuItemHistorialVentas.setVisible(true);
+            menuItemReporteAlmacen.setVisible(false);
+            menuItemReporteVentas.setVisible(false);
+            menuItemCatalogoUsuarios.setVisible(false);
+            menuItemCatalogoProveedores.setVisible(false);
+            menuItemCatalogoProductos.setVisible(true);
+            menuItemCatalogoClientes.setVisible(false);
+            menuItemCatalogoCategorias.setVisible(true);
+            menuItemCatalogoSucursales.setVisible(false);
+            menuItemPedidos.setVisible(false);
+            menuItemAlmacen.setVisible(false);
+        }else if (loginMeta.rolUsuario.equals("Programador")) {
+            menuItemVentas.setVisible(true);
+            menuItemVerificarProductos.setVisible(true);
+            menuItemHistorialVentas.setVisible(true);
+            menuItemReporteAlmacen.setVisible(true);
+            menuItemReporteVentas.setVisible(true);
+            menuItemCatalogoUsuarios.setVisible(true);
+            menuItemCatalogoProveedores.setVisible(true);
+            menuItemCatalogoProductos.setVisible(true);
+            menuItemCatalogoClientes.setVisible(true);
+            menuItemCatalogoCategorias.setVisible(true);
+            menuItemCatalogoSucursales.setVisible(true);
+            menuItemPedidos.setVisible(true);
+            menuItemAlmacen.setVisible(true);
+        }else if (loginMeta.rolUsuario.equals("Administrador")) {
+            menuItemVentas.setVisible(true);
+            menuItemVerificarProductos.setVisible(true);
+            menuItemHistorialVentas.setVisible(true);
+            menuItemReporteAlmacen.setVisible(true);
+            menuItemReporteVentas.setVisible(true);
+            menuItemCatalogoUsuarios.setVisible(true);
+            menuItemCatalogoProveedores.setVisible(true);
+            menuItemCatalogoProductos.setVisible(true);
+            menuItemCatalogoClientes.setVisible(true);
+            menuItemCatalogoCategorias.setVisible(true);
+            menuItemCatalogoSucursales.setVisible(true);
+            menuItemPedidos.setVisible(true);
+            menuItemAlmacen.setVisible(true);
+        }else if (loginMeta.rolUsuario.equals("Encargado de Almacen")) {
+            menuItemVentas.setVisible(true);
+            menuItemVerificarProductos.setVisible(true);
+            menuItemHistorialVentas.setVisible(true);
+            menuItemReporteAlmacen.setVisible(true);
+            menuItemReporteVentas.setVisible(true);
+            menuItemCatalogoUsuarios.setVisible(false);
+            menuItemCatalogoProveedores.setVisible(false);
+            menuItemCatalogoProductos.setVisible(false);
+            menuItemCatalogoClientes.setVisible(false);
+            menuItemCatalogoCategorias.setVisible(false);
+            menuItemCatalogoSucursales.setVisible(false);
+            menuItemPedidos.setVisible(true);
+            menuItemAlmacen.setVisible(true);
+        }
     }
     
     @FXML

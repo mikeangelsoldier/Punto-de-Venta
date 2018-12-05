@@ -20,35 +20,35 @@
           </Menu>
           <Menu mnemonicParsing="false" text="Ventas">
             <items>
-              <MenuItem mnemonicParsing="false" onAction="#cambiarAVistaVentas" text="Ventas" />
-                  <MenuItem mnemonicParsing="false" onAction="#cambiarAVistaVerificarProducto" text="Verificar Producto" />
-                  <MenuItem mnemonicParsing="false" onAction="#cambiarAVistaHistorialVentas" text="Historial Ventas" />
+              <MenuItem fx:id="menuItemVentas" mnemonicParsing="false" onAction="#cambiarAVistaVentas" text="Ventas" />
+                  <MenuItem fx:id="menuItemVerificarProductos" mnemonicParsing="false" onAction="#cambiarAVistaVerificarProducto" text="Verificar Producto" />
+                  <MenuItem fx:id="menuItemHistorialVentas" mnemonicParsing="false" onAction="#cambiarAVistaHistorialVentas" text="Historial Ventas" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Reportes">
             <items>
-                  <MenuItem mnemonicParsing="false" onAction="#cambiarAVistaReportePedidos" text="Reporte Almacen" />
-              <MenuItem mnemonicParsing="false" onAction="#cambiarAVistaReporteVentas" text="Reporte Ventas" />
+                  <MenuItem fx:id="menuItemReporteAlmacen" mnemonicParsing="false" onAction="#cambiarAVistaReportePedidos" text="Reporte Almacen" />
+              <MenuItem fx:id="menuItemReporteVentas" mnemonicParsing="false" onAction="#cambiarAVistaReporteVentas" text="Reporte Ventas" />
             </items>
           </Menu>
             <Menu mnemonicParsing="false" text="Catalogos">
               <items>
-                <MenuItem mnemonicParsing="false" onAction="#cambiarAVistaUsuario" text="Usuarios" />
-                  <MenuItem mnemonicParsing="false" onAction="#cambiarAVistaProveedor" text="Proveedores" />
-                  <MenuItem mnemonicParsing="false" onAction="#cambiarAVistaProducto" text="Productos" />
-                  <MenuItem mnemonicParsing="false" onAction="#cambiarAVistaCliente" text="Clientes" />
-                  <MenuItem mnemonicParsing="false" onAction="#cambiarAVistaCategoria" text="Categorias" />
-                  <MenuItem mnemonicParsing="false" onAction="#cambiarAVistaSucursales" text="Sucursales" />
+                <MenuItem fx:id="menuItemCatalogoUsuarios" mnemonicParsing="false" onAction="#cambiarAVistaUsuario" text="Usuarios" />
+                  <MenuItem fx:id="menuItemCatalogoProveedores" mnemonicParsing="false" onAction="#cambiarAVistaProveedor" text="Proveedores" />
+                  <MenuItem fx:id="menuItemCatalogoProductos" mnemonicParsing="false" onAction="#cambiarAVistaProducto" text="Productos" />
+                  <MenuItem fx:id="menuItemCatalogoClientes" mnemonicParsing="false" onAction="#cambiarAVistaCliente" text="Clientes" />
+                  <MenuItem fx:id="menuItemCatalogoCategorias" mnemonicParsing="false" onAction="#cambiarAVistaCategoria" text="Categorias" />
+                  <MenuItem fx:id="menuItemCatalogoSucursales" mnemonicParsing="false" onAction="#cambiarAVistaSucursales" text="Sucursales" />
               </items>
             </Menu>
             <Menu mnemonicParsing="false" text="Pedidos">
                <items>
-                  <MenuItem mnemonicParsing="false" onAction="#cambiarAVistaPedidos" text="Pedidos" />
+                  <MenuItem fx:id="menuItemPedidos" mnemonicParsing="false" onAction="#cambiarAVistaPedidos" text="Pedidos" />
                </items>
             </Menu>
             <Menu mnemonicParsing="false" text="Almacen">
               <items>
-                <MenuItem mnemonicParsing="false" onAction="#cambiarAVistaAlmacen" text="Almacen" />
+                <MenuItem fx:id="menuItemAlmacen" mnemonicParsing="false" onAction="#cambiarAVistaAlmacen" text="Almacen" />
               </items>
             </Menu>
         </menus>
