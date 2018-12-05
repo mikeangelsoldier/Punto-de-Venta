@@ -163,6 +163,7 @@ public class ControladorVistaLogin implements Initializable {
 
                         usuarioActual = loginEncontrado;
                         loginExiste = true;
+                        lblAvisoLogin.setText("");
                         System.out.println("login existe= " + loginExiste);
 
                         switch (rol) {
