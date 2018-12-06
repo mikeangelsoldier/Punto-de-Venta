@@ -142,7 +142,7 @@ public class ControladorVistaPrincipal implements Initializable {
     public void cambiarAVistaReportePedidos (ActionEvent e) throws Exception {
         try {
             panel_principal.getChildren().clear();
-            panel_principal.getChildren().add(FXMLLoader.load(getClass().getResource("/PuntoDeVenta/VistaReportePedidos.fxml")));
+            panel_principal.getChildren().add(FXMLLoader.load(getClass().getResource("/PuntoDeVenta/VistaReportePedido.fxml")));
         } catch (IOException ex) {
             Logger.getLogger(ControladorVistaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -248,5 +248,18 @@ public class ControladorVistaPrincipal implements Initializable {
             Logger.getLogger(ControladorVistaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    @FXML
+    public void cambiarAVistaReporteAlmacen (ActionEvent e) throws Exception {
+        try {
+            panel_principal.getChildren().clear();
+            panel_principal.getChildren().add(FXMLLoader.load(getClass().getResource("/PuntoDeVenta/VistaProductosFaltantes.fxml")));
+        } catch (IOException ex) {
+            Logger.getLogger(ControladorVistaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    
+    
     
 }

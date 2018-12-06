@@ -33,7 +33,7 @@ public class FacturaPedidoBD {
             //ResultSet rs = connect.prepareCall("EXEC getUsuarios").executeQuery(); //Para SQL Server
             ResultSet rs = connect.prepareCall("CALL getPedidos").executeQuery(); //Para MySql
             while (rs.next()) {
-                listaPedidos.add(new FacturaPedido(rs.getInt(1), rs.getInt(2), rs.getInt(3)
+                listaPedidos.add(new FacturaPedido(rs.getString(1), rs.getInt(2), rs.getInt(3)
                        , rs.getFloat(4), rs.getDate(5)));
             }
 
@@ -45,13 +45,14 @@ public class FacturaPedidoBD {
         return listaPedidos;
     }
     
-    public void addPedido(int id_proveedor, int id_usuario,
+    public void addPedido(String folio_factura,int id_proveedor, int id_usuario,
             float monto, Date fecha) throws SQLException{
-        PreparedStatement statement = connect.prepareCall("CALL addPedido(?, ?, ?, ?)");
-        statement.setInt(1, id_proveedor);
-        statement.setInt(2, id_usuario);
-        statement.setFloat(3, monto);
-        statement.setDate(4, fecha);
+        PreparedStatement statement = connect.prepareCall("CALL addPedido(?,?, ?, ?, ?)");
+        statement.setString(1,folio_factura);
+        statement.setInt(2, id_proveedor);
+        statement.setInt(3, id_usuario);
+        statement.setFloat(4, monto);
+        statement.setDate(5, fecha);
         System.out.println(statement.toString());
         statement.execute();
 
@@ -59,10 +60,10 @@ public class FacturaPedidoBD {
         
     }
     
-    public void updatePedido(int folio_factura, int id_proveedor, int id_usuario,
+    public void updatePedido(String folio_factura, int id_proveedor, int id_usuario,
             float monto, Date fecha) throws SQLException{
         PreparedStatement statement = connect.prepareCall("CALL updatePedido(?, ?, ?, ?, ?)");
-        statement.setInt(1, folio_factura);
+        statement.setString(1, folio_factura);
         statement.setInt(2, id_proveedor);
         statement.setInt(3, id_usuario);
         statement.setFloat(4, monto);
@@ -74,10 +75,10 @@ public class FacturaPedidoBD {
         
     } 
     
-    public void deletePedido(int ID) throws SQLException {
+    public void deletePedido(String ID) throws SQLException {
 
         PreparedStatement statement = connect.prepareCall("CALL deletePedido(?)");
-        statement.setInt(1, ID);
+        statement.setString(1, ID);
         System.out.println(statement);
         statement.execute();
     }
@@ -98,7 +99,7 @@ public class FacturaPedidoBD {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                listaPedidos.add(new FacturaPedido(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getFloat(4), rs.getDate(5)));
+                listaPedidos.add(new FacturaPedido(rs.getString(1), rs.getInt(2), rs.getInt(3), rs.getFloat(4), rs.getDate(5)));
             }
 
             rs.close();
@@ -128,7 +129,7 @@ public class FacturaPedidoBD {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                listaPedidos.add(new FacturaPedido(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getFloat(4), rs.getDate(5)));
+                listaPedidos.add(new FacturaPedido(rs.getString(1), rs.getInt(2), rs.getInt(3), rs.getFloat(4), rs.getDate(5)));
             }
 
             rs.close();

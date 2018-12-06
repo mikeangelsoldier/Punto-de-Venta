@@ -95,7 +95,10 @@ public class ControladorVistaFacturaPedido implements Initializable {
     private TableView<FacturaPedido> tblDatosPedidos;
     
     @FXML
-    private TableColumn<FacturaPedido, Integer> tbcFolio,tbcProveedor,tbcUsuario;
+    private TableColumn<FacturaPedido, String> tbcFolio;
+    
+    @FXML
+    private TableColumn<FacturaPedido, Integer> tbcProveedor,tbcUsuario;
     
     @FXML
     private TableColumn<FacturaPedido, Float> tbcMonto;
@@ -275,7 +278,7 @@ public class ControladorVistaFacturaPedido implements Initializable {
    private void llenarTabla(ArrayList<FacturaPedido> listaPedidos) {
 
         for (int i = 0; i < listaPedidos.size(); i++) {
-            int folio = listaPedidos.get(i).getFolio_factura();
+            String folio = listaPedidos.get(i).getFolio_factura();
             int proveedor = listaPedidos.get(i).getId_proveedor();
             int usuario = listaPedidos.get(i).getId_usuario();
             float monto = listaPedidos.get(i).getMonto();
@@ -397,12 +400,13 @@ public class ControladorVistaFacturaPedido implements Initializable {
 
             if (!camposPorCompletar()) {
                 if (alert.showAndWait().get() == ButtonType.OK) {
+                    contenidoTxtFolioFactura = txtFolioFactura.getText();
                     contenidoCboId_Proveedor = cboProveedor.getSelectionModel().getSelectedIndex();
                     contenidoCboId_Usuario = cboUsuario.getSelectionModel().getSelectedIndex();
                     contenidoTxtMonto = Float.parseFloat(txtMonto.getText());
                     contenidoFecha = java.sql.Date.valueOf(pickerFecha.getValue());
 
-                    facturaBD.addPedido(contenidoCboId_Proveedor, contenidoCboId_Usuario,
+                    facturaBD.addPedido(contenidoTxtFolioFactura,contenidoCboId_Proveedor, contenidoCboId_Usuario,
                             contenidoTxtMonto, contenidoFecha);
                     alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Información");
@@ -465,13 +469,13 @@ public class ControladorVistaFacturaPedido implements Initializable {
                 }
 
                 if (alert.showAndWait().get() == ButtonType.OK) {//solo si se acepto continuar
-                    idDePedidoSeleccionado = tblDatosPedidos.getSelectionModel().getSelectedItem().getFolio_factura();
+                    contenidoTxtFolioFactura = txtFolioFactura.getText();
                     contenidoCboId_Proveedor = cboProveedor.getSelectionModel().getSelectedIndex();
                     contenidoCboId_Usuario = cboUsuario.getSelectionModel().getSelectedIndex();
                     contenidoTxtMonto = Float.parseFloat(txtMonto.getText());
                     contenidoFecha = java.sql.Date.valueOf(pickerFecha.getValue());
                     
-                    facturaBD.updatePedido(idDePedidoSeleccionado, contenidoCboId_Proveedor,
+                    facturaBD.updatePedido(contenidoTxtFolioFactura, contenidoCboId_Proveedor,
                             contenidoCboId_Usuario, contenidoTxtMonto, contenidoFecha);
                     alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Información");
@@ -524,8 +528,8 @@ public class ControladorVistaFacturaPedido implements Initializable {
             alert.setHeaderText(null);
             alert.setContentText("¿Realmente deseas eliminar el registro de este Pedido?");
             if (alert.showAndWait().get() == ButtonType.OK) {
-                int ID = tblDatosPedidos.getSelectionModel().getSelectedItem().getFolio_factura();
-                facturaBD.deletePedido(ID);
+                contenidoTxtFolioFactura = tblDatosPedidos.getSelectionModel().getSelectedItem().getFolio_factura();
+                facturaBD.deletePedido(contenidoTxtFolioFactura);
                 alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setHeaderText(null);
                 alert.setTitle("Información");
@@ -554,7 +558,8 @@ public class ControladorVistaFacturaPedido implements Initializable {
     
     
     private boolean camposPorCompletar() {
-        String proveedor = "";
+        String folio= txtFolioFactura.getText();
+        String proveedor = ""; 
         String usuario = "";
         String monto = txtMonto.getText();
         String fecha = pickerFecha.getValue().toString();
@@ -569,7 +574,7 @@ public class ControladorVistaFacturaPedido implements Initializable {
         proveedor = cboProveedor.getSelectionModel().getSelectedItem().toString();
         usuario = cboUsuario.getSelectionModel().getSelectedItem().toString();
 
-        if (proveedor.equals(PROVEEDOR_DEFAULT) || usuario.equals(USUARIO_DEFAULT) || monto.equals("") || fecha.equals("")) {
+        if (folio.equals("") || proveedor.equals(PROVEEDOR_DEFAULT) || usuario.equals(USUARIO_DEFAULT) || monto.equals("") || fecha.equals("")) {
             return true;
         } else {
             return false;
@@ -604,7 +609,7 @@ public class ControladorVistaFacturaPedido implements Initializable {
             btnGuardarInsercionPedido.setVisible(true);
             btnGuardarModificacionPedido.setVisible(false);
 
-            txtFolioFactura.setEditable(false);
+            txtFolioFactura.setEditable(true);
             cboProveedor.setEditable(true);
             cboProveedor.getSelectionModel().select(0);
             cboUsuario.setEditable(true);
@@ -708,7 +713,7 @@ public class ControladorVistaFacturaPedido implements Initializable {
                 usuario = String.valueOf(obtenerIDdeUsuario(usuario));
             }
             
-            if(pickerFecha.getValue().toString().equals("")){
+            if(pickerFecha.getValue() == null){
                 fecha="";
             }else{
                 fecha=pickerFecha.getValue().toString();

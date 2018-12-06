@@ -13,7 +13,7 @@ import java.sql.Date;
  */
 public class FacturaPedido {
     
-    private int folio_factura;
+    private String folio_factura;
     private int id_proveedor;
     private int id_usuario;
     private String proveedor;
@@ -25,7 +25,7 @@ public class FacturaPedido {
         
     }
 
-    public FacturaPedido(int folio_factura, int id_proveedor, int id_usuario, float monto, Date fecha) {
+    public FacturaPedido(String folio_factura, int id_proveedor, int id_usuario, float monto, Date fecha) {
         this.folio_factura = folio_factura;
         this.id_proveedor = id_proveedor;
         this.id_usuario = id_usuario;
@@ -33,7 +33,7 @@ public class FacturaPedido {
         this.fecha = fecha;
     }
     
-    public FacturaPedido(int folio_factura, String proveedor, String usuario, float monto, Date fecha) {
+    public FacturaPedido(String folio_factura, String proveedor, String usuario, float monto, Date fecha) {
         this.folio_factura = folio_factura;
         this.proveedor = proveedor;
         this.usuario = usuario;
@@ -58,11 +58,11 @@ public class FacturaPedido {
     }
     
 
-    public int getFolio_factura() {
+    public String getFolio_factura() {
         return folio_factura;
     }
 
-    public void setFolio_factura(int folio_factura) {
+    public void setFolio_factura(String folio_factura) {
         this.folio_factura = folio_factura;
     }
 

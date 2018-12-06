@@ -13,20 +13,18 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" blendMode="DARKEN" prefHeight="600.0" prefWidth="897.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controlador.ControladorVistaReporteVentas">
+<AnchorPane id="AnchorPane" blendMode="DARKEN" prefHeight="600.0" prefWidth="897.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controlador.ControladorVistaReportePedidos">
    <children>
       <Label fx:id="label" layoutX="126" layoutY="120" minHeight="16" minWidth="69" />
-      <Pane prefHeight="600.0" prefWidth="937.0">
+      <Pane prefHeight="600.0" prefWidth="888.0">
          <children>
-            <TableView fx:id="tblDatosReporteVenta" layoutX="43.0" layoutY="357.0" prefHeight="217.0" prefWidth="887.0">
+            <TableView fx:id="tblDatosPedidos" layoutX="43.0" layoutY="357.0" prefHeight="217.0" prefWidth="733.0">
                <columns>
-                  <TableColumn fx:id="tbcIdVenta" prefWidth="118.0" text="Id" />
-                  <TableColumn fx:id="tbcFecha" prefWidth="147.0" text="Fecha" />
-                  <TableColumn fx:id="tbcSubtotal" prefWidth="148.0" text="Subtotal" />
-                  <TableColumn fx:id="tbcIVA" prefWidth="166.0" text="IVA" />
-                  <TableColumn fx:id="tbcTotal" prefWidth="121.0" text="Total" />
-                  <TableColumn fx:id="tbcTipoPago" prefWidth="121.0" text="Forma de pago" />
-                  <TableColumn fx:id="tbcIdCliente" prefWidth="121.0" text="Cliente" />
+                  <TableColumn fx:id="tbcFolio" prefWidth="118.0" text="Folio" />
+                  <TableColumn fx:id="tbcProveedor" prefWidth="147.0" text="Proveedor" />
+                  <TableColumn fx:id="tbcUsuario" prefWidth="148.0" text="Usuario" />
+                  <TableColumn fx:id="tbcMonto" prefWidth="166.0" text="Monto" />
+                  <TableColumn fx:id="tbcFecha" prefWidth="121.0" text="Fecha" />
                </columns>
             </TableView>
             <HBox layoutX="43.0" layoutY="58.0" prefHeight="42.0" prefWidth="825.0" spacing="10.0">
@@ -53,7 +51,7 @@
                   </JFXButton>
                </children>
             </HBox>
-            <Label layoutX="47.0" layoutY="14.0" prefHeight="42.0" prefWidth="256.0" text="Reporte Ventas" textFill="#222288">
+            <Label layoutX="47.0" layoutY="14.0" prefHeight="42.0" prefWidth="256.0" text="Reporte Pedidos" textFill="#222288">
                <font>
                   <Font name="Tahoma" size="33.0" />
                </font>

@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" blendMode="DARKEN" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controlador.ControladorVistaUsuario">
+<AnchorPane id="AnchorPane" blendMode="DARKEN" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controlador.ControladorVistaUsuario">
     <children>
       <Pane layoutY="1.0" prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: 12,12,12;">
          <children>
@@ -81,10 +81,10 @@
                   </JFXButton>
                </children>
             </HBox>
-            <Pane layoutX="76.0" layoutY="119.0" prefHeight="195.0" prefWidth="747.0">
+            <Pane layoutX="18.0" layoutY="110.0" prefHeight="195.0" prefWidth="747.0">
                <children>
                   <JFXTextField fx:id="txtNombreUsuario" focusColor="#222288" layoutX="96.0" layoutY="54.0" maxWidth="155.0" minWidth="155.0" prefHeight="31.0" prefWidth="155.0" promptText="Nombre" unFocusColor="#222288" />
-                  <Label layoutX="25.0" layoutY="61.0" text="Nombres" textFill="#222288">
+                  <Label layoutX="19.0" layoutY="65.0" text="Nombres" textFill="#222288">
                      <font>
                         <Font size="14.0" />
                      </font></Label>
@@ -92,23 +92,23 @@
                      <font>
                         <Font size="14.0" />
                      </font></Label>
-                  <Label layoutX="20.0" layoutY="111.0" text="Password" textFill="#222288">
+                  <Label layoutX="20.0" layoutY="112.0" text="Password" textFill="#222288">
                      <font>
                         <Font size="14.0" />
                      </font></Label>
-                  <JFXPasswordField fx:id="txtPasswordUsuario" focusColor="#222288" layoutX="96.0" layoutY="106.0" maxWidth="118.0" minWidth="111.0" prefHeight="31.0" prefWidth="111.0" promptText="Password" unFocusColor="#222288" />
+                  <JFXPasswordField fx:id="txtPasswordUsuario" focusColor="#222288" layoutX="96.0" layoutY="106.0" maxWidth="155.0" minWidth="111.0" prefHeight="31.0" prefWidth="155.0" promptText="Password" unFocusColor="#222288" />
                   <JFXTextField fx:id="txtLoginUsuario" focusColor="#222288" layoutX="502.0" layoutY="69.0" prefHeight="25.0" prefWidth="155.0" promptText="Usuario" unFocusColor="#222288" />
                   <JFXComboBox fx:id="cboRolUsuario" layoutX="98.0" layoutY="156.0" prefHeight="25.0" prefWidth="155.0" unFocusColor="#222288" />
-                  <Label layoutX="25.0" layoutY="160.0" text="Rol" textFill="#222288">
+                  <Label layoutX="23.0" layoutY="159.0" text="Rol" textFill="#222288">
                      <font>
                         <Font size="14.0" />
                      </font></Label>
-                  <JFXTextField fx:id="txtIDUsuario" editable="false" focusColor="#222288" layoutX="57.0" layoutY="7.0" maxWidth="155.0" minWidth="69.0" prefHeight="25.0" prefWidth="78.0" promptText="id" unFocusColor="#222288" />
-                  <Label layoutX="25.0" layoutY="11.0" prefHeight="17.0" prefWidth="49.0" text="ID" textFill="#222288">
+                  <JFXTextField fx:id="txtIDUsuario" editable="false" focusColor="#222288" layoutX="98.0" layoutY="8.0" maxWidth="155.0" minWidth="69.0" prefHeight="25.0" prefWidth="155.0" promptText="id" unFocusColor="#222288" />
+                  <Label layoutX="23.0" layoutY="10.0" prefHeight="17.0" prefWidth="49.0" text="ID" textFill="#222288">
                      <font>
                         <Font size="14.0" />
                      </font></Label>
-                  <JFXButton fx:id="btnGenerarPassw" layoutX="224.0" layoutY="107.0" onAction="#generarPassw" text="Generar" />
+                  <JFXButton fx:id="btnGenerarPassw" layoutX="251.0" layoutY="109.0" onAction="#generarPassw" text="Generar" />
                </children>
             </Pane>
             <Label layoutX="43.0" layoutY="14.0" prefHeight="38.0" prefWidth="149.0" text="Usuarios" textFill="#222288">

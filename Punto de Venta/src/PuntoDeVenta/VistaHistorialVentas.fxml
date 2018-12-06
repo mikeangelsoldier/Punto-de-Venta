@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="1200.0" styleClass="fondoB2" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controlador.ControladorVistaHistorialVentas">
+<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="1200.0" styleClass="fondoB2" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controlador.ControladorVistaHistorialVentas">
    <children>
       <Pane fx:id="panelPrincipal" prefHeight="600.0" prefWidth="1200.0">
          <children>
@@ -37,35 +37,35 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <Label text="Años" GridPane.rowIndex="1">
+                        <Label text="Años" textFill="#222288" GridPane.rowIndex="1">
                            <font>
                               <Font size="15.0" />
                            </font>
                         </Label>
-                        <JFXComboBox fx:id="cboAños" prefHeight="25.0" prefWidth="133.0" style="-fx-background-color: #ffffff;" GridPane.rowIndex="2" />
-                        <Label text="Meses" GridPane.rowIndex="3">
+                        <JFXComboBox fx:id="cboAños" prefHeight="25.0" prefWidth="133.0" GridPane.rowIndex="2" />
+                        <Label text="Meses" textFill="#222288" GridPane.rowIndex="3">
                            <font>
                               <Font size="15.0" />
                            </font>
                         </Label>
-                        <JFXComboBox fx:id="cboMeses" prefHeight="25.0" prefWidth="133.0" style="-fx-background-color: #ffffff;" GridPane.rowIndex="4" />
-                        <Label prefHeight="17.0" prefWidth="177.0" text="Filtros">
+                        <JFXComboBox fx:id="cboMeses" prefHeight="25.0" prefWidth="133.0" GridPane.rowIndex="4" />
+                        <Label prefHeight="17.0" prefWidth="177.0" text="Filtros" textFill="#222288">
                            <font>
                               <Font name="System Bold" size="19.0" />
                            </font>
                         </Label>
-                        <Label text="Dias" GridPane.rowIndex="5">
+                        <Label text="Dias" textFill="#222288" GridPane.rowIndex="5">
                            <font>
                               <Font size="15.0" />
                            </font>
                         </Label>
-                        <Label text="Usuarios" GridPane.rowIndex="7">
+                        <Label text="Usuarios" textFill="#222288" GridPane.rowIndex="7">
                            <font>
                               <Font size="15.0" />
                            </font>
                         </Label>
-                        <JFXComboBox fx:id="cboDias" prefHeight="25.0" prefWidth="133.0" style="-fx-background-color: #ffffff;" GridPane.rowIndex="6" />
-                        <JFXComboBox fx:id="cboUsuarios" prefHeight="25.0" prefWidth="133.0" style="-fx-background-color: #ffffff;" GridPane.rowIndex="8" />
+                        <JFXComboBox fx:id="cboDias" prefHeight="25.0" prefWidth="133.0" GridPane.rowIndex="6" />
+                        <JFXComboBox fx:id="cboUsuarios" prefHeight="25.0" prefWidth="133.0" GridPane.rowIndex="8" />
                      </children>
                   </GridPane>
                </children>
@@ -86,80 +86,80 @@
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <Label prefHeight="22.0" prefWidth="74.0" text="Id Venta">
+                        <Label prefHeight="22.0" prefWidth="74.0" text="Id Venta" textFill="#222288">
                            <font>
                               <Font size="15.0" />
                            </font>
                         </Label>
-                        <Label text="IVA" GridPane.rowIndex="3">
+                        <Label text="IVA" textFill="#222288" GridPane.rowIndex="3">
                            <font>
                               <Font size="15.0" />
                            </font>
                         </Label>
-                        <Label text="SubTotal" GridPane.rowIndex="2">
+                        <Label text="SubTotal" textFill="#222288" GridPane.rowIndex="2">
                            <font>
                               <Font size="15.0" />
                            </font>
                         </Label>
-                        <Label text="Fecha" GridPane.rowIndex="1">
+                        <Label text="Fecha" textFill="#222288" GridPane.rowIndex="1">
                            <font>
                               <Font size="15.0" />
                            </font>
                         </Label>
-                        <Label text="Total" GridPane.columnIndex="2">
+                        <Label text="Total" textFill="#222288" GridPane.columnIndex="2">
                            <font>
                               <Font size="15.0" />
                            </font>
                         </Label>
-                        <Label text="Cliente" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                        <Label text="Cliente" textFill="#222288" GridPane.columnIndex="2" GridPane.rowIndex="2">
                            <font>
                               <Font size="15.0" />
                            </font>
                         </Label>
-                        <Label prefHeight="17.0" prefWidth="108.0" text="Forma Pago" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                        <Label prefHeight="17.0" prefWidth="108.0" text="Forma Pago" textFill="#222288" GridPane.columnIndex="2" GridPane.rowIndex="1">
                            <font>
                               <Font size="15.0" />
                            </font>
                         </Label>
-                        <JFXTextField fx:id="txtIdVenta" editable="false" maxWidth="-Infinity" prefHeight="19.0" prefWidth="80.0" style="-fx-background-color: #ffffff;" GridPane.columnIndex="1">
+                        <JFXTextField fx:id="txtIdVenta" editable="false" maxWidth="-Infinity" prefHeight="31.0" prefWidth="168.0" GridPane.columnIndex="1">
                            <font>
                               <Font size="15.0" />
                            </font>
                         </JFXTextField>
-                        <JFXTextField fx:id="txtSubTotal" editable="false" maxWidth="-Infinity" style="-fx-background-color: #ffffff;" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                        <JFXTextField fx:id="txtSubTotal" editable="false" maxWidth="-Infinity" GridPane.columnIndex="1" GridPane.rowIndex="2">
                            <font>
                               <Font size="15.0" />
                            </font>
                         </JFXTextField>
-                        <JFXTextField fx:id="txtIva" editable="false" maxWidth="-Infinity" style="-fx-background-color: #ffffff;" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                        <JFXTextField fx:id="txtIva" editable="false" maxWidth="-Infinity" GridPane.columnIndex="1" GridPane.rowIndex="3">
                            <font>
                               <Font size="15.0" />
                            </font>
                         </JFXTextField>
-                        <JFXTextField fx:id="txtTotal" editable="false" style="-fx-background-color: #ffffff;" GridPane.columnIndex="3">
+                        <JFXTextField fx:id="txtTotal" editable="false" GridPane.columnIndex="3">
                            <font>
                               <Font size="15.0" />
                            </font>
                         </JFXTextField>
-                        <JFXTextField fx:id="txtFormaPago" editable="false" style="-fx-background-color: #ffffff;" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                        <JFXTextField fx:id="txtFormaPago" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="1">
                            <font>
                               <Font size="15.0" />
                            </font>
                         </JFXTextField>
-                        <JFXTextField fx:id="txtCliente" editable="false" maxWidth="-Infinity" style="-fx-background-color: #ffffff;" GridPane.columnIndex="3" GridPane.rowIndex="2">
+                        <JFXTextField fx:id="txtCliente" editable="false" maxWidth="-Infinity" prefHeight="31.0" prefWidth="204.0" GridPane.columnIndex="3" GridPane.rowIndex="2">
                            <font>
                               <Font size="15.0" />
                            </font>
                         </JFXTextField>
-                        <JFXDatePicker fx:id="dpkFechaVenta" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <JFXDatePicker fx:id="dpkFechaVenta" editable="false" prefHeight="25.0" prefWidth="204.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                      </children>
                   </GridPane>
-                  <Label layoutX="324.0" layoutY="1.0" prefHeight="27.0" prefWidth="264.0" text="Registro de Ventas">
+                  <Label layoutX="324.0" layoutY="1.0" prefHeight="27.0" prefWidth="264.0" text="Registro de Ventas" textFill="#222288">
                      <font>
                         <Font name="System Bold" size="18.0" />
                      </font>
                   </Label>
-                  <JFXButton fx:id="btnVerDetallesVenta" buttonType="RAISED" disable="true" layoutX="695.0" layoutY="48.0" onAction="#btnVerDetallesVentaEvento" style="-fx-background-color: #9999ea;" text="Ver Productos vendidos en esta venta" textFill="WHITE">
+                  <JFXButton fx:id="btnVerDetallesVenta" buttonType="RAISED" disable="true" layoutX="695.0" layoutY="48.0" onAction="#btnVerDetallesVentaEvento" style="-fx-background-color: #222288;" text="Ver Productos vendidos en esta venta" textFill="WHITE">
                      <font>
                         <Font size="15.0" />
                      </font>

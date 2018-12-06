@@ -1858,13 +1858,14 @@ INSERT INTO Factura_Pedido (folio_factura,id_proveedor,id_usuario,montoFactura,f
 
 DROP PROCEDURE IF EXISTS updatePedido;
 CREATE PROCEDURE updatePedido(
-folio_factura int,
+folio_factura varchar(200),
 id_proveedor int,
 id_usuario int,
 montoFactura float(15),
 fecha date)
 UPDATE Factura_Pedido as f
 	SET 
+		f.folio_factura =folio_factura,
 		f.id_proveedor=id_proveedor,
 		f.id_usuario=id_usuario,
 		f.montoFactura=montoFactura,
@@ -1873,7 +1874,7 @@ WHERE f.folio_factura = folio_factura;
 
 DROP PROCEDURE IF EXISTS deletePedido;
 CREATE PROCEDURE deletePedido(
-folio_factura int)
+folio_factura varchar(200))
 UPDATE Factura_Pedido as f 
 	SET 
 		f.status='inactivo'
@@ -1917,13 +1918,13 @@ fecha_Inicio varchar(100) ,
 fecha_Fin varchar(100) 
 )
 	SELECT * from factura_pedido AS f
-	where  (f.fecha between fecha_Inicio AND fecha_Fin)
+	where  CONVERT(f.fecha,CHAR) between fecha_Inicio AND fecha_Fin
     AND f.status = 'activo'
 ;
 
 /*	
 
-call getPedidos();
+call geReportePedidos('2018-01-12','2018-31-12');
 
 call geReportePedidos('2018/11/14','2018/11/15');
 SELECT * FROM ventas;

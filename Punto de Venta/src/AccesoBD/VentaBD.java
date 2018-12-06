@@ -184,4 +184,37 @@ public class VentaBD {
         return listaVentas;
     }
     
+    
+            
+    
+    
+    public ArrayList<Venta> getReporteVentas(String fechaDesde, String fechaHasta) {
+        ArrayList<Venta> listaVentas = new ArrayList<>();
+
+        try {
+            //ResultSet rs = connect.prepareCall("EXEC getBusquedaUsuario2").executeQuery(); //Para SQL Server
+            PreparedStatement ps = connect.prepareStatement("CALL  getBusquedaVenta(?, ?,?,?)"); //Para MySql
+            
+            ps.setString(1, fechaDesde);
+            ps.setString(2, fechaHasta);
+            ps.setString(3, "");
+            ps.setString(4, "");
+
+            System.out.println(ps);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                listaVentas.add(new Venta(rs.getInt(1), rs.getString(2), rs.getDouble(3), rs.getDouble(4), rs.getDouble(5),
+                        rs.getString(6), rs.getInt(7), rs.getInt(8),rs.getString(9)));
+            }
+
+            rs.close();
+            ps.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(UsuarioBD.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return listaVentas;
+    }
+    
 }
