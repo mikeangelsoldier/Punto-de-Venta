@@ -46,8 +46,8 @@ public class ControladorVistaPrincipal implements Initializable {
             menuItemCatalogoCategorias,
             menuItemCatalogoSucursales,
             menuItemPedidos,
-            menuItemAlmacen,
-            menuItemCerrarSesion;
+            menuItemAlmacen
+            ;
 
     @FXML
     private void handleButtonAction(ActionEvent event) {

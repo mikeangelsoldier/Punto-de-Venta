@@ -463,7 +463,7 @@ public class ControladorVistaHistorialVentas implements Initializable {
 
             JasperViewer jv = new JasperViewer(jp, false);
             jv.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-            jv.setTitle("Reporte parcial");
+            jv.setTitle("Reporte de ventas");
             jv.setVisible(true);
 
             // conectaBD_punto_de_venta.cerrarConexion();

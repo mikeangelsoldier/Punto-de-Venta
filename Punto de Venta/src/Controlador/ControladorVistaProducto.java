@@ -177,8 +177,6 @@ public class ControladorVistaProducto implements Initializable {
             btnLeerCodigoProducto,
             btnMostrarCodigoBarrasProducto,
             btnImprimirCodigoBarrasProducto,
-            btnAccesoDirectoEditarProveedoresProducto,
-            btnAccesoDirectoEditarCategoriasProducto,
             btnAccesoDirectoEditarMarcasProducto,
             btnImprimirCodigoBarrasVariosProductos,
             btnRegresarAVistaProductos, btnAgregarMarca, btnEliminarMarca, btnGuardarInsercionMarca, btnCancelarMarca;
@@ -1191,8 +1189,6 @@ public class ControladorVistaProducto implements Initializable {
 
         btnGenerarCodigoAleatorioProducto.setVisible(false);
         btnLeerCodigoProducto.setVisible(false);
-        btnAccesoDirectoEditarProveedoresProducto.setVisible(false);
-        btnAccesoDirectoEditarCategoriasProducto.setVisible(false);
         btnAccesoDirectoEditarMarcasProducto.setVisible(false);
 
         panelCodigoBarras.setVisible(true);
@@ -1243,8 +1239,6 @@ public class ControladorVistaProducto implements Initializable {
 
             btnGenerarCodigoAleatorioProducto.setVisible(true);
             btnLeerCodigoProducto.setVisible(false);
-            btnAccesoDirectoEditarProveedoresProducto.setVisible(true);
-            btnAccesoDirectoEditarCategoriasProducto.setVisible(true);
             btnAccesoDirectoEditarMarcasProducto.setVisible(true);
 
             panelCodigoBarras.setVisible(true);
@@ -1292,8 +1286,6 @@ public class ControladorVistaProducto implements Initializable {
 
             btnGenerarCodigoAleatorioProducto.setVisible(true);
             btnLeerCodigoProducto.setVisible(false);
-            btnAccesoDirectoEditarProveedoresProducto.setVisible(true);
-            btnAccesoDirectoEditarCategoriasProducto.setVisible(true);
             btnAccesoDirectoEditarMarcasProducto.setVisible(true);
 
             panelCodigoBarras.setVisible(true);
@@ -1336,8 +1328,6 @@ public class ControladorVistaProducto implements Initializable {
 
             btnGenerarCodigoAleatorioProducto.setVisible(false);
             btnLeerCodigoProducto.setVisible(false);
-            btnAccesoDirectoEditarProveedoresProducto.setVisible(false);
-            btnAccesoDirectoEditarCategoriasProducto.setVisible(false);
             btnAccesoDirectoEditarMarcasProducto.setVisible(false);
 
             panelCodigoBarras.setVisible(false);
@@ -1380,8 +1370,6 @@ public class ControladorVistaProducto implements Initializable {
 
             btnGenerarCodigoAleatorioProducto.setVisible(false);
             btnLeerCodigoProducto.setVisible(false);
-            btnAccesoDirectoEditarProveedoresProducto.setVisible(false);
-            btnAccesoDirectoEditarCategoriasProducto.setVisible(false);
             btnAccesoDirectoEditarMarcasProducto.setVisible(false);
 
             panelCodigoBarras.setVisible(true);
@@ -1434,6 +1422,10 @@ public class ControladorVistaProducto implements Initializable {
         cboMarcaProducto.getSelectionModel().select(0);
         cboCategoriaProducto.getSelectionModel().select(0);
         cboProveedorProducto.getSelectionModel().select(0);
+        
+        lblCodigoBarras.setText("");
+        lblCodigoBarras.setGraphic(null);
+        
 
     }
 
@@ -1630,6 +1622,9 @@ public class ControladorVistaProducto implements Initializable {
         //POR DEFECTO NO SE PUEDE EDITAR EN LOS TXT
         txtIdMarca.setEditable(false);
         txaNombreMarca.setEditable(false);
+        
+        lblCodigoBarras.setGraphic(null);
+        lblCodigoBarras.setText("");
 
         limpiarCamposMarca();
     }
