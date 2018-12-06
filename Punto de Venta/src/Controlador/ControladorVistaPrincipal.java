@@ -22,6 +22,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 
 /**
  *
@@ -31,7 +32,7 @@ public class ControladorVistaPrincipal implements Initializable {
 
     @FXML
     Pane panel_principal;
-    
+
     @FXML
     MenuItem menuItemVentas,
             menuItemVerificarProductos,
@@ -45,7 +46,8 @@ public class ControladorVistaPrincipal implements Initializable {
             menuItemCatalogoCategorias,
             menuItemCatalogoSucursales,
             menuItemPedidos,
-            menuItemAlmacen;
+            menuItemAlmacen,
+            menuItemCerrarSesion;
 
     @FXML
     private void handleButtonAction(ActionEvent event) {
@@ -56,7 +58,7 @@ public class ControladorVistaPrincipal implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         habilitarOpciones();
     }
-    
+
     private void habilitarOpciones() {
         if (loginMeta.rolUsuario.equals("Empleado")) {
             menuItemVentas.setVisible(true);
@@ -72,7 +74,7 @@ public class ControladorVistaPrincipal implements Initializable {
             menuItemCatalogoSucursales.setVisible(false);
             menuItemPedidos.setVisible(false);
             menuItemAlmacen.setVisible(false);
-        }else if (loginMeta.rolUsuario.equals("Programador")) {
+        } else if (loginMeta.rolUsuario.equals("Programador")) {
             menuItemVentas.setVisible(true);
             menuItemVerificarProductos.setVisible(true);
             menuItemHistorialVentas.setVisible(true);
@@ -86,7 +88,7 @@ public class ControladorVistaPrincipal implements Initializable {
             menuItemCatalogoSucursales.setVisible(true);
             menuItemPedidos.setVisible(true);
             menuItemAlmacen.setVisible(true);
-        }else if (loginMeta.rolUsuario.equals("Administrador")) {
+        } else if (loginMeta.rolUsuario.equals("Administrador")) {
             menuItemVentas.setVisible(true);
             menuItemVerificarProductos.setVisible(true);
             menuItemHistorialVentas.setVisible(true);
@@ -100,7 +102,7 @@ public class ControladorVistaPrincipal implements Initializable {
             menuItemCatalogoSucursales.setVisible(true);
             menuItemPedidos.setVisible(true);
             menuItemAlmacen.setVisible(true);
-        }else if (loginMeta.rolUsuario.equals("Encargado de Almacen")) {
+        } else if (loginMeta.rolUsuario.equals("Encargado de Almacen")) {
             menuItemVentas.setVisible(true);
             menuItemVerificarProductos.setVisible(true);
             menuItemHistorialVentas.setVisible(true);
@@ -116,9 +118,9 @@ public class ControladorVistaPrincipal implements Initializable {
             menuItemAlmacen.setVisible(true);
         }
     }
-    
+
     @FXML
-    public void cambiarAVistaProducto (ActionEvent e) throws Exception {
+    public void cambiarAVistaProducto(ActionEvent e) throws Exception {
         try {
             panel_principal.getChildren().clear();
             panel_principal.getChildren().add(FXMLLoader.load(getClass().getResource("/PuntoDeVenta/VistaProducto.fxml")));
@@ -126,10 +128,9 @@ public class ControladorVistaPrincipal implements Initializable {
             Logger.getLogger(ControladorVistaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    
+
     @FXML
-    public void cambiarAVistaCliente (ActionEvent e) throws Exception {
+    public void cambiarAVistaCliente(ActionEvent e) throws Exception {
         try {
             panel_principal.getChildren().clear();
             panel_principal.getChildren().add(FXMLLoader.load(getClass().getResource("/PuntoDeVenta/VistaCliente.fxml")));
@@ -137,9 +138,9 @@ public class ControladorVistaPrincipal implements Initializable {
             Logger.getLogger(ControladorVistaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     @FXML
-    public void cambiarAVistaReportePedidos (ActionEvent e) throws Exception {
+    public void cambiarAVistaReportePedidos(ActionEvent e) throws Exception {
         try {
             panel_principal.getChildren().clear();
             panel_principal.getChildren().add(FXMLLoader.load(getClass().getResource("/PuntoDeVenta/VistaReportePedido.fxml")));
@@ -147,8 +148,9 @@ public class ControladorVistaPrincipal implements Initializable {
             Logger.getLogger(ControladorVistaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
     @FXML
-    public void cambiarAVistaReporteVentas (ActionEvent e) throws Exception {
+    public void cambiarAVistaReporteVentas(ActionEvent e) throws Exception {
         try {
             panel_principal.getChildren().clear();
             panel_principal.getChildren().add(FXMLLoader.load(getClass().getResource("/PuntoDeVenta/VistaReporteVentas.fxml")));
@@ -156,9 +158,9 @@ public class ControladorVistaPrincipal implements Initializable {
             Logger.getLogger(ControladorVistaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-      @FXML
-    public void cambiarAVistaPedidos (ActionEvent e) throws Exception {
+
+    @FXML
+    public void cambiarAVistaPedidos(ActionEvent e) throws Exception {
         try {
             panel_principal.getChildren().clear();
             panel_principal.getChildren().add(FXMLLoader.load(getClass().getResource("/PuntoDeVenta/VistaFacturaPedido.fxml")));
@@ -166,9 +168,9 @@ public class ControladorVistaPrincipal implements Initializable {
             Logger.getLogger(ControladorVistaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     @FXML
-    public void cambiarAVistaUsuario (ActionEvent e) throws Exception {
+    public void cambiarAVistaUsuario(ActionEvent e) throws Exception {
         try {
             panel_principal.getChildren().clear();
             panel_principal.getChildren().add(FXMLLoader.load(getClass().getResource("/PuntoDeVenta/VistaUsuario.fxml")));
@@ -176,9 +178,9 @@ public class ControladorVistaPrincipal implements Initializable {
             Logger.getLogger(ControladorVistaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     @FXML
-    public void cambiarAVistaVentas (ActionEvent e) throws Exception {
+    public void cambiarAVistaVentas(ActionEvent e) throws Exception {
         try {
             panel_principal.getChildren().clear();
             panel_principal.getChildren().add(FXMLLoader.load(getClass().getResource("/PuntoDeVenta/VistaVenta.fxml")));
@@ -186,9 +188,9 @@ public class ControladorVistaPrincipal implements Initializable {
             Logger.getLogger(ControladorVistaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     @FXML
-    public void cambiarAVistaVerificarProducto (ActionEvent e) throws Exception {
+    public void cambiarAVistaVerificarProducto(ActionEvent e) throws Exception {
         try {
             panel_principal.getChildren().clear();
             panel_principal.getChildren().add(FXMLLoader.load(getClass().getResource("/PuntoDeVenta/VistaVerificarProducto.fxml")));
@@ -196,9 +198,9 @@ public class ControladorVistaPrincipal implements Initializable {
             Logger.getLogger(ControladorVistaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     @FXML
-    public void cambiarAVistaHistorialVentas (ActionEvent e) throws Exception {
+    public void cambiarAVistaHistorialVentas(ActionEvent e) throws Exception {
         try {
             panel_principal.getChildren().clear();
             panel_principal.getChildren().add(FXMLLoader.load(getClass().getResource("/PuntoDeVenta/VistaHistorialVentas.fxml")));
@@ -206,10 +208,9 @@ public class ControladorVistaPrincipal implements Initializable {
             Logger.getLogger(ControladorVistaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-            
+
     @FXML
-    public void cambiarAVistaAlmacen (ActionEvent e) throws Exception {
+    public void cambiarAVistaAlmacen(ActionEvent e) throws Exception {
         try {
             panel_principal.getChildren().clear();
             panel_principal.getChildren().add(FXMLLoader.load(getClass().getResource("/PuntoDeVenta/VistaAlmacen.fxml")));
@@ -217,10 +218,9 @@ public class ControladorVistaPrincipal implements Initializable {
             Logger.getLogger(ControladorVistaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    
+
     @FXML
-    public void cambiarAVistaProveedor (ActionEvent e) throws Exception {
+    public void cambiarAVistaProveedor(ActionEvent e) throws Exception {
         try {
             panel_principal.getChildren().clear();
             panel_principal.getChildren().add(FXMLLoader.load(getClass().getResource("/PuntoDeVenta/VistaProveedor.fxml")));
@@ -228,9 +228,9 @@ public class ControladorVistaPrincipal implements Initializable {
             Logger.getLogger(ControladorVistaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     @FXML
-    public void cambiarAVistaCategoria (ActionEvent e) throws Exception {
+    public void cambiarAVistaCategoria(ActionEvent e) throws Exception {
         try {
             panel_principal.getChildren().clear();
             panel_principal.getChildren().add(FXMLLoader.load(getClass().getResource("/PuntoDeVenta/VistaCategoria_1.fxml")));
@@ -238,9 +238,9 @@ public class ControladorVistaPrincipal implements Initializable {
             Logger.getLogger(ControladorVistaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     @FXML
-    public void cambiarAVistaSucursales (ActionEvent e) throws Exception {
+    public void cambiarAVistaSucursales(ActionEvent e) throws Exception {
         try {
             panel_principal.getChildren().clear();
             panel_principal.getChildren().add(FXMLLoader.load(getClass().getResource("/PuntoDeVenta/VistaSucursal.fxml")));
@@ -248,9 +248,9 @@ public class ControladorVistaPrincipal implements Initializable {
             Logger.getLogger(ControladorVistaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     @FXML
-    public void cambiarAVistaReporteAlmacen (ActionEvent e) throws Exception {
+    public void cambiarAVistaReporteAlmacen(ActionEvent e) throws Exception {
         try {
             panel_principal.getChildren().clear();
             panel_principal.getChildren().add(FXMLLoader.load(getClass().getResource("/PuntoDeVenta/VistaProductosFaltantes.fxml")));
@@ -258,8 +258,21 @@ public class ControladorVistaPrincipal implements Initializable {
             Logger.getLogger(ControladorVistaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    
-    
-    
+
+    @FXML
+    public void cerrarSesion(ActionEvent e) throws Exception {
+        try {
+            Parent panelTabla = FXMLLoader.load(getClass().getResource("/PuntoDeVenta/VistaLogin.fxml"));
+            Scene panelTablaScene = new Scene(panelTabla);
+
+            Stage window = (Stage) ((Node) e.getSource()).getScene().getWindow();
+            window.setScene(panelTablaScene);
+            window.centerOnScreen();
+            window.show();
+
+        } catch (Exception ex) {
+
+        }
+    }
+
 }

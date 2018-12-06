@@ -82,6 +82,7 @@ public class ControladorVistaLogin implements Initializable {
 
             Stage window = (Stage) ((Node) e.getSource()).getScene().getWindow();
             window.setScene(panelTablaScene);
+            window.centerOnScreen();
             window.show();
         }
 

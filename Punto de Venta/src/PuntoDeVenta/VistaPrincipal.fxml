@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import com.jfoenix.controls.JFXButton?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="620.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controlador.ControladorVistaPrincipal">
+<AnchorPane id="AnchorPane" prefHeight="620.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controlador.ControladorVistaPrincipal">
    <children>
       <Pane fx:id="panel_principal" layoutY="31.0" prefHeight="610.0" prefWidth="1200.0" />
       <MenuBar layoutX="14.0" layoutY="6.0" prefHeight="7.0" prefWidth="972.0" style="-fx-background-color: #8EBDCC;">
@@ -17,8 +16,6 @@
           <Menu mnemonicParsing="false" text="Archivo">
             <items>
               <MenuItem mnemonicParsing="false" text="Ayuda" />
-                  <MenuItem mnemonicParsing="false" text="Cerrar Sesión" />
-                  <MenuItem mnemonicParsing="false" text="Salir" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Ventas">
@@ -57,5 +54,10 @@
             </Menu>
         </menus>
       </MenuBar>
+      <JFXButton fx:id="btnCerrarSesion" buttonType="RAISED" layoutX="1060.0" layoutY="4.0" onAction="#cerrarSesion" ripplerFill="#3fb0dd" style="-fx-background-color: #222288;" text="Cerrar Sesión" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+      </JFXButton>
    </children>
 </AnchorPane>
