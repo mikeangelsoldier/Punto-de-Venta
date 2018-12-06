@@ -140,10 +140,10 @@ public class ControladorVistaHistorialVentas implements Initializable {
 
     @FXML
     private Pane panelDetallesDeVenta;
-    
+
     @FXML
     private void btnVerDetallesVentaEvento(ActionEvent event) {
-       if (txtIdVenta.getText().equals("")) {
+        if (txtIdVenta.getText().equals("")) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText("Un error ha ocurrido");
@@ -151,22 +151,25 @@ public class ControladorVistaHistorialVentas implements Initializable {
             alert.show();
             return;
         }
-       
-       generarReporte();
+
+        
         iniciarVistaDetallesVentas();
         panelPrincipal.setDisable(true);
         panelDetallesDeVenta.setVisible(true);
     }
     
     @FXML
+    private void btnGenerarReporteEvento(ActionEvent event) {
+        generarReporte();
+    }
+    
+    
+
+    @FXML
     private void btnRegresarAVentasEvento(ActionEvent event) {
         panelPrincipal.setDisable(false);
         panelDetallesDeVenta.setVisible(false);
     }
-
-   
-    
-    
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -183,13 +186,11 @@ public class ControladorVistaHistorialVentas implements Initializable {
         ventaBD = new VentaBD(conectaBD_punto_de_venta.getConnection());
         usuarioBD = new UsuarioBD(conectaBD_punto_de_venta.getConnection());
 
-        
         //txtApellidoPaternoB.textProperty().addListener(manejadorFiltro);
         //txtSemestreB.textProperty().addListener(manejadorFiltro);
         //txtNumControlB.textProperty().addListener(manejadorFiltro);
-        
         llenarCombos();
-        
+
         manejadorFiltro = new ManejadorFiltroKey();
 
         cboAños.valueProperty().addListener(manejadorFiltro);
@@ -197,11 +198,9 @@ public class ControladorVistaHistorialVentas implements Initializable {
         cboDias.valueProperty().addListener(manejadorFiltro);
         cboUsuarios.valueProperty().addListener(manejadorFiltro);
 
-        
-        
         //---------------------------
         btnVerDetallesVenta.setDisable(true);
-        
+
         cboAños.getSelectionModel().select(0);
         cboMeses.getSelectionModel().select(0);
         cboDias.getSelectionModel().select(0);
@@ -209,9 +208,9 @@ public class ControladorVistaHistorialVentas implements Initializable {
         llenadoInicialTablaVentas();
         //-------
     }
-    
-    private void llenadoInicialTablaVentas(){
-        
+
+    private void llenadoInicialTablaVentas() {
+
         String año = cboAños.getSelectionModel().getSelectedItem().toString();
         String mes = cboMeses.getSelectionModel().getSelectedItem().toString();
         String dia = cboDias.getSelectionModel().getSelectedItem().toString();
@@ -231,12 +230,10 @@ public class ControladorVistaHistorialVentas implements Initializable {
 
         if (usuario.equals(USUARIO_DEFAULT)) {
             usuario = "";
-        }else{
-            usuario =String.valueOf(obtenerIDdeUsuario(usuario));
+        } else {
+            usuario = String.valueOf(obtenerIDdeUsuario(usuario));
         }
 
-       
-        
         llenarTablaVentas(ventaBD.getVentasAñoMesDiaFiltro(año, mes, dia, usuario));
 
     }
@@ -266,12 +263,10 @@ public class ControladorVistaHistorialVentas implements Initializable {
 
         detalleVentaBD = new DetalleVentaBD(conectaBD_punto_de_venta.getConnection());
 
-        String venta=txtIdVenta.getText();
-        
+        String venta = txtIdVenta.getText();
+
         llenarTablaDetallesVenta(detalleVentaBD.getDetallesConProductosDeUnaSolaVenta(Integer.parseInt(venta)));
     }
-
-
 
     @FXML
     private void handleTableChangeVentas(Event event) {
@@ -288,8 +283,6 @@ public class ControladorVistaHistorialVentas implements Initializable {
         }
         btnVerDetallesVenta.setDisable(false);
     }
-
-  
 
     private void llenarCombos() {
         cboAños.getItems().clear();
@@ -349,14 +342,14 @@ public class ControladorVistaHistorialVentas implements Initializable {
         for (DetalleVenta detalleVenta : listaDetallesVentas) {
             tblDatosDetallesVentas.getItems().add(detalleVenta);
         }
-        
+
         if (tblDatosDetallesVentas.getItems().isEmpty()) {
             btnVerDetallesVenta.setDisable(true);
         } else if (tblDatosDetallesVentas.getSelectionModel().getSelectedItems().size() > 0) {
             btnVerDetallesVenta.setDisable(false);
         }
     }
-    
+
     private void asignarCamposATableColumnsDetallesVenta() {
         tbcIdDetalleVenta.setCellValueFactory(new PropertyValueFactory<>("idDetalleVenta"));
         tbcCodigoProductoDetalleVenta.setCellValueFactory(new PropertyValueFactory<>("codigoProducto"));
@@ -373,26 +366,20 @@ public class ControladorVistaHistorialVentas implements Initializable {
         txtTotal.clear();
         txtFormaPago.clear();
         txtCliente.clear();
-        
-        
+
         cboAños.getSelectionModel().select(0);
         cboMeses.getSelectionModel().select(0);
         cboDias.getSelectionModel().select(0);
         cboUsuarios.getSelectionModel().select(0);
     }
 
-    
-
-   
-
-
     private void ManejadorFiltro() {
-        String año, mes, dia,usuario;
+        String año, mes, dia, usuario;
         año = cboAños.getSelectionModel().getSelectedItem().toString();
         mes = cboMeses.getSelectionModel().getSelectedItem().toString();
         dia = cboDias.getSelectionModel().getSelectedItem().toString();
         usuario = cboUsuarios.getSelectionModel().getSelectedItem().toString();
-        
+
         if (año.equals(AÑO_DEFAULT)) {
             año = "";
         }
@@ -407,13 +394,11 @@ public class ControladorVistaHistorialVentas implements Initializable {
 
         if (usuario.equals(USUARIO_DEFAULT)) {
             usuario = "";
-        }else{
-            usuario =String.valueOf(obtenerIDdeUsuario(usuario));
+        } else {
+            usuario = String.valueOf(obtenerIDdeUsuario(usuario));
         }
-        
-        
-        
-        llenarTablaVentas(ventaBD.getVentasAñoMesDiaFiltro(año,mes,dia,usuario));
+
+        llenarTablaVentas(ventaBD.getVentasAñoMesDiaFiltro(año, mes, dia, usuario));
     }
 
     private int obtenerIDdeUsuario(String usuario) {
@@ -435,34 +420,56 @@ public class ControladorVistaHistorialVentas implements Initializable {
         }
 
     }
-    
+
     private void generarReporte() {
-        String path=
-                "src\\reportes\\ReporteVentaAñoMes.jasper";
-        JasperReport jr=null;
+        String path
+                = "src\\reportes\\ReporteVentaAñoMes.jasper";
+        JasperReport jr = null;
         try {
-            jr=(JasperReport) JRLoader.loadObjectFromFile(path);
+            jr = (JasperReport) JRLoader.loadObjectFromFile(path);
+
+            String año, mes, dia, usuario;
+            año = cboAños.getSelectionModel().getSelectedItem().toString();
+            mes = cboMeses.getSelectionModel().getSelectedItem().toString();
+            dia = cboDias.getSelectionModel().getSelectedItem().toString();
+            usuario = cboUsuarios.getSelectionModel().getSelectedItem().toString();
+
+            if (año.equals(AÑO_DEFAULT)) {
+                año = "";
+            }
+
+            if (mes.equals(MES_DEFAULT)) {
+                mes = "";
+            }
+
+            if (dia.equals(DIA_DEFAULT)) {
+                dia = "";
+            }
+
+            if (usuario.equals(USUARIO_DEFAULT)) {
+                usuario = "";
+            } else {
+                usuario = String.valueOf(obtenerIDdeUsuario(usuario));
+            }
             
-             Map parametro = new HashMap();
-            
-            parametro.put("año","");
-            parametro.put("mes", "");
-            parametro.put("dia", "");
-            parametro.put("id_usuario", "");
-            
-            JasperPrint jp=JasperFillManager.fillReport(jr,parametro,conectaBD_punto_de_venta.getConnection());
-            
-            JasperViewer jv=new JasperViewer(jp,false);
+            Map parametro = new HashMap();
+
+            parametro.put("año", año);
+            parametro.put("mes", mes);
+            parametro.put("dia", dia);
+            parametro.put("id_usuario", usuario);
+
+            JasperPrint jp = JasperFillManager.fillReport(jr, parametro, conectaBD_punto_de_venta.getConnection());
+
+            JasperViewer jv = new JasperViewer(jp, false);
             jv.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
             jv.setTitle("Reporte parcial");
             jv.setVisible(true);
-            
-            
-           // conectaBD_punto_de_venta.cerrarConexion();
+
+            // conectaBD_punto_de_venta.cerrarConexion();
         } catch (JRException ex) {
-           
+
         }
-        
-        
+
     }
 }

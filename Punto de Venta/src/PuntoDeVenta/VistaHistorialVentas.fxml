@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="1200.0" styleClass="fondoB2" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controlador.ControladorVistaHistorialVentas">
+<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="1200.0" styleClass="fondoB2" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controlador.ControladorVistaHistorialVentas">
    <children>
       <Pane fx:id="panelPrincipal" prefHeight="600.0" prefWidth="1200.0">
          <children>
@@ -160,6 +160,11 @@
                      </font>
                   </Label>
                   <JFXButton fx:id="btnVerDetallesVenta" buttonType="RAISED" disable="true" layoutX="695.0" layoutY="48.0" onAction="#btnVerDetallesVentaEvento" style="-fx-background-color: #222288;" text="Ver Productos vendidos en esta venta" textFill="WHITE">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </JFXButton>
+                  <JFXButton buttonType="RAISED" layoutX="695.0" layoutY="13.0" onAction="#btnGenerarReporteEvento" style="-fx-background-color: #222288;" text="Generar Reporte" textFill="WHITE">
                      <font>
                         <Font size="15.0" />
                      </font>
