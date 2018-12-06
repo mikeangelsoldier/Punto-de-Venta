@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controlador.ControladorVistaVentas">
+<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controlador.ControladorVistaVentas">
    <children>
       <Pane fx:id="panelPrincipalVentas" prefHeight="600.0" prefWidth="1200.0">
          <children>
@@ -46,7 +46,7 @@
             </Pane>
             <JFXTabPane layoutX="40.0" layoutY="127.0" prefHeight="226.0" prefWidth="679.0">
                <tabs>
-                  <Tab text="Datos Producto">
+                  <Tab style="-fx-background-color: #222288;" text="Datos Producto">
                      <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="691.0">
                            <children>
@@ -118,7 +118,7 @@
                         </AnchorPane>
                      </content>
                   </Tab>
-                  <Tab text="Datos cliente">
+                  <Tab style="-fx-background-color: #222288;" text="Datos cliente">
                      <content>
                         <AnchorPane fx:id="panelDatosCliente" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
@@ -200,7 +200,7 @@
                   </JFXTextField>
                </children>
             </Pane>
-            <JFXButton fx:id="btnInsertarProfesor" buttonType="RAISED" layoutX="1099.0" layoutY="197.0" ripplerFill="#011245" style="-fx-background-color: #222288;" text="Clientes" textFill="WHITE">
+            <JFXButton fx:id="btnInsertarProfesor" buttonType="RAISED" layoutX="1099.0" layoutY="197.0" ripplerFill="#011245" style="-fx-background-color: #222288;" text="Clientes" textFill="WHITE" visible="false">
                <font>
                   <Font name="System Bold" size="13.0" />
                </font>
@@ -231,6 +231,7 @@
                   <Font size="14.0" />
                </font>
             </Label>
+            <Pane layoutX="296.0" layoutY="126.0" prefHeight="38.0" prefWidth="423.0" style="-fx-background-color: #222288;" />
          </children>
       </Pane>
       <Pane fx:id="panelBuscarClientes" layoutX="14.0" layoutY="55.0" prefHeight="500.0" prefWidth="1150.0" style="-fx-background-color: #b1b1df;" visible="false">
