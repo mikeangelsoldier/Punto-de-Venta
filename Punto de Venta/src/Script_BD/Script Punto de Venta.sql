@@ -1462,8 +1462,8 @@ call addVenta('2018-12-01',15.0,3.5,21.50,'EFECTIVO',2,1);
 
 DROP PROCEDURE IF EXISTS getBusquedaVenta;
 CREATE PROCEDURE getBusquedaVenta(  
-fecha_ventaInicio date ,
-fecha_ventaFin date ,
+fecha_ventaInicio varchar(100) ,
+fecha_ventaFin varchar(100) ,
 id_usuario varchar(100),
 id_cliente varchar(100)
 )
@@ -1848,12 +1848,13 @@ CREATE PROCEDURE getPedidos ()
     
 DROP PROCEDURE IF EXISTS addPedido;
 CREATE PROCEDURE addPedido(
+folio varchar(17),
 id_proveedor int,
 id_usuario int,
 montoFactura float(15),
 fecha date)
-INSERT INTO Factura_Pedido (id_proveedor,id_usuario,montoFactura,fecha,status) 
-				VALUES(id_proveedor,id_usuario,montoFactura,fecha,'activo');
+INSERT INTO Factura_Pedido (folio_factura,id_proveedor,id_usuario,montoFactura,fecha,status) 
+				VALUES(folio,id_proveedor,id_usuario,montoFactura,fecha,'activo');
 
 DROP PROCEDURE IF EXISTS updatePedido;
 CREATE PROCEDURE updatePedido(
@@ -1908,3 +1909,26 @@ fecha varchar(200))
 	AND CONVERT(f.fecha,CHAR) like (CONCAT('%',fecha,'%'))/*Uso convert para comparar el valor char recibido con un int o double*/
     AND status='activo';
 ;
+
+
+DROP PROCEDURE IF EXISTS geReportePedidos;
+CREATE PROCEDURE geReportePedidos(  
+fecha_Inicio varchar(100) ,
+fecha_Fin varchar(100) 
+)
+	SELECT * from factura_pedido AS f
+	where  (f.fecha between fecha_Inicio AND fecha_Fin)
+    AND f.status = 'activo'
+;
+
+/*	
+
+call getPedidos();
+
+call geReportePedidos('2018/11/14','2018/11/15');
+SELECT * FROM ventas;
+	
+*/
+
+call addPedido('0145214785414',1,4,1000.0,'2018/11/12');
+
