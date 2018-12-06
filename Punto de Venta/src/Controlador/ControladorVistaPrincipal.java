@@ -18,6 +18,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.Pane;
@@ -258,6 +259,16 @@ public class ControladorVistaPrincipal implements Initializable {
             Logger.getLogger(ControladorVistaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    @FXML
+    public void mostrarAyuda(ActionEvent e) throws Exception {
+       Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Información");
+                    alert.setHeaderText("Contacto");
+                    alert.setContentText("Cualquier queja o sugerencia enviar mensaje al correo\n migueram_5@hotmail.com");
+                    alert.show();
+    }
+    
 
     @FXML
     public void cerrarSesion(ActionEvent e) throws Exception {
